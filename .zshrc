@@ -1,34 +1,3 @@
-# install the following packages:
-#
-# - `homebrew`                   => https://brew.sh/
-# - `gnupg`                      => brew install gnupg
-# - `tmux`                       => brew install tmux
-# - `vim`                        => brew install vim --with-python3 --with-luajit
-# - `wget`                       => brew install wget
-# - `reattach-to-user-namespace` => brew install reattach-to-user-namespace
-# - `autojump`                   => brew install autojump
-# - `zsh-syntax-highlighting`    => brew install zsh-syntax-highlighting
-# - `asdf`                       => https://github.com/asdf-vm/asdf
-# - `asdf-ruby`                  => https://github.com/asdf-vm/asdf-ruby
-# - `asdf-nodejs`                => https://github.com/asdf-vm/asdf-nodejs
-# - `asdf-rust`                  => https://github.com/code-lever/asdf-rust
-# - `asdf-crystal`               => https://github.com/marciogm/asdf-crystal
-# - `base16-shell`               => https://github.com/chriskempson/base16-shell
-#
-# run shell commands:
-#
-# ### asdf reshims
-#
-# - `asdf reshim ruby <version>`
-# - `asdf reshim nodejs <version>`
-# - `asdf reshim rust <version>`
-# - `asdf reshim crystal <version>`
-#
-# ### mac system commands
-#
-# - `defaults write com.apple.finder AppleShowAllFiles YES`
-# - `defaults write com.apple.dock autohide-delay -float 1000; killall Dock`
-
 # plugin list
 plugins=(tmux git brew osx colorize github ruby bundler extract shrink-path)
 
@@ -56,10 +25,8 @@ export PROMPT='[%{$fg[red]%}%n%{$reset_color%} at %{$fg[blue]%}$(shrink_path -f)
 export EDITOR='vim'
 
 # various aliasses
-alias config="/usr/bin/git --work-tree=$HOME"
 alias ag='ag -i --path-to-ignore ~/.agignore'
 alias cr='crystal'
-alias cani='caniuse'
 alias aa="$EDITOR ~/.asdfrc"
 alias zz="$EDITOR ~/.zshrc"
 alias zx="source ~/.zshrc"
