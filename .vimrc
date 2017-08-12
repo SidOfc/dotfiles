@@ -10,10 +10,10 @@ Plugin 'chriskempson/base16-vim'             " see lines about base16 shell belo
 Plugin 'christoomey/vim-tmux-navigator'      " seamless pane switching between tmux and vim using vim binds
 Plugin 'ctrlpvim/ctrlp.vim'                  " fuzzy file finder
 Plugin 'danilo-augusto/vim-afterglow'        " set terminal to use same background as vim
-Plugin 'easymotion/vim-easymotion'           " highlight matches -> allow navigating with specific character per match
-Plugin 'hail2u/vim-css3-syntax'              " CSS3 support
 Plugin 'haya14busa/incsearch.vim'            " show highlight while searching, hide highlight when done
-Plugin 'haya14busa/incsearch-easymotion.vim' " use easymotion with incsearch plugin
+Plugin 'easymotion/vim-easymotion'           " epic movement motions
+Plugin 'haya14busa/incsearch-easymotion.vim' " add easymotion integration to incsearch
+Plugin 'hail2u/vim-css3-syntax'              " CSS3 support
 Plugin 'itchyny/lightline.vim'               " bottom line displaying mode / file / time etc...
 Plugin 'jreybert/vimagit'                    " interactive git staging
 Plugin 'juleswang/css.vim'                   " improved CSS highlighting
@@ -42,7 +42,8 @@ Plugin 'whatyouhide/vim-lengthmatters'       " plugin for highlighting after 80 
 Plugin 'fmoralesc/vim-pad'                   " take notes with vim
 Plugin 'edkolev/tmuxline.vim'                " tmux statusline match lightline theme
 Plugin 'airblade/vim-gitgutter'              " show git status in gutter
-Plugin 'michaeljsmith/vim-indent-object'     " indentation based text-object
+Plugin 'wellle/targets.vim'                  " more flexible text-objects
+Plugin 'AndrewRadev/splitjoin.vim'           " toggle single line to multiline stuff
 
 call vundle#end()
 
@@ -94,9 +95,9 @@ let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']                " er
 let g:ctrlp_show_hidden = 1                                           " allow ctrlp to show hidden files
 let g:incsearch#auto_nohlsearch = 1                                   " auto unhighlight after searching
 let g:incsearch#magic = '\v'                                          " sheer awesomeness
-let g:jsx_ext_required = 0                                            " do not require .jsx extension for correct syntax highlighting
 let g:incsearch#do_not_save_error_message_history = 1                 " do not store incsearch errors in history
 let g:incsearch#consistent_n_direction = 1                            " when searching backward, do not invert meaning of n and N
+let g:jsx_ext_required = 0                                            " do not require .jsx extension for correct syntax highlighting
 let g:lightline#bufferline#show_number = 2                            " show buf number in bufferline
 let g:lightline#bufferline#shorten_path = 1                           " do not show full path
 let g:lightline#bufferline#modified = '[+]'                           " modifier buffer label
@@ -108,6 +109,8 @@ let g:gundo_return_on_revert = 0                                      " stay in 
 let g:gundo_prefer_python3 = 1                                        " lets move forward :P
 let g:lengthmatters_highlight_one_column = 1                          " only highlight 81st column on long lines
 let g:vimfiler_as_default_explorer = 1                                " do not use netrw
+let g:splitjoin_split_mapping = ''                                    " reset splitjoin mappings
+let g:splitjoin_join_mapping = ''                                     " reset splitjoin mappings
 let g:lengthmatters_excluded = ['vimfiler', 'gundo', 'magit',
                               \ 'GV', 'help']                         " exclude highlighting > 80 cols for these filetypes
 
@@ -189,33 +192,25 @@ if filereadable(expand("~/.vimrc_background"))
 endif
 
 " mappings
-nnoremap <Tab> :make<CR>
-nmap     / <Plug>(incsearch-easymotion-/)
-nmap     ? <Plug>(incsearch-easymotion-?)
-nmap     g/ <Plug>(incsearch-easymotion-stay)
+nnoremap <S-Tab> :make<CR>
+nnoremap <C-x> :bd<CR>
+nmap     / <Plug>(incsearch-forward)
+nmap     ? <Plug>(incsearch-backward)
+nmap     g/ <Plug>(incsearch-stay)
 nmap     ga <Plug>(EasyAlign)
 xmap     ga <Plug>(EasyAlign)
-nmap     <silent> <C-k> <Plug>(ale_previous)
-nmap     <silent> <C-j> <Plug>(ale_next)
+nmap     <Leader>/ <Plug>(incsearch-easymotion-/)
+nmap     <Leader>? <Plug>(incsearch-easymotion-?)
 nmap     <Leader>w <Plug>(easymotion-bd-w)
-nmap     <Leader>f <Plug>(easymotion-bd-f)
-nmap     n <Plug>(easymotion-next)
-nmap     N <Plug>(easymotion-prev)
+noremap  <Leader>j :SplitjoinJoin<CR>
+noremap  <Leader>J :SplitjoinSplit<CR>
 noremap  <Leader>u :GundoToggle<CR>
 noremap  <Leader>m :MagitO<CR>
 noremap  <Leader>N :Pad new<CR>
 noremap  <Leader>n :Pad ls<CR>
-noremap  <Leader>p :Dispatch! git push<CR>
-noremap  <Leader>o :Dispatch! git pull<CR>
-noremap  <Leader>l :GV<CR>
-noremap  <Leader>s :up<CR>
-vnoremap <Leader>u :GundoToggle<CR>gv
-vnoremap <Leader>m :MagitO<CR>gv
-vnoremap <Leader>N :Pad ls<CR>gv
-vnoremap <Leader>p :Dispatch! git push<CR>gv
-vnoremap <Leader>l :Dispatch! git pull<CR>gv
-vnoremap <Leader>s :up<CR>gv
-nnoremap <C-x> :bd<CR>
+noremap  <Leader>p :Dispatch! git pull<CR>
+noremap  <Leader>P :Dispatch! git push<CR>
+noremap  <Leader>h :GV<CR>
 nmap     <Leader>1 <Plug>lightline#bufferline#go(1)
 nmap     <Leader>2 <Plug>lightline#bufferline#go(2)
 nmap     <Leader>3 <Plug>lightline#bufferline#go(3)
