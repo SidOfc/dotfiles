@@ -20,7 +20,6 @@ setopt interactivecomments # bash comments in prompt
 setopt prompt_subst        # enable prompt substitution
 
 # exports
-export BASE16_SHELL=$HOME/.config/base16-shell/
 export PROMPT='[%{$fg[red]%}%n%{$reset_color%} at %{$fg[blue]%}$(shrink_path -f)%{$reset_color%}$(git_prompt_info)] %# '
 export EDITOR='vim'
 
@@ -44,7 +43,7 @@ if [[ $TERM == xterm ]]; then
 fi
 
 # sourcing
-[ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
-. /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-. /usr/local/etc/profile.d/autojump.sh
-. $HOME/.asdf/asdf.sh
+source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/local/etc/profile.d/autojump.sh
+source $HOME/.asdf/asdf.sh

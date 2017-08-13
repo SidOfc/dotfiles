@@ -30,11 +30,6 @@ Then, launch ITerm3 and open preferences (<kbd>cmd</kbd>+<kbd>,</kbd>) and navig
     $ cd ..
     $ rm -rf fonts
 
-### 1.4 [Base16 shell](https://github.com/chriskempson/base16-shell)
-
-    $ cd ~
-    $ git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
-
 ## 2.0 [Homebrew](https://brew.sh)
 
 The missing package manager for macOS
@@ -50,7 +45,7 @@ Additional packages / dependencies
     $ brew install gnupg autojump wget the_silver_searcher
     $ brew install vim --with-python3 --with-luajit
     $ brew install tmux reattach-to-user-namespace
-    $ brew install zsh zsh-completions zsh-syntax-highlighting
+    $ brew install zsh zsh-completions zsh-syntax-highlighting zsh-autosuggestions
 
 ## 3.0 [OMZ](https://github.com/robbyrussell/oh-my-zsh)
 
