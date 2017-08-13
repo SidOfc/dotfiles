@@ -74,8 +74,9 @@ set shiftwidth=2                      " tabsize 2 spaces
 set showtabline=2                     " always show statusline
 set lazyredraw                        " reduce redraws
 set tabstop=2                         " tabsize 2 spaces
+set backspace=2                       " restore backspace
 set ttimeoutlen=50                    " keycode delay
-colorscheme base16-tomorrow-night     " apply color scheme
+colorscheme base16-default-dark            " apply color scheme
 
 " let statements
 let mapleader = " "                                                   " remap leader
