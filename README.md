@@ -42,10 +42,10 @@ The missing package manager for macOS
 
 Additional packages / dependencies
 
-    $ brew install gnupg autojump wget the_silver_searcher
+    $ brew install zsh zsh-completions zsh-syntax-highlighting zsh-autosuggestions
+    $ brew install gnupg autojump wget the_silver_searcher diff-so-fancy
     $ brew install vim --with-python3 --with-luajit
     $ brew install tmux reattach-to-user-namespace
-    $ brew install zsh zsh-completions zsh-syntax-highlighting zsh-autosuggestions
 
 ## 3.0 [OMZ](https://github.com/robbyrussell/oh-my-zsh)
 

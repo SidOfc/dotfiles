@@ -36,7 +36,6 @@ Plugin 'tpope/vim-repeat'                    " better repeat, extensible by plug
 Plugin 'tpope/vim-sleuth'                    " autodetect indent
 Plugin 'tpope/vim-surround'                  " change any surrounding with ease, e.g. { to [ or ( for instance
 Plugin 'w0rp/ale'                            " async linting of files, alternative to syntastic
-Plugin 'whatyouhide/vim-lengthmatters'       " plugin for highlighting after 80 cols, has an edge over default match commands
 Plugin 'fmoralesc/vim-pad'                   " take notes with vim
 Plugin 'wellle/targets.vim'                  " more flexible text-objects
 Plugin 'AndrewRadev/splitjoin.vim'           " toggle single line to multiline stuff
@@ -100,12 +99,9 @@ let g:lightline#bufferline#shorten_path = 1                           " do not s
 let g:lightline#bufferline#modified = '[+]'                           " modifier buffer label
 let g:lightline#bufferline#read_only = '[!]'                          " readonly buffer label
 let g:lightline#bufferline#unnamed = '[*]'                            " unnamed buffer label
-let g:lengthmatters_highlight_one_column = 1                          " only highlight 81st column on long lines
 let g:vimfiler_as_default_explorer = 1                                " do not use netrw
 let g:splitjoin_split_mapping = ''                                    " reset splitjoin mappings
 let g:splitjoin_join_mapping = ''                                     " reset splitjoin mappings
-let g:lengthmatters_excluded = ['vimfiler', 'magit',
-                              \ 'GV', 'help']                         " exclude highlighting > 80 cols for these filetypes
 
 " additional vimfiler settings
 call vimfiler#custom#profile('default', 'context', {

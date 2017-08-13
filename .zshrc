@@ -26,13 +26,12 @@ export EDITOR='vim'
 # various aliasses
 alias ag='ag -i --path-to-ignore ~/.agignore'
 alias cr='crystal'
-alias aa="$EDITOR ~/.asdfrc"
 alias zz="$EDITOR ~/.zshrc"
 alias zx="source ~/.zshrc"
 alias vv="$EDITOR ~/.vimrc"
 alias vip="vim +PluginInstall +qall"
 alias vup="vim +PluginUpdate"
-alias vcp="vim + PluginClean +qall"
+alias vcp="vim +PluginClean +qall"
 alias tt="$EDITOR ~/.tmux.conf"
 alias tr="tmux source-file ~/.tmux.conf"
 alias v="$EDITOR ."
