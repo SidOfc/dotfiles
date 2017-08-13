@@ -9,7 +9,6 @@ Plugin 'VundleVim/Vundle.vim'                " most important, manages all other
 Plugin 'chriskempson/base16-vim'             " see lines about base16 shell below
 Plugin 'christoomey/vim-tmux-navigator'      " seamless pane switching between tmux and vim using vim binds
 Plugin 'ctrlpvim/ctrlp.vim'                  " fuzzy file finder
-Plugin 'danilo-augusto/vim-afterglow'        " set terminal to use same background as vim
 Plugin 'haya14busa/incsearch.vim'            " show highlight while searching, hide highlight when done
 Plugin 'easymotion/vim-easymotion'           " epic movement motions
 Plugin 'haya14busa/incsearch-easymotion.vim' " add easymotion integration to incsearch
@@ -26,7 +25,6 @@ Plugin 'pangloss/vim-javascript'             " improved JS support
 Plugin 'rhysd/vim-crystal'                   " crystal-lang support
 Plugin 'Shougo/unite.vim'                    " required for file explorer
 Plugin 'Shougo/vimfiler.vim'                 " file explorer attempt #2
-Plugin 'sjl/gundo.vim'                       " visual undo
 Plugin 'slim-template/vim-slim'              " slim-lang support
 Plugin 'tpope/vim-abolish'                   " smart case replace
 Plugin 'tpope/vim-commentary'                " easily insert comments
@@ -40,20 +38,20 @@ Plugin 'tpope/vim-surround'                  " change any surrounding with ease,
 Plugin 'w0rp/ale'                            " async linting of files, alternative to syntastic
 Plugin 'whatyouhide/vim-lengthmatters'       " plugin for highlighting after 80 cols, has an edge over default match commands
 Plugin 'fmoralesc/vim-pad'                   " take notes with vim
-Plugin 'edkolev/tmuxline.vim'                " tmux statusline match lightline theme
-Plugin 'airblade/vim-gitgutter'              " show git status in gutter
 Plugin 'wellle/targets.vim'                  " more flexible text-objects
 Plugin 'AndrewRadev/splitjoin.vim'           " toggle single line to multiline stuff
+
+" only emable to update tmux statusline look
+" Plugin 'edkolev/tmuxline.vim'                " tmux statusline match lightline theme
+
 
 call vundle#end()
 
 " set statements
 filetype plugin indent on
 syntax enable                         " cuz white text is going to be awesome to edit :D
-set autoindent                        " auto indent code
 set cursorline                        " highlight cursor line
 set expandtab                         " softtabs, always
-set signcolumn="yes"                  " always show signcolumn
 set hidden                            " debatable, allow switching from unsaved buffer without '!'
 set ignorecase                        " ignore case in search
 set smartcase                         " use case-sensitive if a capital letter is included
@@ -64,7 +62,6 @@ set splitbelow                        " split below instead of above
 set splitright                        " split after instead of before
 set termguicolors                     " enable termguicolors for better highlighting
 set background=dark                   " set bg dark
-set backspace=indent,eol,start        " reset backspace to gui-sanity level
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp " place to keep swap files
 set clipboard^=unnamed                " copy into osx clipboard by default
 set directory=~/.vim-tmp,~/.tmp,~/tmp " ditto
@@ -75,10 +72,9 @@ set fileformats=unix,dos              " try unix line endings before dos, use un
 set laststatus=2                      " always show statusline
 set shiftwidth=2                      " tabsize 2 spaces
 set showtabline=2                     " always show statusline
+set lazyredraw                        " reduce redraws
 set tabstop=2                         " tabsize 2 spaces
-set timeoutlen=300                    " mapping delays
-set ttimeoutlen=10                    " keycode delay
-set updatetime=300                    " increase refresh rate
+set ttimeoutlen=50                    " keycode delay
 colorscheme base16-tomorrow-night     " apply color scheme
 
 " let statements
@@ -103,15 +99,11 @@ let g:lightline#bufferline#shorten_path = 1                           " do not s
 let g:lightline#bufferline#modified = '[+]'                           " modifier buffer label
 let g:lightline#bufferline#read_only = '[!]'                          " readonly buffer label
 let g:lightline#bufferline#unnamed = '[*]'                            " unnamed buffer label
-let g:gundo_width = 80                                                " visual undo screen width
-let g:gundo_preview_height = 25                                       " visual undo preview diff height
-let g:gundo_return_on_revert = 0                                      " stay in gundo after reverting instead
-let g:gundo_prefer_python3 = 1                                        " lets move forward :P
 let g:lengthmatters_highlight_one_column = 1                          " only highlight 81st column on long lines
 let g:vimfiler_as_default_explorer = 1                                " do not use netrw
 let g:splitjoin_split_mapping = ''                                    " reset splitjoin mappings
 let g:splitjoin_join_mapping = ''                                     " reset splitjoin mappings
-let g:lengthmatters_excluded = ['vimfiler', 'gundo', 'magit',
+let g:lengthmatters_excluded = ['vimfiler', 'magit',
                               \ 'GV', 'help']                         " exclude highlighting > 80 cols for these filetypes
 
 " additional vimfiler settings
@@ -183,14 +175,6 @@ if executable('ag')
   let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor -g ""' " use ag with ctrlp
 endif
 
-" sources:
-"   https://github.com/chriskempson/base16-shell (Shell config)
-"   https://github.com/chriskempson/base16-vim/ (Plugin)
-if filereadable(expand("~/.vimrc_background"))
-  let base16colorspace=256
-  source ~/.vimrc_background
-endif
-
 " mappings
 nnoremap <S-Tab> :make<CR>
 nnoremap <C-x> :bd<CR>
@@ -204,7 +188,6 @@ nmap     <Leader>? <Plug>(incsearch-easymotion-?)
 nmap     <Leader>w <Plug>(easymotion-bd-w)
 noremap  <Leader>j :SplitjoinJoin<CR>
 noremap  <Leader>J :SplitjoinSplit<CR>
-noremap  <Leader>u :GundoToggle<CR>
 noremap  <Leader>m :MagitO<CR>
 noremap  <Leader>N :Pad new<CR>
 noremap  <Leader>n :Pad ls<CR>
