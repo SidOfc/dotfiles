@@ -1,4 +1,4 @@
-# plugin list
+# plugins
 plugins=(tmux git brew osx colorize github ruby bundler extract shrink-path)
 
 # zsh tmux plugin settings
@@ -7,10 +7,10 @@ ZSH_TMUX_AUTOSTART_ONCE=false
 ZSH_TMUX_FIXTERM_WITHOUT_256COLOR="xterm"
 ZSH_TMUX_FIXTERM_WITHOUT_256COLOR="xterm-256-color"
 
-# ssh connection stuff
+# ssh connection
 [[ -n "$SSH_CLIENT" ]] || DEFAULT_USER="$(whoami)"
 
-# load zsh
+# zsh
 export ZSH_THEME="kphoen"
 export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
@@ -23,7 +23,7 @@ setopt prompt_subst        # enable prompt substitution
 export PROMPT='[%{$fg[red]%}%n%{$reset_color%} at %{$fg[blue]%}$(shrink_path -f)%{$reset_color%}$(git_prompt_info)] %# '
 export EDITOR='vim'
 
-# various aliasses
+# aliasses
 alias ag='ag -i --path-to-ignore ~/.agignore'
 alias cr='crystal'
 alias zz="$EDITOR ~/.zshrc"
@@ -34,13 +34,14 @@ alias vup="vim +PluginUpdate"
 alias vcp="vim +PluginClean +qall"
 alias tt="$EDITOR ~/.tmux.conf"
 alias tr="tmux source-file ~/.tmux.conf"
-alias v="$EDITOR ."
+alias v="$EDITOR"
 
-# set terminal to 256-color mode when possible
 if [[ $TERM == xterm ]]; then
+  # set terminal to 256-color mode
   TERM=xterm-256color
 fi
 
+# keybindings
 bindkey '^e' autosuggest-accept
 
 # sourcing
