@@ -41,6 +41,8 @@ if [[ $TERM == xterm ]]; then
   TERM=xterm-256color
 fi
 
+bindkey '^e' autosuggest-accept
+
 # sourcing
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
