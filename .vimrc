@@ -1,7 +1,6 @@
-set nocompatible " required for package management
-filetype off " ditto
+set nocompatible
+filetype off
 
-" plugin statements / loading
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
@@ -10,8 +9,6 @@ Plugin 'chriskempson/base16-vim'             " see lines about base16 shell belo
 Plugin 'christoomey/vim-tmux-navigator'      " seamless pane switching between tmux and vim using vim binds
 Plugin 'ctrlpvim/ctrlp.vim'                  " fuzzy file finder
 Plugin 'haya14busa/incsearch.vim'            " show highlight while searching, hide highlight when done
-Plugin 'easymotion/vim-easymotion'           " epic movement motions
-Plugin 'haya14busa/incsearch-easymotion.vim' " add easymotion integration to incsearch
 Plugin 'hail2u/vim-css3-syntax'              " CSS3 support
 Plugin 'itchyny/lightline.vim'               " bottom line displaying mode / file / time etc...
 Plugin 'jreybert/vimagit'                    " interactive git staging
@@ -28,7 +25,6 @@ Plugin 'Shougo/vimfiler.vim'                 " file explorer attempt #2
 Plugin 'slim-template/vim-slim'              " slim-lang support
 Plugin 'tpope/vim-abolish'                   " smart case replace
 Plugin 'tpope/vim-commentary'                " easily insert comments
-Plugin 'tpope/vim-dispatch'                  " run some commands in the background
 Plugin 'tpope/vim-endwise'                   " auto insert 'end' keyword for ruby-like languages
 Plugin 'tpope/vim-fugitive'                  " I will never git without it :D
 Plugin 'tpope/vim-haml'                      " HAML support
@@ -39,14 +35,13 @@ Plugin 'w0rp/ale'                            " async linting of files, alternati
 Plugin 'fmoralesc/vim-pad'                   " take notes with vim
 Plugin 'wellle/targets.vim'                  " more flexible text-objects
 Plugin 'AndrewRadev/splitjoin.vim'           " toggle single line to multiline stuff
+Plugin 'benmills/vimux'                      " Run commands from vim
 
 " only emable to update tmux statusline look
-" Plugin 'edkolev/tmuxline.vim'                " tmux statusline match lightline theme
-
+" Plugin 'edkolev/tmuxline.vim'
 
 call vundle#end()
 
-" set statements
 filetype plugin indent on
 syntax enable                         " cuz white text is going to be awesome to edit :D
 set cursorline                        " highlight cursor line
@@ -62,7 +57,7 @@ set splitright                        " split after instead of before
 set termguicolors                     " enable termguicolors for better highlighting
 set background=dark                   " set bg dark
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp " place to keep swap files
-set clipboard^=unnamed                " copy into osx clipboard by default
+set clipboard=unnamed                 " copy into osx clipboard by default
 set directory=~/.vim-tmp,~/.tmp,~/tmp " ditto
 set encoding=utf-8                    " utf-8 files
 set fileencoding=utf-8                " utf-8 files
@@ -71,37 +66,39 @@ set fileformats=unix,dos              " try unix line endings before dos, use un
 set laststatus=2                      " always show statusline
 set shiftwidth=2                      " tabsize 2 spaces
 set showtabline=2                     " always show statusline
-set lazyredraw                        " reduce redraws
 set tabstop=2                         " tabsize 2 spaces
 set backspace=2                       " restore backspace
 set ttimeoutlen=50                    " keycode delay
-colorscheme base16-default-dark            " apply color scheme
+colorscheme base16-default-dark       " apply color scheme
 
-" let statements
-let mapleader = " "                                                   " remap leader
-let g:pad#dir = expand('~/notes')                                     " dir to store notes from vim-pad
-let g:pad#window_height = 20                                          " default window height
-let g:pad#open_in_split = 0                                           " open notes fullscreen
-let g:pad#set_mappings = 0                                            " do not set default vim-pad mappings
-let g:ale_echo_msg_error_str = 'E'                                    " error sign
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'              " status line format
-let g:ale_echo_msg_warning_str = 'W'                                  " warning sign
-let g:ale_linters = { 'ruby': ['rubocop'], 'javascript': ['eslint'] } " specify linters
-let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']                " error status format
-let g:ctrlp_show_hidden = 1                                           " allow ctrlp to show hidden files
-let g:incsearch#auto_nohlsearch = 1                                   " auto unhighlight after searching
-let g:incsearch#magic = '\v'                                          " sheer awesomeness
-let g:incsearch#do_not_save_error_message_history = 1                 " do not store incsearch errors in history
-let g:incsearch#consistent_n_direction = 1                            " when searching backward, do not invert meaning of n and N
-let g:jsx_ext_required = 0                                            " do not require .jsx extension for correct syntax highlighting
-let g:lightline#bufferline#show_number = 2                            " show buf number in bufferline
-let g:lightline#bufferline#shorten_path = 1                           " do not show full path
-let g:lightline#bufferline#modified = '[+]'                           " modifier buffer label
-let g:lightline#bufferline#read_only = '[!]'                          " readonly buffer label
-let g:lightline#bufferline#unnamed = '[*]'                            " unnamed buffer label
-let g:vimfiler_as_default_explorer = 1                                " do not use netrw
-let g:splitjoin_split_mapping = ''                                    " reset splitjoin mappings
-let g:splitjoin_join_mapping = ''                                     " reset splitjoin mappings
+let mapleader = " "                                      " remap leader
+let g:pad#dir = expand('~/notes')                        " dir to store notes from vim-pad
+let g:pad#window_height = 20                             " default window height
+let g:pad#set_mappings = 0                               " do not set default vim-pad mappings
+let g:ale_echo_msg_error_str = 'E'                       " error sign
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]' " status line format
+let g:ale_echo_msg_warning_str = 'W'                     " warning sign
+let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']   " error status format
+let g:ctrlp_show_hidden = 1                              " allow ctrlp to show hidden files
+let g:incsearch#auto_nohlsearch = 1                      " auto unhighlight after searching
+let g:incsearch#magic = '\v'                             " sheer awesomeness
+let g:incsearch#do_not_save_error_message_history = 1    " do not store incsearch errors in history
+let g:incsearch#consistent_n_direction = 1               " when searching backward, do not invert meaning of n and N
+let g:jsx_ext_required = 0                               " do not require .jsx extension for correct syntax highlighting
+let g:lightline#bufferline#show_number = 2               " show buf number in bufferline
+let g:lightline#bufferline#shorten_path = 1              " do not show full path
+let g:lightline#bufferline#modified = '[+]'              " modifier buffer label
+let g:lightline#bufferline#read_only = '[!]'             " readonly buffer label
+let g:lightline#bufferline#unnamed = '[*]'               " unnamed buffer label
+let g:vimfiler_as_default_explorer = 1                   " do not use netrw
+let g:splitjoin_split_mapping = ''                       " reset splitjoin mappings
+let g:splitjoin_join_mapping = ''                        " reset splitjoin mappings
+
+" additional ale settings
+let g:ale_linters = {
+      \ 'ruby': ['rubocop'],
+      \ 'javascript': ['eslint']
+      \ }
 
 " additional vimfiler settings
 call vimfiler#custom#profile('default', 'context', {
@@ -155,7 +152,7 @@ let g:lightline = {
 
 " tmuxline preset
 let g:tmuxline_preset = {
-        \ 'a':    '#S',
+        \ 'a':    '⬤',
         \ 'win':  '#I #W',
         \ 'cwin': '#I #W',
         \ 'y':    '%d·%m·%Y',
@@ -173,24 +170,20 @@ if executable('ag')
 endif
 
 " mappings
-nnoremap <S-Tab> :make<CR>
 nnoremap <C-x> :bd<CR>
 nmap     / <Plug>(incsearch-forward)
 nmap     ? <Plug>(incsearch-backward)
 nmap     g/ <Plug>(incsearch-stay)
 nmap     ga <Plug>(EasyAlign)
 xmap     ga <Plug>(EasyAlign)
-nmap     <Leader>/ <Plug>(incsearch-easymotion-/)
-nmap     <Leader>? <Plug>(incsearch-easymotion-?)
-nmap     <Leader>w <Plug>(easymotion-bd-w)
 noremap  <Leader>j :SplitjoinJoin<CR>
 noremap  <Leader>J :SplitjoinSplit<CR>
 noremap  <Leader>m :MagitO<CR>
 noremap  <Leader>N :Pad new<CR>
 noremap  <Leader>n :Pad ls<CR>
-noremap  <Leader>p :Dispatch! git pull<CR>
-noremap  <Leader>P :Dispatch! git push<CR>
-noremap  <Leader>h :GV<CR>
+noremap  <Leader>l :GV<CR>
+noremap  <Leader>e :VimuxPromptCommand<CR>
+noremap  <Leader>E :VimuxRunLastCommand<CR>
 nmap     <Leader>1 <Plug>lightline#bufferline#go(1)
 nmap     <Leader>2 <Plug>lightline#bufferline#go(2)
 nmap     <Leader>3 <Plug>lightline#bufferline#go(3)
@@ -223,11 +216,6 @@ hi IncSearchMatch guibg=#bbbbbb guifg=#121212
 hi IncSearchOnCursor guibg=#c27b4d guifg=#121212
 hi link IncSearchCursor IncSearchOnCursor
 
-" link highlight groups of plugin that uses incsearch
-" for consistent highlighting
-hi link EasyMotionMoveHL IncSearchOnCursor
-hi link EasyMotionIncSearch IncSearchMatch
-
 if !exists('*s:VimFilerOverride')
   function s:VimFilerOverride()
     nunmap <buffer> <Space>
@@ -237,12 +225,8 @@ endif
 " file autocmds
 augroup Files
   au!
-  au BufWritePre *              %s/\s\+$//e                     " remove trailing whitespace
-  au FileType vimfiler          call s:VimFilerOverride()       " keep using <Space-N> to switch tabs in vimfiler buffer
-  au FileType jsx,javascript    setlocal makeprg=node\ %        " use node as compiler for javascript files
-  au FileType ruby              setlocal makeprg=ruby\ %        " use ruby as compiler for ruby files
-  au FileType python            setlocal makeprg=python3\ %     " use python as compiler for python files
-  au FileType crystal           setlocal makeprg=crystal\ %     " use crystal as compiler for crystal files
+  au BufWritePre *              %s/\s\+$//e               " remove trailing whitespace
+  au FileType vimfiler          call s:VimFilerOverride() " keep using <Space-N> to switch tabs in vimfiler buffer
 augroup END
 
 " global autocmds
