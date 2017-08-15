@@ -94,6 +94,7 @@ let g:vimfiler_as_default_explorer = 1                   " do not use netrw
 let g:splitjoin_split_mapping = ''                       " reset splitjoin mappings
 let g:splitjoin_join_mapping = ''                        " reset splitjoin mappings
 let g:VimuxPromptString = '% '                           " change default vim prompt string
+let g:VimuxResetSequence = 'q C-u C-l'                   " clear output before running a command
 
 " additional ale settings
 let g:ale_linters = {
@@ -185,7 +186,7 @@ noremap  <Leader>n :Pad ls<CR>
 noremap  <Leader>l :GV<CR>
 noremap  <Leader>rr :VimuxPromptCommand<CR>
 noremap  <Leader>rl :VimuxRunLastCommand<CR>
-noremap  <Leader>rd :VimuxCloseRunner<CR>
+noremap  <Leader>re :VimuxCloseRunner<CR>
 nmap     <Leader>1 <Plug>lightline#bufferline#go(1)
 nmap     <Leader>2 <Plug>lightline#bufferline#go(2)
 nmap     <Leader>3 <Plug>lightline#bufferline#go(3)
