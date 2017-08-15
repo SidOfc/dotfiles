@@ -1,5 +1,5 @@
 # plugins
-plugins=(tmux git brew osx colorize github ruby bundler extract shrink-path)
+plugins=(tmux shrink-path)
 
 # zsh tmux plugin settings
 ZSH_TMUX_AUTOSTART=true
