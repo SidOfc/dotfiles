@@ -1,11 +1,15 @@
 # plugins
 plugins=(tmux shrink-path)
 
-# zsh tmux plugin settings
+# zsh tmux
 ZSH_TMUX_AUTOSTART=true
 ZSH_TMUX_AUTOSTART_ONCE=false
 ZSH_TMUX_FIXTERM_WITHOUT_256COLOR="xterm"
 ZSH_TMUX_FIXTERM_WITHOUT_256COLOR="xterm-256-color"
+
+# zsh autosuggest
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_USE_ASYNC=true
 
 # ssh connection
 [[ -n "$SSH_CLIENT" ]] || DEFAULT_USER="$(whoami)"
@@ -34,7 +38,7 @@ alias vup="vim +PluginUpdate"
 alias vcp="vim +PluginClean +qall"
 alias tt="$EDITOR ~/.tmux.conf"
 alias tr="tmux source-file ~/.tmux.conf"
-alias v="$EDITOR"
+alias v="$EDITOR ."
 
 if [[ $TERM == xterm ]]; then
   # set terminal to 256-color mode
