@@ -184,6 +184,8 @@ noremap  <Leader>m :MagitO<CR>
 noremap  <Leader>N :Pad new<CR>
 noremap  <Leader>n :Pad ls<CR>
 noremap  <Leader>l :GV<CR>
+noremap  <Leader>p VimuxRunCommand("git pull")<CR>
+noremap  <Leader>P VimuxRunCommand("git push")<CR>
 noremap  <Leader>rr :VimuxPromptCommand<CR>
 noremap  <Leader>rl :VimuxRunLastCommand<CR>
 noremap  <Leader>re :VimuxCloseRunner<CR>
