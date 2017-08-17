@@ -5,6 +5,9 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'           " most important, manages all other plugins
+Plugin 'sheerun/vim-polyglot'           " lots of language packs in one plugin
+Plugin 'Shougo/unite.vim'               " required for file explorer
+Plugin 'Shougo/vimfiler.vim'            " file explorer attempt #2
 Plugin 'chriskempson/base16-vim'        " see lines about base16 shell below
 Plugin 'christoomey/vim-tmux-navigator' " seamless pane switching between tmux and vim using vim binds
 Plugin 'ctrlpvim/ctrlp.vim'             " fuzzy file finder
@@ -12,16 +15,9 @@ Plugin 'haya14busa/incsearch.vim'       " show highlight while searching, hide h
 Plugin 'hail2u/vim-css3-syntax'         " CSS3 support
 Plugin 'itchyny/lightline.vim'          " bottom line displaying mode / file / time etc...
 Plugin 'jreybert/vimagit'               " interactive git staging
-Plugin 'juleswang/css.vim'              " improved CSS highlighting
 Plugin 'junegunn/gv.vim'                " git commit browser
 Plugin 'junegunn/vim-easy-align'        " align code easier
-Plugin 'kchmck/vim-coffee-script'       " coffeescript support
 Plugin 'mgee/lightline-bufferline'      " show open buffers at top of window
-Plugin 'mxw/vim-jsx'                    " JSX support
-Plugin 'pangloss/vim-javascript'        " improved JS support
-Plugin 'rhysd/vim-crystal'              " crystal-lang support
-Plugin 'Shougo/unite.vim'               " required for file explorer
-Plugin 'Shougo/vimfiler.vim'            " file explorer attempt #2
 Plugin 'slim-template/vim-slim'         " slim-lang support
 Plugin 'tpope/vim-abolish'              " smart case replace
 Plugin 'tpope/vim-commentary'           " easily insert comments
@@ -30,7 +26,7 @@ Plugin 'tpope/vim-fugitive'             " I will never git without it :D
 Plugin 'tpope/vim-haml'                 " HAML support
 Plugin 'tpope/vim-repeat'               " better repeat, extensible by plugins
 Plugin 'tpope/vim-sleuth'               " autodetect indent
-Plugin 'tpope/vim-surround'             " change any surrounding with ease, e.g. { to [ or ( for instance
+Plugin 'tpope/vim-surround'             " change any surrounding with ease, e.g. { to [ or (.
 Plugin 'w0rp/ale'                       " async linting of files, alternative to syntastic
 Plugin 'fmoralesc/vim-pad'              " take notes with vim
 Plugin 'wellle/targets.vim'             " more flexible text-objects
@@ -56,7 +52,7 @@ set splitbelow                        " split below instead of above
 set splitright                        " split after instead of before
 set termguicolors                     " enable termguicolors for better highlighting
 set background=dark                   " set bg dark
-set backupdir=~/.vim-tmp,~/.tmp,~/tmp " place to keep swap files
+set noswapfile                        " no more swapfiles
 set clipboard=unnamed                 " copy into osx clipboard by default
 set directory=~/.vim-tmp,~/.tmp,~/tmp " ditto
 set encoding=utf-8                    " utf-8 files
@@ -68,7 +64,13 @@ set shiftwidth=2                      " tabsize 2 spaces
 set showtabline=2                     " always show statusline
 set tabstop=2                         " tabsize 2 spaces
 set backspace=2                       " restore backspace
+set nowrap                            " do not wrap text at `textwidth`
+set noerrorbells                      " do not show error bells
+set novisualbell                      " do not use visual bell
 set ttimeoutlen=50                    " keycode delay
+set wildignore+=.git,.DS_Store,.,..   " ignore files
+set autoread                          " auto read changes outside vim
+set autowriteall                      " write all changed files
 colorscheme base16-default-dark       " apply color scheme
 
 let mapleader = " "                                      " remap leader
