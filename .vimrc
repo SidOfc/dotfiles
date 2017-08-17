@@ -4,38 +4,38 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-Plugin 'VundleVim/Vundle.vim'                " most important, manages all other plugins
-Plugin 'chriskempson/base16-vim'             " see lines about base16 shell below
-Plugin 'christoomey/vim-tmux-navigator'      " seamless pane switching between tmux and vim using vim binds
-Plugin 'ctrlpvim/ctrlp.vim'                  " fuzzy file finder
-Plugin 'haya14busa/incsearch.vim'            " show highlight while searching, hide highlight when done
-Plugin 'hail2u/vim-css3-syntax'              " CSS3 support
-Plugin 'itchyny/lightline.vim'               " bottom line displaying mode / file / time etc...
-Plugin 'jreybert/vimagit'                    " interactive git staging
-Plugin 'juleswang/css.vim'                   " improved CSS highlighting
-Plugin 'junegunn/gv.vim'                     " git commit browser
-Plugin 'junegunn/vim-easy-align'             " align code easier
-Plugin 'kchmck/vim-coffee-script'            " coffeescript support
-Plugin 'mgee/lightline-bufferline'           " show open buffers at top of window
-Plugin 'mxw/vim-jsx'                         " JSX support
-Plugin 'pangloss/vim-javascript'             " improved JS support
-Plugin 'rhysd/vim-crystal'                   " crystal-lang support
-Plugin 'Shougo/unite.vim'                    " required for file explorer
-Plugin 'Shougo/vimfiler.vim'                 " file explorer attempt #2
-Plugin 'slim-template/vim-slim'              " slim-lang support
-Plugin 'tpope/vim-abolish'                   " smart case replace
-Plugin 'tpope/vim-commentary'                " easily insert comments
-Plugin 'tpope/vim-endwise'                   " auto insert 'end' keyword for ruby-like languages
-Plugin 'tpope/vim-fugitive'                  " I will never git without it :D
-Plugin 'tpope/vim-haml'                      " HAML support
-Plugin 'tpope/vim-repeat'                    " better repeat, extensible by plugins
-Plugin 'tpope/vim-sleuth'                    " autodetect indent
-Plugin 'tpope/vim-surround'                  " change any surrounding with ease, e.g. { to [ or ( for instance
-Plugin 'w0rp/ale'                            " async linting of files, alternative to syntastic
-Plugin 'fmoralesc/vim-pad'                   " take notes with vim
-Plugin 'wellle/targets.vim'                  " more flexible text-objects
-Plugin 'AndrewRadev/splitjoin.vim'           " toggle single line to multiline stuff
-Plugin 'benmills/vimux'                      " Run commands from vim
+Plugin 'VundleVim/Vundle.vim'           " most important, manages all other plugins
+Plugin 'chriskempson/base16-vim'        " see lines about base16 shell below
+Plugin 'christoomey/vim-tmux-navigator' " seamless pane switching between tmux and vim using vim binds
+Plugin 'ctrlpvim/ctrlp.vim'             " fuzzy file finder
+Plugin 'haya14busa/incsearch.vim'       " show highlight while searching, hide highlight when done
+Plugin 'hail2u/vim-css3-syntax'         " CSS3 support
+Plugin 'itchyny/lightline.vim'          " bottom line displaying mode / file / time etc...
+Plugin 'jreybert/vimagit'               " interactive git staging
+Plugin 'juleswang/css.vim'              " improved CSS highlighting
+Plugin 'junegunn/gv.vim'                " git commit browser
+Plugin 'junegunn/vim-easy-align'        " align code easier
+Plugin 'kchmck/vim-coffee-script'       " coffeescript support
+Plugin 'mgee/lightline-bufferline'      " show open buffers at top of window
+Plugin 'mxw/vim-jsx'                    " JSX support
+Plugin 'pangloss/vim-javascript'        " improved JS support
+Plugin 'rhysd/vim-crystal'              " crystal-lang support
+Plugin 'Shougo/unite.vim'               " required for file explorer
+Plugin 'Shougo/vimfiler.vim'            " file explorer attempt #2
+Plugin 'slim-template/vim-slim'         " slim-lang support
+Plugin 'tpope/vim-abolish'              " smart case replace
+Plugin 'tpope/vim-commentary'           " easily insert comments
+Plugin 'tpope/vim-endwise'              " auto insert 'end' keyword for ruby-like languages
+Plugin 'tpope/vim-fugitive'             " I will never git without it :D
+Plugin 'tpope/vim-haml'                 " HAML support
+Plugin 'tpope/vim-repeat'               " better repeat, extensible by plugins
+Plugin 'tpope/vim-sleuth'               " autodetect indent
+Plugin 'tpope/vim-surround'             " change any surrounding with ease, e.g. { to [ or ( for instance
+Plugin 'w0rp/ale'                       " async linting of files, alternative to syntastic
+Plugin 'fmoralesc/vim-pad'              " take notes with vim
+Plugin 'wellle/targets.vim'             " more flexible text-objects
+Plugin 'AndrewRadev/splitjoin.vim'      " toggle single line to multiline stuff
+Plugin 'benmills/vimux'                 " Run commands from vim
 
 " only emable to update tmux statusline look
 " Plugin 'edkolev/tmuxline.vim'
