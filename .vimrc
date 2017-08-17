@@ -187,7 +187,7 @@ noremap  <Leader>l :GV<CR>
 noremap  <Leader>p :VimuxRunCommand("git pull")<CR>
 noremap  <Leader>P :VimuxRunCommand("git push")<CR>
 noremap  <Leader>s :VimuxRunCommand("git status")<CR>
-noremap  <Leader>d :Gdiff<CR>
+noremap  <Leader>O :Gdiff<CR>
 noremap  <Leader>rr :VimuxPromptCommand<CR>
 noremap  <Leader>rl :VimuxRunLastCommand<CR>
 noremap  <Leader>re :VimuxCloseRunner<CR>
