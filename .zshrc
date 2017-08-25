@@ -24,7 +24,7 @@ setopt prompt_subst
 
 # exports
 # PS1=$PS1
-export PROMPT='at %{$fg[blue]%}$(shrink_path -f)%{$reset_color%}$(git_prompt_info) ❯ '
+export PROMPT='%{$fg[blue]%}$(shrink_path -f)%{$fg[yellow]%} ❯ '
 export EDITOR='vim'
 
 # aliasses

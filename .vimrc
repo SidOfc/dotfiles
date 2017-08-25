@@ -40,7 +40,6 @@ call vundle#end()
 
 filetype plugin indent on
 syntax enable                         " cuz white text is going to be awesome to edit :D
-set cursorline                        " highlight cursor line
 set expandtab                         " softtabs, always
 set hidden                            " debatable, allow switching from unsaved buffer without '!'
 set ignorecase                        " ignore case in search
@@ -52,9 +51,9 @@ set splitbelow                        " split below instead of above
 set splitright                        " split after instead of before
 set termguicolors                     " enable termguicolors for better highlighting
 set background=dark                   " set bg dark
+set nobackup
 set noswapfile                        " no more swapfiles
 set clipboard=unnamed                 " copy into osx clipboard by default
-set directory=~/.vim-tmp,~/.tmp,~/tmp " ditto
 set encoding=utf-8                    " utf-8 files
 set fileencoding=utf-8                " utf-8 files
 set fileformat=unix                   " use unix line endings
@@ -69,8 +68,6 @@ set noerrorbells                      " do not show error bells
 set novisualbell                      " do not use visual bell
 set ttimeoutlen=50                    " keycode delay
 set wildignore+=.git,.DS_Store,.,..   " ignore files
-set autoread                          " auto read changes outside vim
-set autowriteall                      " write all changed files
 colorscheme base16-default-dark       " apply color scheme
 
 let mapleader = " "                                      " remap leader
@@ -93,6 +90,7 @@ let g:lightline#bufferline#modified = '[+]'              " modifier buffer label
 let g:lightline#bufferline#read_only = '[!]'             " readonly buffer label
 let g:lightline#bufferline#unnamed = '[*]'               " unnamed buffer label
 let g:vimfiler_as_default_explorer = 1                   " do not use netrw
+let g:vimfiler_ignore_pattern = '.git|.DS_Store|.|..'
 let g:splitjoin_split_mapping = ''                       " reset splitjoin mappings
 let g:splitjoin_join_mapping = ''                        " reset splitjoin mappings
 let g:VimuxPromptString = '% '                           " change default vim prompt string
@@ -166,11 +164,11 @@ let g:tmuxline_preset = {
         \ }
         \ }
 
-if executable('ag')
-  set grepprg=ag\ --vimgrep
+if executable('rg')
+  set grepprg=rg\ --color=never\ --vimgrep\ --no-ignore-vcs\ --hidden\ --glob\ ''             " use ripgrep as grepprg
 
-  let g:ctrlp_use_caching  = 0                                   " do not use caching in ctrlp
-  let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor -g ""' " use ag with ctrlp
+  let g:ctrlp_use_caching  = 0                                                                " do not use caching in ctrlp
+  let g:ctrlp_user_command = 'rg %s --files --color=never --no-ignore-vcs --hidden --glob ""' " use ripgrep in ctrlp
 endif
 
 " mappings
