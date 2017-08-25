@@ -221,7 +221,7 @@ hi link xmlEndTag xmlTag
 
 " incsearch consistent highlighting / different color for
 " match on cursor
-hi IncSearchMatch guibg=#bbbbbb guifg=#121212
+hi IncSearchMatch    guibg=#bbbbbb guifg=#121212
 hi IncSearchOnCursor guibg=#c27b4d guifg=#121212
 hi link IncSearchCursor IncSearchOnCursor
 
@@ -234,8 +234,8 @@ endif
 " file autocmds
 augroup Files
   au!
-  au BufWritePre *              %s/\s\+$//e               " remove trailing whitespace
-  au FileType vimfiler          call s:VimFilerOverride() " keep using <Space-N> to switch tabs in vimfiler buffer
+  au BufWritePre *     %s/\s\+$//e               " remove trailing whitespace
+  au FileType vimfiler call s:VimFilerOverride() " keep using <Space-N> to switch tabs in vimfiler buffer
 augroup END
 
 " global autocmds
