@@ -19,12 +19,12 @@ export ZSH_THEME="kphoen"
 export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
 
-setopt RM_STAR_WAIT        # sanity check for accidental 'rm *'
-setopt interactivecomments # bash comments in prompt
-setopt prompt_subst        # enable prompt substitution
+# enable prompt substitution
+setopt prompt_subst
 
 # exports
-export PROMPT='[%{$fg[red]%}%n%{$reset_color%} at %{$fg[blue]%}$(shrink_path -f)%{$reset_color%}$(git_prompt_info)] %# '
+# PS1=$PS1
+export PROMPT='at %{$fg[blue]%}$(shrink_path -f)%{$reset_color%}$(git_prompt_info) ❯ '
 export EDITOR='vim'
 
 # aliasses
@@ -46,6 +46,7 @@ if [[ $TERM == xterm ]]; then
 fi
 
 # keybindings
+bindkey -v
 bindkey '^e' autosuggest-accept
 
 # sourcing
