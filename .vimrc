@@ -32,6 +32,7 @@ Plugin 'fmoralesc/vim-pad'              " take notes with vim
 Plugin 'wellle/targets.vim'             " more flexible text-objects
 Plugin 'AndrewRadev/splitjoin.vim'      " toggle single line to multiline stuff
 Plugin 'benmills/vimux'                 " Run commands from vim
+Plugin 'vitalk/vim-shebang'             " filetype detection with shebang
 
 " only emable to update tmux statusline look
 " Plugin 'edkolev/tmuxline.vim'
@@ -171,6 +172,9 @@ if executable('rg')
   let g:ctrlp_user_command = 'rg %s --files --color=never --no-ignore-vcs --hidden --glob ""' " use ripgrep in ctrlp
 endif
 
+" detect filetypes with shebang, add unrecognized ones here
+AddShebangPattern! crystal ^#!.*/bin/env\s\+crystal\>
+
 " mappings
 nnoremap <C-x> :bd<CR>
 nmap     / <Plug>(incsearch-forward)
@@ -188,6 +192,7 @@ noremap  <Leader>p :VimuxRunCommand("git pull")<CR>
 noremap  <Leader>P :VimuxRunCommand("git push")<CR>
 noremap  <Leader>s :VimuxRunCommand("git status")<CR>
 noremap  <Leader>O :Gdiff<CR>
+noremap  <Leader>rt :VimuxRunCommand("clear;" . &ft . " " . bufname("%"))<CR>
 noremap  <Leader>rr :VimuxPromptCommand<CR>
 noremap  <Leader>rl :VimuxRunLastCommand<CR>
 noremap  <Leader>re :VimuxCloseRunner<CR>
@@ -226,6 +231,7 @@ hi link IncSearchCursor IncSearchOnCursor
 if !exists('*s:VimFilerOverride')
   function s:VimFilerOverride()
     nunmap <buffer> <Space>
+    nunmap <buffer> <C-j>
   endfunction
 endif
 
