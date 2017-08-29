@@ -33,6 +33,7 @@ Plugin 'wellle/targets.vim'             " more flexible text-objects
 Plugin 'AndrewRadev/splitjoin.vim'      " toggle single line to multiline stuff
 Plugin 'benmills/vimux'                 " Run commands from vim
 Plugin 'vitalk/vim-shebang'             " filetype detection with shebang
+Plugin 'easymotion/vim-easymotion'
 
 " only emable to update tmux statusline look
 " Plugin 'edkolev/tmuxline.vim'
@@ -182,6 +183,7 @@ nmap     ? <Plug>(incsearch-backward)
 nmap     g/ <Plug>(incsearch-stay)
 nmap     ga <Plug>(EasyAlign)
 xmap     ga <Plug>(EasyAlign)
+nmap     <Leader>w <Plug>(easymotion-bd-f)
 noremap  <Leader>j :SplitjoinJoin<CR>
 noremap  <Leader>J :SplitjoinSplit<CR>
 noremap  <Leader>m :MagitO<CR>
