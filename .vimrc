@@ -10,12 +10,10 @@ Plugin 'Shougo/unite.vim'               " required for file explorer
 Plugin 'Shougo/vimfiler.vim'            " file explorer attempt #2
 Plugin 'chriskempson/base16-vim'        " see lines about base16 shell below
 Plugin 'christoomey/vim-tmux-navigator' " seamless pane switching between tmux and vim using vim binds
-Plugin 'ctrlpvim/ctrlp.vim'             " fuzzy file finder
 Plugin 'haya14busa/incsearch.vim'       " show highlight while searching, hide highlight when done
 Plugin 'hail2u/vim-css3-syntax'         " CSS3 support
 Plugin 'itchyny/lightline.vim'          " bottom line displaying mode / file / time etc...
 Plugin 'jreybert/vimagit'               " interactive git staging
-Plugin 'junegunn/gv.vim'                " git commit browser
 Plugin 'junegunn/vim-easy-align'        " align code easier
 Plugin 'mgee/lightline-bufferline'      " show open buffers at top of window
 Plugin 'slim-template/vim-slim'         " slim-lang support
@@ -33,7 +31,8 @@ Plugin 'wellle/targets.vim'             " more flexible text-objects
 Plugin 'AndrewRadev/splitjoin.vim'      " toggle single line to multiline stuff
 Plugin 'benmills/vimux'                 " Run commands from vim
 Plugin 'vitalk/vim-shebang'             " filetype detection with shebang
-Plugin 'easymotion/vim-easymotion'
+Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plugin 'junegunn/fzf.vim'
 
 " only emable to update tmux statusline look
 " Plugin 'edkolev/tmuxline.vim'
@@ -80,7 +79,6 @@ let g:ale_echo_msg_error_str = 'E'                       " error sign
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]' " status line format
 let g:ale_echo_msg_warning_str = 'W'                     " warning sign
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']   " error status format
-let g:ctrlp_show_hidden = 1                              " allow ctrlp to show hidden files
 let g:incsearch#auto_nohlsearch = 1                      " auto unhighlight after searching
 let g:incsearch#magic = '\v'                             " sheer awesomeness
 let g:incsearch#do_not_save_error_message_history = 1    " do not store incsearch errors in history
@@ -97,6 +95,22 @@ let g:splitjoin_split_mapping = ''                       " reset splitjoin mappi
 let g:splitjoin_join_mapping = ''                        " reset splitjoin mappings
 let g:VimuxPromptString = '% '                           " change default vim prompt string
 let g:VimuxResetSequence = 'q C-u C-l'                   " clear output before running a command
+let g:fzf_layout = { 'down': '~20%' }
+
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
 
 " additional ale settings
 let g:ale_linters = {
@@ -167,10 +181,7 @@ let g:tmuxline_preset = {
         \ }
 
 if executable('rg')
-  set grepprg=rg\ --color=never\ --vimgrep\ --no-ignore-vcs\ --hidden\ --glob\ ''             " use ripgrep as grepprg
-
-  let g:ctrlp_use_caching  = 0                                                                " do not use caching in ctrlp
-  let g:ctrlp_user_command = 'rg %s --files --color=never --no-ignore-vcs --hidden --glob ""' " use ripgrep in ctrlp
+  set grepprg=rg\ --color=never\ --vimgrep\ --no-ignore-vcs\ --follow\ --hidden\ --glob\ '' " use ripgrep as grepprg
 endif
 
 " detect filetypes with shebang, add unrecognized ones here
@@ -183,13 +194,13 @@ nmap     ? <Plug>(incsearch-backward)
 nmap     g/ <Plug>(incsearch-stay)
 nmap     ga <Plug>(EasyAlign)
 xmap     ga <Plug>(EasyAlign)
-nmap     <Leader>w <Plug>(easymotion-bd-f)
+nmap     <C-p> :Files<CR>
 noremap  <Leader>j :SplitjoinJoin<CR>
 noremap  <Leader>J :SplitjoinSplit<CR>
 noremap  <Leader>m :MagitO<CR>
 noremap  <Leader>N :Pad new<CR>
 noremap  <Leader>n :Pad ls<CR>
-noremap  <Leader>l :GV<CR>
+noremap  <Leader>l :Commits<CR>
 noremap  <Leader>p :VimuxRunCommand("git pull")<CR>
 noremap  <Leader>P :VimuxRunCommand("git push")<CR>
 noremap  <Leader>s :VimuxRunCommand("git status")<CR>
@@ -215,7 +226,7 @@ noremap  <Right> <NOP>
 
 " in diff mode
 if &diff
-  let g:ctrlp_map = '<C-q>'
+  nunmap <buffer> <C-p>
 
   nnoremap <C-n> ]c
   nmap     <C-p> [c

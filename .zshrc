@@ -23,12 +23,10 @@ source $ZSH/oh-my-zsh.sh
 setopt prompt_subst
 
 # exports
-# PS1=$PS1
 export PROMPT='%{$fg[blue]%}$(shrink_path -f)%{$fg[yellow]%} ❯ '
 export EDITOR='vim'
 
 # aliasses
-alias ag='ag -i --path-to-ignore ~/.agignore'
 alias cr='crystal'
 alias zz="$EDITOR ~/.zshrc"
 alias zx="source ~/.zshrc"
@@ -54,3 +52,25 @@ source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/local/etc/profile.d/autojump.sh
 source $HOME/.asdf/asdf.sh
+source ~/.fzf.zsh
+
+# additional FZF exports
+export FZF_TMUX=1
+export FZF_TMUX_HEIGHT=20
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# This is the same functionality as fzf's ctrl-t, except that the file or
+# directory selected is now automatically cd'ed or opened, respectively.
+fzf-open-file-or-dir() {
+  local out=$(eval $FZF_DEFAULT_COMMAND | fzf-tmux -d 20 --exit-0)
+
+  if [ -f "$out" ]; then
+    $EDITOR "$out" < /dev/tty
+  elif [ -d "$out" ]; then
+    cd "$out"
+    zle reset-prompt
+  fi
+}
+zle     -N   fzf-open-file-or-dir
+bindkey '^P' fzf-open-file-or-dir
