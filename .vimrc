@@ -23,7 +23,6 @@ Plugin 'tpope/vim-endwise'              " auto insert 'end' keyword for ruby-lik
 Plugin 'tpope/vim-fugitive'             " I will never git without it :D
 Plugin 'tpope/vim-haml'                 " HAML support
 Plugin 'tpope/vim-repeat'               " better repeat, extensible by plugins
-Plugin 'tpope/vim-sleuth'               " autodetect indent
 Plugin 'tpope/vim-surround'             " change any surrounding with ease, e.g. { to [ or (.
 Plugin 'w0rp/ale'                       " async linting of files, alternative to syntastic
 Plugin 'fmoralesc/vim-pad'              " take notes with vim
@@ -41,7 +40,6 @@ call vundle#end()
 
 filetype plugin indent on
 syntax enable                         " cuz white text is going to be awesome to edit :D
-set expandtab                         " softtabs, always
 set hidden                            " debatable, allow switching from unsaved buffer without '!'
 set ignorecase                        " ignore case in search
 set smartcase                         " use case-sensitive if a capital letter is included
@@ -60,9 +58,11 @@ set fileencoding=utf-8                " utf-8 files
 set fileformat=unix                   " use unix line endings
 set fileformats=unix,dos              " try unix line endings before dos, use unix
 set laststatus=2                      " always show statusline
-set shiftwidth=2                      " tabsize 2 spaces
+set expandtab                         " softtabs, always (e.g. convert tabs to spaces)
+set shiftwidth=2                      " tabsize 2 spaces (by default)
+set softtabstop=2                     " tabsize 2 spaces (by default)
+set tabstop=2                         " tabsize 2 spaces (by default)
 set showtabline=2                     " always show statusline
-set tabstop=2                         " tabsize 2 spaces
 set backspace=2                       " restore backspace
 set nowrap                            " do not wrap text at `textwidth`
 set noerrorbells                      " do not show error bells
@@ -149,12 +149,11 @@ let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'modified', 'fugitive', 'filename' ] ],
-      \   'right': [ [ 'lineinfo', 'sleuth' ],
+      \   'right': [ [ 'lineinfo'],
       \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
       \ },
       \ 'component': {
       \   'mode':     '%{lightline#mode()[0]}',
-      \   'sleuth':   '%{SleuthIndicator()}',
       \   'readonly': '%{&filetype=="help"?"":&readonly?"[!]":""}',
       \   'modified': '%{&filetype=="help"?"":&modified?"[+]":&modifiable?"":"[-]"}',
       \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
@@ -224,14 +223,6 @@ noremap  <Down>  <NOP>
 noremap  <Left>  <NOP>
 noremap  <Right> <NOP>
 
-" in diff mode
-if &diff
-  nunmap <buffer> <C-p>
-
-  nnoremap <C-n> ]c
-  nmap     <C-p> [c
-endif
-
 " fix jsx highlighting of end xml tags
 hi link xmlEndTag xmlTag
 
@@ -248,11 +239,18 @@ if !exists('*s:VimFilerOverride')
   endfunction
 endif
 
+if !exists('*s:IndentSize')
+  function s:IndentSize(amount)
+    execute("setlocal expandtab ts=" . a:amount . " sts=" . a:amount . " sw=" . a:amount)
+  endfunction
+endif
+
 " file autocmds
 augroup Files
   au!
-  au BufWritePre *     %s/\s\+$//e               " remove trailing whitespace
-  au FileType vimfiler call s:VimFilerOverride() " keep using <Space-N> to switch tabs in vimfiler buffer
+  au BufWritePre *                %s/\s\+$//e               " remove trailing whitespace
+  au FileType vimfiler            call s:VimFilerOverride() " keep using <Space-N> to switch tabs in vimfiler buffer
+  au FileType javascript,jsx      call s:IndentSize(4)      " 4 space indent languages
 augroup END
 
 " global autocmds
