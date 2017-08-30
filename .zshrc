@@ -25,6 +25,7 @@ setopt prompt_subst
 # exports
 export PROMPT='%{$fg[blue]%}$(shrink_path -f)%{$fg[yellow]%} ❯ '
 export EDITOR='vim'
+export EVENT_NOKQUEUE=1
 
 # aliasses
 alias cr='crystal'
@@ -63,7 +64,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # This is the same functionality as fzf's ctrl-t, except that the file or
 # directory selected is now automatically cd'ed or opened, respectively.
 fzf-open-file-or-dir() {
-  local out=$(eval $FZF_DEFAULT_COMMAND | fzf-tmux -d 20 --exit-0)
+  local out=$(eval $FZF_DEFAULT_COMMAND | fzf-tmux -d $FZF_TMUX_HEIGHT --exit-0)
 
   if [ -f "$out" ]; then
     $EDITOR "$out" < /dev/tty
@@ -72,5 +73,28 @@ fzf-open-file-or-dir() {
     zle reset-prompt
   fi
 }
+
+# mnemonic: [K]ill [P]rocess
+kp() {
+  local pid
+  pid=$(ps -ef | sed 1d | fzf-tmux -d $FZF_TMUX_HEIGHT -m | awk '{print $2}')
+
+  if [ "x$pid" != "x" ]
+  then
+    echo $pid | xargs kill -${1:-9}
+  fi
+}
+
+# mnemonic: [K]ill [S]erver
+ks() {
+  local pid
+  pid=$(lsof -Pwni tcp | sed 1d | fzf-tmux -d $FZF_TMUX_HEIGHT -m | awk '{print $2}')
+
+  if [ "x$pid" != "x" ]
+  then
+    echo $pid | xargs kill -${1:-9}
+  fi
+}
+
 zle     -N   fzf-open-file-or-dir
 bindkey '^P' fzf-open-file-or-dir

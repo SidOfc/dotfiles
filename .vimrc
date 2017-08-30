@@ -8,7 +8,7 @@ Plugin 'VundleVim/Vundle.vim'           " most important, manages all other plug
 Plugin 'sheerun/vim-polyglot'           " lots of language packs in one plugin
 Plugin 'Shougo/unite.vim'               " required for file explorer
 Plugin 'Shougo/vimfiler.vim'            " file explorer attempt #2
-Plugin 'chriskempson/base16-vim'        " see lines about base16 shell below
+Plugin 'chriskempson/base16-vim'        " color scheme
 Plugin 'christoomey/vim-tmux-navigator' " seamless pane switching between tmux and vim using vim binds
 Plugin 'haya14busa/incsearch.vim'       " show highlight while searching, hide highlight when done
 Plugin 'hail2u/vim-css3-syntax'         " CSS3 support
