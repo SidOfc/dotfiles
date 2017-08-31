@@ -42,7 +42,7 @@ alias tt="$EDITOR ~/.tmux.conf"
 alias tr="tmux source-file ~/.tmux.conf"
 alias v="$EDITOR ."
 alias e="exa"
-alias ee="exa --long --tree"
+alias et="exa --long --tree"
 
 if [[ $TERM == xterm ]]; then
   # set terminal to 256-color mode

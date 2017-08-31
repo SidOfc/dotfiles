@@ -194,6 +194,7 @@ nmap     g/ <Plug>(incsearch-stay)
 nmap     ga <Plug>(EasyAlign)
 xmap     ga <Plug>(EasyAlign)
 nmap     <C-p> :Files<CR>
+nmap     <C-g> :Ag<CR>
 noremap  <Leader>j :SplitjoinJoin<CR>
 noremap  <Leader>J :SplitjoinSplit<CR>
 noremap  <Leader>m :MagitO<CR>
@@ -236,6 +237,7 @@ if !exists('*s:VimFilerOverride')
   function s:VimFilerOverride()
     nunmap <buffer> <Space>
     nunmap <buffer> <C-j>
+    nunmap <buffer> <C-g>
   endfunction
 endif
 
