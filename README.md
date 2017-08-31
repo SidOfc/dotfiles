@@ -43,9 +43,9 @@ The missing package manager for macOS
 Additional packages / dependencies
 
     $ brew install zsh zsh-completions zsh-syntax-highlighting zsh-autosuggestions
-    $ brew install gnupg autojump wget diff-so-fancy ripgrep fzf
-    $ brew install vim --with-python3 --with-luajit
+    $ brew install gnupg autojump wget diff-so-fancy ripgrep fzf exa
     $ brew install tmux reattach-to-user-namespace
+    $ brew install vim --with-python3 --with-luajit
 
 After installing fzf, also run: `/usr/local/opt/fzf/install`
 

@@ -11,6 +11,9 @@ ZSH_TMUX_FIXTERM_WITHOUT_256COLOR="xterm-256-color"
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 ZSH_AUTOSUGGEST_USE_ASYNC=true
 
+# case insensitive autocomplete
+CASE_SENSITIVE="false"
+
 # ssh connection
 [[ -n "$SSH_CLIENT" ]] || DEFAULT_USER="$(whoami)"
 
@@ -38,6 +41,8 @@ alias vcp="vim +PluginClean +qall"
 alias tt="$EDITOR ~/.tmux.conf"
 alias tr="tmux source-file ~/.tmux.conf"
 alias v="$EDITOR ."
+alias e="exa"
+alias ee="exa --long --tree"
 
 if [[ $TERM == xterm ]]; then
   # set terminal to 256-color mode
