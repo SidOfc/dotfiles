@@ -87,7 +87,7 @@ fzf-open-file-or-dir() {
 bip() {
   local inst=$(brew search | fzf)
 
-  if [[ "$inst" ]]; then
+  if [[ $inst ]]; then
     brew install $inst
   fi
 }
@@ -96,8 +96,8 @@ bip() {
 bup() {
   local upd=$(brew leaves | fzf)
 
-  if [[ "$upd" ]]; then
-    brew update $upd
+  if [[ $upd ]]; then
+    brew upgrade $upd
   fi
 }
 
@@ -105,7 +105,7 @@ bup() {
 bcp() {
   local uninst=$(brew leaves | fzf)
 
-  if [[ "$uninst" ]]; then
+  if [[ $uninst ]]; then
     brew uninstall $uninst
   fi
 }
