@@ -41,8 +41,9 @@ alias vcp="vim +PluginClean +qall"
 alias tt="$EDITOR ~/.tmux.conf"
 alias tr="tmux source-file ~/.tmux.conf"
 alias v="$EDITOR ."
-alias e="exa"
+alias e="exa -a1"
 alias et="exa --long --tree"
+alias rv="source $HOME/.rvm/scripts/rvm"
 
 if [[ $TERM == xterm ]]; then
   # set terminal to 256-color mode
@@ -59,6 +60,9 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/local/etc/profile.d/autojump.sh
 source $HOME/.asdf/asdf.sh
 source ~/.fzf.zsh
+
+# remove duplicates from path
+typeset -U PATH
 
 # additional FZF exports
 export FZF_TMUX=1
