@@ -83,6 +83,26 @@ fzf-open-file-or-dir() {
   fi
 }
 
+# mnemoic [B]rew [I]nstall [P]lugin
+bip() {
+  brew install $(brew search | fzf)
+}
+
+# mnemoic [B]rew [U]pdate [P]lugin
+bup() {
+  brew update $(brew leaves | fzf)
+}
+
+# mnemoic [B]rew [C]lean [P]lugin (e.g. uninstall)
+bcp() {
+  brew uninstall $(brew leaves | fzf)
+}
+
+# mnemonic: [F]ind [P]ath
+fp() {
+  echo $(echo $PATH | sed -e $'s/:/\\\n/g' | fzf)
+}
+
 # mnemonic: [K]ill [P]rocess
 kp() {
   local pid
@@ -92,11 +112,6 @@ kp() {
   then
     echo $pid | xargs kill -${1:-9}
   fi
-}
-
-# mnemonic: [F]ind [P]ath
-fp() {
-  echo $(echo $PATH | sed -e $'s/:/\\\n/g' | fzf)
 }
 
 # mnemonic: [K]ill [S]erver
