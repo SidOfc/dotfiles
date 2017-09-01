@@ -204,6 +204,10 @@ nmap     <Leader>7 <Plug>lightline#bufferline#go(7)
 nmap     <Leader>8 <Plug>lightline#bufferline#go(8)
 nmap     <Leader>9 <Plug>lightline#bufferline#go(9)
 nmap     <Leader>0 <Plug>lightline#bufferline#go(10)
+nmap     <Tab> >>
+nmap     <S-Tab> <<
+vmap     <Tab> >><ESC>gv
+vmap     <S-Tab> <<<ESC>gv
 noremap  <Up>    <NOP>
 noremap  <Down>  <NOP>
 noremap  <Left>  <NOP>
