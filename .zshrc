@@ -70,8 +70,9 @@ export FZF_TMUX_HEIGHT=20
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# This is the same functionality as fzf's ctrl-t, except that the file or
-# directory selected is now automatically cd'ed or opened, respectively.
+# vim-like CtrlP in zsh.
+# - When dir, CD into it
+# - When file, run "$EDITOR file"
 fzf-open-file-or-dir() {
   local out=$(eval $FZF_DEFAULT_COMMAND | fzf-tmux -d $FZF_TMUX_HEIGHT --exit-0)
 
@@ -83,32 +84,65 @@ fzf-open-file-or-dir() {
   fi
 }
 
+### ASDF functions
+vmi() {
+  local lang=${1}
+
+  if [[ $lang ]]; then
+    local versions=$(asdf list-all $lang | fzf -m)
+    if [[ $versions ]]; then
+      for version in $(echo $versions); do; asdf install $lang $version; done
+    fi
+  else
+    echo 'Please supply installed asdf plugin'
+    return 1
+  fi
+}
+
+vmc() {
+  local lang=${1}
+
+  if [[ $lang ]]; then
+    local versions = $(asdf list $lang | fzf)
+    if [[ $versions ]]; then
+      for version in $(echo $versions); do; asdf uninstall $lang $version; done
+    fi
+  else
+    echo 'Please supply installed asdf plugin'
+    return 1
+  fi
+}
+
+### BREW FUNCTIONS
+
 # mnemonic [B]rew [I]nstall [P]lugin
 bip() {
-  local inst=$(brew search | fzf)
+  local inst=$(brew search | fzf -m)
 
   if [[ $inst ]]; then
-    brew install $inst
+    for prog in $(echo $inst); do; brew install $prog; done;
   fi
 }
 
 # mnemonic [B]rew [U]pdate [P]lugin
 bup() {
-  local upd=$(brew leaves | fzf)
+  local upd=$(brew leaves | fzf -m)
 
   if [[ $upd ]]; then
-    brew upgrade $upd
+    for prog in $(echo $upd); do; brew upgrade $prog; done;
   fi
 }
 
 # mnemonic [B]rew [C]lean [P]lugin (e.g. uninstall)
 bcp() {
-  local uninst=$(brew leaves | fzf)
+  local uninst=$(brew leaves | fzf -m)
 
   if [[ $uninst ]]; then
-    brew uninstall $uninst
+    for prog in $(echo $uninst); do; brew uninstall $prog; done;
   fi
 }
+
+### GENERAL FUNCTIONS
 
 # mnemonic: [F]ind [P]ath
 fp() {
