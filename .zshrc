@@ -90,6 +90,11 @@ kp() {
   fi
 }
 
+# mnemonic: [F]ind [P]ath
+fp() {
+  echo $(echo $PATH | sed -e $'s/:/\\\n/g' | fzf)
+}
+
 # mnemonic: [K]ill [S]erver
 ks() {
   local pid

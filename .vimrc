@@ -6,8 +6,6 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'           " most important, manages all other plugins
 Plugin 'sheerun/vim-polyglot'           " lots of language packs in one plugin
-Plugin 'Shougo/unite.vim'               " required for file explorer
-Plugin 'Shougo/vimfiler.vim'            " file explorer attempt #2
 Plugin 'chriskempson/base16-vim'        " color scheme
 Plugin 'christoomey/vim-tmux-navigator' " seamless pane switching between tmux and vim using vim binds
 Plugin 'haya14busa/incsearch.vim'       " show highlight while searching, hide highlight when done
@@ -23,20 +21,29 @@ Plugin 'tpope/vim-endwise'              " auto insert 'end' keyword for ruby-lik
 Plugin 'tpope/vim-fugitive'             " I will never git without it :D
 Plugin 'tpope/vim-haml'                 " HAML support
 Plugin 'tpope/vim-repeat'               " better repeat, extensible by plugins
+Plugin 'tpope/vim-vinegar'              " enhance netrw
 Plugin 'tpope/vim-surround'             " change any surrounding with ease, e.g. { to [ or (.
 Plugin 'w0rp/ale'                       " async linting of files, alternative to syntastic
-Plugin 'fmoralesc/vim-pad'              " take notes with vim
 Plugin 'wellle/targets.vim'             " more flexible text-objects
 Plugin 'AndrewRadev/splitjoin.vim'      " toggle single line to multiline stuff
 Plugin 'benmills/vimux'                 " Run commands from vim
 Plugin 'vitalk/vim-shebang'             " filetype detection with shebang
-Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plugin 'junegunn/fzf.vim'
+Plugin 'junegunn/fzf.vim'               " fuzzy finder
+Plugin 'junegunn/fzf', {
+  \   'dir': '~/.fzf',
+  \   'do': './install --all'
+  \ }
 
 " only emable to update tmux statusline look
 " Plugin 'edkolev/tmuxline.vim'
 
 call vundle#end()
+
+if !exists('*s:IndentSize')
+  function s:IndentSize(amount)
+    execute("setlocal expandtab ts=" . a:amount . " sts=" . a:amount . " sw=" . a:amount)
+  endfunction
+endif
 
 filetype plugin indent on
 syntax enable                         " cuz white text is going to be awesome to edit :D
@@ -72,9 +79,6 @@ set wildignore+=.git,.DS_Store,.,..   " ignore files
 colorscheme base16-default-dark       " apply color scheme
 
 let mapleader = " "                                      " remap leader
-let g:pad#dir = expand('~/notes')                        " dir to store notes from vim-pad
-let g:pad#window_height = 20                             " default window height
-let g:pad#set_mappings = 0                               " do not set default vim-pad mappings
 let g:ale_echo_msg_error_str = 'E'                       " error sign
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]' " status line format
 let g:ale_echo_msg_warning_str = 'W'                     " warning sign
@@ -89,13 +93,15 @@ let g:lightline#bufferline#shorten_path = 1              " do not show full path
 let g:lightline#bufferline#modified = '[+]'              " modifier buffer label
 let g:lightline#bufferline#read_only = '[!]'             " readonly buffer label
 let g:lightline#bufferline#unnamed = '[*]'               " unnamed buffer label
-let g:vimfiler_as_default_explorer = 1                   " do not use netrw
-let g:vimfiler_ignore_pattern = '.git|.DS_Store|.|..'
 let g:splitjoin_split_mapping = ''                       " reset splitjoin mappings
 let g:splitjoin_join_mapping = ''                        " reset splitjoin mappings
 let g:VimuxPromptString = '% '                           " change default vim prompt string
 let g:VimuxResetSequence = 'q C-u C-l'                   " clear output before running a command
 let g:fzf_layout = { 'down': '~20%' }
+let g:netrw_banner = 0
+let g:netrw_winsize = 20
+let g:netrw_liststyle= 3
+let g:netrw_altv = 1
 
 " Customize fzf colors to match your color scheme
 let g:fzf_colors =
@@ -117,11 +123,6 @@ let g:ale_linters = {
       \ 'ruby': ['rubocop'],
       \ 'javascript': ['eslint']
       \ }
-
-" additional vimfiler settings
-call vimfiler#custom#profile('default', 'context', {
-      \ 'safe': 0
-      \ })
 
 " additional easyalign delims
 let g:easy_align_delimiters = {
@@ -198,8 +199,6 @@ nmap     <C-g> :Ag<CR>
 noremap  <Leader>j :SplitjoinJoin<CR>
 noremap  <Leader>J :SplitjoinSplit<CR>
 noremap  <Leader>m :MagitO<CR>
-noremap  <Leader>N :Pad new<CR>
-noremap  <Leader>n :Pad ls<CR>
 noremap  <Leader>l :Commits<CR>
 noremap  <Leader>p :VimuxRunCommand("git pull")<CR>
 noremap  <Leader>P :VimuxRunCommand("git push")<CR>
@@ -233,26 +232,11 @@ hi IncSearchMatch    guibg=#bbbbbb guifg=#121212
 hi IncSearchOnCursor guibg=#c27b4d guifg=#121212
 hi link IncSearchCursor IncSearchOnCursor
 
-if !exists('*s:VimFilerOverride')
-  function s:VimFilerOverride()
-    nunmap <buffer> <Space>
-    nunmap <buffer> <C-j>
-    nunmap <buffer> <C-g>
-  endfunction
-endif
-
-if !exists('*s:IndentSize')
-  function s:IndentSize(amount)
-    execute("setlocal expandtab ts=" . a:amount . " sts=" . a:amount . " sw=" . a:amount)
-  endfunction
-endif
-
 " file autocmds
 augroup Files
   au!
-  au BufWritePre *                %s/\s\+$//e               " remove trailing whitespace
-  au FileType vimfiler            call s:VimFilerOverride() " keep using <Space-N> to switch tabs in vimfiler buffer
-  au FileType javascript,jsx      call s:IndentSize(4)      " 4 space indent languages
+  au BufWritePre *                %s/\s\+$//e          " remove trailing whitespace
+  au FileType javascript,jsx      call s:IndentSize(4) " 4 space indent languages
 augroup END
 
 " global autocmds
