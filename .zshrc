@@ -85,17 +85,29 @@ fzf-open-file-or-dir() {
 
 # mnemoic [B]rew [I]nstall [P]lugin
 bip() {
-  brew install $(brew search | fzf)
+  local inst=$(brew search | fzf)
+
+  if [[ "$inst" ]]; then
+    brew install $inst
+  fi
 }
 
 # mnemoic [B]rew [U]pdate [P]lugin
 bup() {
-  brew update $(brew leaves | fzf)
+  local upd=$(brew leaves | fzf)
+
+  if [[ "$upd" ]]; then
+    brew update $upd
+  fi
 }
 
 # mnemoic [B]rew [C]lean [P]lugin (e.g. uninstall)
 bcp() {
-  brew uninstall $(brew leaves | fzf)
+  local uninst=$(brew leaves | fzf)
+
+  if [[ "$uninst" ]]; then
+    brew uninstall $uninst
+  fi
 }
 
 # mnemonic: [F]ind [P]ath
