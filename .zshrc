@@ -83,7 +83,7 @@ fzf-open-file-or-dir() {
   fi
 }
 
-# mnemoic [B]rew [I]nstall [P]lugin
+# mnemonic [B]rew [I]nstall [P]lugin
 bip() {
   local inst=$(brew search | fzf)
 
@@ -92,7 +92,7 @@ bip() {
   fi
 }
 
-# mnemoic [B]rew [U]pdate [P]lugin
+# mnemonic [B]rew [U]pdate [P]lugin
 bup() {
   local upd=$(brew leaves | fzf)
 
@@ -101,7 +101,7 @@ bup() {
   fi
 }
 
-# mnemoic [B]rew [C]lean [P]lugin (e.g. uninstall)
+# mnemonic [B]rew [C]lean [P]lugin (e.g. uninstall)
 bcp() {
   local uninst=$(brew leaves | fzf)
 
