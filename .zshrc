@@ -103,7 +103,7 @@ vmc() {
   local lang=${1}
 
   if [[ $lang ]]; then
-    local versions = $(asdf list $lang | fzf)
+    local versions=$(asdf list $lang | fzf -m)
     if [[ $versions ]]; then
       for version in $(echo $versions); do; asdf uninstall $lang $version; done
     fi
