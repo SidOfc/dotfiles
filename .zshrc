@@ -59,7 +59,6 @@ source $HOME/.asdf/asdf.sh
 source ~/.fzf.zsh
 
 # final path adjustments
-export PATH="$PATH:$HOME/dotfiles/bin"
 typeset -U PATH
 
 # additional FZF exports
@@ -70,7 +69,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # caniuse for quick access to global support list
 cani() {
-  ciu | sort -rn | fzf > /dev/null
+  ~/dotfiles/bin/ciu | sort -rn | fzf > /dev/null
 }
 
 # vim-like CtrlP in zsh.
@@ -91,30 +90,28 @@ fzf-open-file-or-dir() {
 vmi() {
   local lang=${1}
 
+  if [[ ! $lang ]]; then
+    lang=$(asdf plugin-list | fzf)
+  fi
+
   if [[ $lang ]]; then
-    local versions=$(asdf list-all $lang | fzf -m)
-    if [[ $versions ]]; then
-      for version in $(echo $versions);
-      do; asdf install $lang $version; done;
-    fi
-  else
-    echo 'Please supply installed asdf plugin'
-    return 1
+    for version in $(asdf list-all $lang | sort -nrk1,1 | fzf -m)
+    do asdf install $lang $version
+    done
   fi
 }
 
 vmc() {
   local lang=${1}
 
+  if [[ ! $lang ]]; then
+    lang=$(asdf plugin-list | fzf)
+  fi
+
   if [[ $lang ]]; then
-    local versions=$(asdf list $lang | fzf -m)
-    if [[ $versions ]]; then
-      for version in $(echo $versions);
-      do; asdf uninstall $lang $version; done;
-    fi
-  else
-    echo 'Please supply installed asdf plugin'
-    return 1
+    for version in $(asdf list $lang | sort -nrk1,1 | fzf -m)
+    do asdf uninstall $lang $version
+    done
   fi
 }
 
@@ -125,8 +122,9 @@ bip() {
   local inst=$(brew search | fzf -m)
 
   if [[ $inst ]]; then
-    for prog in $(echo $inst);
-    do; brew install $prog; done;
+    for prog in $(echo $inst)
+    do brew install $prog
+    done
   fi
 }
 
@@ -135,8 +133,9 @@ bup() {
   local upd=$(brew leaves | fzf -m)
 
   if [[ $upd ]]; then
-    for prog in $(echo $upd);
-    do; brew upgrade $prog; done;
+    for prog in $(echo $upd)
+    do brew upgrade $prog
+    done
   fi
 }
 
@@ -145,8 +144,9 @@ bcp() {
   local uninst=$(brew leaves | fzf -m)
 
   if [[ $uninst ]]; then
-    for prog in $(echo $uninst);
-    do; brew uninstall $prog; done;
+    for prog in $(echo $uninst)
+    do brew uninstall $prog
+    done
   fi
 }
 
@@ -154,13 +154,12 @@ bcp() {
 
 # mnemonic: [F]ind [P]ath
 fp() {
-  echo $(echo $PATH | sed -e $'s/:/\\\n/g' | fzf)
+  echo $(echo $PATH | sed -e $'s/:/\\\n/g' | fzf > /dev/null)
 }
 
 # mnemonic: [K]ill [P]rocess
 kp() {
-  local pid
-  pid=$(ps -ef | sed 1d | fzf-tmux -d $FZF_TMUX_HEIGHT -m | awk '{print $2}')
+  local pid=$(ps -ef | sed 1d | fzf-tmux -d $FZF_TMUX_HEIGHT -m | awk '{print $2}')
 
   if [ "x$pid" != "x" ]
   then
@@ -170,8 +169,7 @@ kp() {
 
 # mnemonic: [K]ill [S]erver
 ks() {
-  local pid
-  pid=$(lsof -Pwni tcp | sed 1d | fzf-tmux -d $FZF_TMUX_HEIGHT -m | awk '{print $2}')
+  local pid=$(lsof -Pwni tcp | sed 1d | fzf-tmux -d $FZF_TMUX_HEIGHT -m | awk '{print $2}')
 
   if [ "x$pid" != "x" ]
   then
@@ -179,5 +177,9 @@ ks() {
   fi
 }
 
+zle     -N   kp
+zle     -N   ks
 zle     -N   fzf-open-file-or-dir
+bindkey '^I' ks
+bindkey '^O' kp
 bindkey '^P' fzf-open-file-or-dir
