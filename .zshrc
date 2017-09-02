@@ -39,10 +39,7 @@ alias vip="vim +PluginInstall +qall"
 alias vup="vim +PluginUpdate"
 alias vcp="vim +PluginClean +qall"
 alias tt="$EDITOR ~/.tmux.conf"
-alias tr="tmux source-file ~/.tmux.conf"
 alias v="$EDITOR ."
-alias e="exa -a1"
-alias et="exa --long --tree"
 alias rv="source $HOME/.rvm/scripts/rvm"
 
 if [[ $TERM == xterm ]]; then
@@ -61,7 +58,8 @@ source /usr/local/etc/profile.d/autojump.sh
 source $HOME/.asdf/asdf.sh
 source ~/.fzf.zsh
 
-# remove duplicates from path
+# final path adjustments
+export PATH="$PATH:$HOME/dotfiles/bin"
 typeset -U PATH
 
 # additional FZF exports
@@ -69,6 +67,11 @@ export FZF_TMUX=1
 export FZF_TMUX_HEIGHT=20
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# caniuse for quick access to global support list
+cani() {
+  ciu | sort -rn | fzf > /dev/null
+}
 
 # vim-like CtrlP in zsh.
 # - When dir, CD into it
@@ -91,7 +94,8 @@ vmi() {
   if [[ $lang ]]; then
     local versions=$(asdf list-all $lang | fzf -m)
     if [[ $versions ]]; then
-      for version in $(echo $versions); do; asdf install $lang $version; done
+      for version in $(echo $versions);
+      do; asdf install $lang $version; done;
     fi
   else
     echo 'Please supply installed asdf plugin'
@@ -105,7 +109,8 @@ vmc() {
   if [[ $lang ]]; then
     local versions=$(asdf list $lang | fzf -m)
     if [[ $versions ]]; then
-      for version in $(echo $versions); do; asdf uninstall $lang $version; done
+      for version in $(echo $versions);
+      do; asdf uninstall $lang $version; done;
     fi
   else
     echo 'Please supply installed asdf plugin'
@@ -120,7 +125,8 @@ bip() {
   local inst=$(brew search | fzf -m)
 
   if [[ $inst ]]; then
-    for prog in $(echo $inst); do; brew install $prog; done;
+    for prog in $(echo $inst);
+    do; brew install $prog; done;
   fi
 }
 
@@ -129,7 +135,8 @@ bup() {
   local upd=$(brew leaves | fzf -m)
 
   if [[ $upd ]]; then
-    for prog in $(echo $upd); do; brew upgrade $prog; done;
+    for prog in $(echo $upd);
+    do; brew upgrade $prog; done;
   fi
 }
 
@@ -138,7 +145,8 @@ bcp() {
   local uninst=$(brew leaves | fzf -m)
 
   if [[ $uninst ]]; then
-    for prog in $(echo $uninst); do; brew uninstall $prog; done;
+    for prog in $(echo $uninst);
+    do; brew uninstall $prog; done;
   fi
 }
 

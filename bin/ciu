@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+require 'json'
+
+module Ciu
+  def self.features
+    data
+  end
+
+  def self.row ft
+    [status(ft['status']), support(ft['usage_perc_y']), title(ft['title']), stats(ft['stats'])].join '  '
+  end
+
+  def self.title title, max_width = 30, filler = '...'
+    title.size >= max_width ? title[0..(max_width - filler.size - 1)] + filler : title + (' ' * (max_width - title.size))
+  end
+
+  def self.status status
+    ('[' + status + ']').ljust(7)
+  end
+
+  def self.support percentage
+    (percentage.to_s + '%').ljust(6)
+  end
+
+  def self.stats stats
+    maxlen = stats.keys.map(&:size).max
+    %w[ie edge safari ios_saf opera firefox chrome android].reduce "" do |output, browser| + 5
+    output += "    [#{stats[browser].values.last == 'y' ? '+' : '-'}] #{browser}".ljust(maxlen)
+    end
+  end
+
+  def self.data
+    @data ||= begin
+      path = File.expand_path '~/caniuse.json'
+      if File.exists?(path) && File.mtime(path).to_i > (Time.now.to_i - 86400)
+        JSON.parse(File.read(path))
+      else
+        download!
+      end
+    end
+  end
+
+  def self.download!
+    path = File.expand_path '~/caniuse.json'
+    json = JSON.parse `curl --silent https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json`
+    data = json['data'].values.map(&method(:row))
+
+    File.open(path, 'w') { |f| f.write data.to_json }
+    data
+  end
+end
+
+puts Ciu.features.join "\n"
