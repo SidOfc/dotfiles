@@ -8,7 +8,7 @@ module Ciu
   COL       = '   '
   VER_BACK  = 2
   FETCH_URL = 'https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json'
-  STAT_SYMS = { 'n' => '-', 'y' => '+' }.freeze
+  STAT_SYMS = { 'n' => '-', 'y' => '+', 'p' => '~' }.freeze
   LIST      = %w[ie edge safari ios_saf opera op_mob firefox chrome android bb]
   NAMES     = { 'firefox' => 'ff', 'chrome' => 'chr', 'safari' => 'saf',
                 'ios_saf' => 'saf_ios', 'opera' => 'opr', 'op_mob' => 'opr_mob',
@@ -46,7 +46,7 @@ module Ciu
     @data ||= begin
       path = File.expand_path '~/caniuse-db.txt'
       exists = File.exists? path
-      update = File.mtime(path).to_i < Time.now.to_i - MAX_AGE
+      update = exists && File.mtime(path).to_i < Time.now.to_i - MAX_AGE
 
       exists && !update ? File.read(path) : download!
     end

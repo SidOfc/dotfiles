@@ -69,7 +69,13 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # caniuse for quick access to global support list
 cani() {
-  ~/dotfiles/bin/ciu | sort -rn | fzf > /dev/null
+  local feats=$(~/dotfiles/bin/ciu | sort -rn | fzf -m | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
+
+  if [[ $feats ]]; then
+    for feat in $(echo $feats)
+    do caniuse $feat
+    done
+  fi
 }
 
 # vim-like CtrlP in zsh.
