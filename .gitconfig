@@ -24,11 +24,9 @@
 	old = red bold
 	new = green bold
 [color "status"]
-	added = yellow
-	changed = green
-	untracked = cyan
-[alias]
-	d = difftool
+	added = green
+	changed = yellow
+	untracked = blue
 [merge]
 	tool = vimdiff
 	conflictstyle = diff3
