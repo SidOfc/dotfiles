@@ -167,6 +167,15 @@ bcp() {
   fi
 }
 
+### LASTPASS
+lps() {
+  local selected=$(lpass ls --long | fzf-tmux -d $FZF_TMUX_HEIGHT | awk '{print $5}' | cut -d] -f1)
+
+  if [[ $selected ]]; then
+    lpass show -c --password "$selected"
+  fi
+}
+
 ### GENERAL FUNCTIONS
 
 # mnemonic: [F]ind [P]ath
@@ -197,8 +206,10 @@ ks() {
 zle     -N   kp
 zle     -N   ks
 zle     -N   fp
+zle     -N   lps
 zle     -N   fzf-open-file-or-dir
 bindkey '^W' ks
 bindkey '^Q' kp
-bindkey '^E' fp
+bindkey '^Z' lps
+bindkey '^X' fp
 bindkey '^P' fzf-open-file-or-dir

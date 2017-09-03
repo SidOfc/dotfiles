@@ -46,6 +46,7 @@ Additional packages / dependencies
     $ brew install gnupg autojump wget diff-so-fancy ripgrep fzf
     $ brew install tmux reattach-to-user-namespace
     $ brew install vim --with-python3 --with-luajit
+    $ brew install lastpass-cli --with-pinentry
 
 After installing fzf, also run: `/usr/local/opt/fzf/install`
 
