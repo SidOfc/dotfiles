@@ -44,7 +44,7 @@ module Ciu
 
   def self.data
     @data ||= begin
-      path = File.expand_path '~/caniuse-db.txt'
+      path = File.expand_path '~/.caniuse-fzf-data'
       exists = File.exists? path
       update = exists && File.mtime(path).to_i < Time.now.to_i - MAX_AGE
 
@@ -53,7 +53,7 @@ module Ciu
   end
 
   def self.download!
-    path = File.expand_path '~/caniuse-db.txt'
+    path = File.expand_path '~/.caniuse-fzf-data'
     json = JSON.parse `curl --silent #{FETCH_URL}`
     data = json['data'].values.map(&method(:row)).join "\n"
 

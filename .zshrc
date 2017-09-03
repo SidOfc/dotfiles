@@ -41,6 +41,17 @@ alias vcp="vim +PluginClean +qall"
 alias tt="$EDITOR ~/.tmux.conf"
 alias v="$EDITOR ."
 alias rv="source $HOME/.rvm/scripts/rvm"
+alias la="ls -al"
+alias laf="ls -al | grep ${1}"
+alias ga="git add ."
+alias gc="git commit -m ${1}"
+alias gs="git status"
+alias gd="git diff"
+alias gdt="git difftool"
+alias gmt="git mergetool"
+alias gpl="git pull ${1} ${2}"
+alias grb="git rebase ${1}"
+alias gps="git push ${1} ${2}"
 
 if [[ $TERM == xterm ]]; then
   # set terminal to 256-color mode
@@ -186,6 +197,6 @@ ks() {
 zle     -N   kp
 zle     -N   ks
 zle     -N   fzf-open-file-or-dir
-bindkey '^Q' ks
-bindkey '^A' kp
+bindkey '^W' ks
+bindkey '^Q' kp
 bindkey '^P' fzf-open-file-or-dir
