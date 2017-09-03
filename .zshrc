@@ -180,6 +180,6 @@ ks() {
 zle     -N   kp
 zle     -N   ks
 zle     -N   fzf-open-file-or-dir
-bindkey '^I' ks
-bindkey '^O' kp
+bindkey '^Q' ks
+bindkey '^A' kp
 bindkey '^P' fzf-open-file-or-dir

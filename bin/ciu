@@ -3,12 +3,23 @@
 require 'json'
 
 module Ciu
+  MAX_AGE   = 86400 # 1 day in seconds
+  STATUSSES = { 'rec' => 'rc', 'unoff' => 'un', 'other' => 'ot' }.freeze
+  COL       = '   '
+  VER_BACK  = 2
+  FETCH_URL = 'https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json'
+  STAT_SYMS = { 'n' => '-', 'y' => '+' }.freeze
+  LIST      = %w[ie edge safari ios_saf opera op_mob firefox chrome android bb]
+  NAMES     = { 'firefox' => 'ff', 'chrome' => 'chr', 'safari' => 'saf',
+                'ios_saf' => 'saf_ios', 'opera' => 'opr', 'op_mob' => 'opr_mob',
+                'android' => 'andr' }.freeze
+
   def self.features
     data
   end
 
   def self.row ft
-    [status(ft['status']), support(ft['usage_perc_y']), title(ft['title']), stats(ft['stats'])].join '  '
+    [status(ft['status']), support(ft['usage_perc_y']), title(ft['title']), *stats(ft['stats'])].join COL
   end
 
   def self.title title, max_width = 30, filler = '...'
@@ -16,7 +27,7 @@ module Ciu
   end
 
   def self.status status
-    ('[' + status + ']').ljust(7)
+    '[' + (STATUSSES[status] || status) + ']'
   end
 
   def self.support percentage
@@ -24,31 +35,31 @@ module Ciu
   end
 
   def self.stats stats
-    maxlen = stats.keys.map(&:size).max
-    %w[ie edge safari ios_saf opera firefox chrome android].reduce "" do |output, browser| + 5
-    output += "    [#{stats[browser].values.last == 'y' ? '+' : '-'}] #{browser}".ljust(maxlen)
+    LIST.reduce [] do |output, browser|
+      indic = stats[browser].values.last(VER_BACK)
+                            .map { |yn| STAT_SYMS.fetch(yn, '-') }.join
+      output << "#{indic}#{NAMES[browser] || browser}"
     end
   end
 
   def self.data
     @data ||= begin
-      path = File.expand_path '~/caniuse.json'
-      if File.exists?(path) && File.mtime(path).to_i > (Time.now.to_i - 86400)
-        JSON.parse(File.read(path))
-      else
-        download!
-      end
+      path = File.expand_path '~/caniuse-db.txt'
+      exists = File.exists? path
+      update = File.mtime(path).to_i < Time.now.to_i - MAX_AGE
+
+      exists && !update ? File.read(path) : download!
     end
   end
 
   def self.download!
-    path = File.expand_path '~/caniuse.json'
-    json = JSON.parse `curl --silent https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json`
-    data = json['data'].values.map(&method(:row))
+    path = File.expand_path '~/caniuse-db.txt'
+    json = JSON.parse `curl --silent #{FETCH_URL}`
+    data = json['data'].values.map(&method(:row)).join "\n"
 
-    File.open(path, 'w') { |f| f.write data.to_json }
+    File.open(path, 'w') { |f| f.write data }
     data
   end
 end
 
-puts Ciu.features.join "\n"
+puts Ciu.features
