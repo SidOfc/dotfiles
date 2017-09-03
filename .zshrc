@@ -51,7 +51,7 @@ alias gdt="git difftool"
 alias gmt="git mergetool"
 alias gpl="git pull ${1} ${2}"
 alias grb="git rebase ${1}"
-alias gps="git push ${1} ${2}"
+alias gp="git push ${1} ${2}"
 
 if [[ $TERM == xterm ]]; then
   # set terminal to 256-color mode
@@ -84,7 +84,7 @@ cani() {
 
   if [[ $feats ]]; then
     for feat in $(echo $feats)
-    do caniuse $feat
+    do if [[ $feat ]]; then; caniuse $feat; fi
     done
   fi
 }

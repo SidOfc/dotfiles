@@ -35,10 +35,10 @@ module Ciu
   end
 
   def self.stats stats
-    LIST.reduce [] do |output, browser|
-      indic = stats[browser].values.last(VER_BACK)
-                            .map { |yn| STAT_SYMS.fetch(yn, '-') }.join
-      output << "#{indic}#{NAMES[browser] || browser}"
+    LIST.map do |browser|
+      stats[browser].values.last(VER_BACK)
+        .map { |ypn| STAT_SYMS.fetch ypn, '-' }
+        .join + (NAMES[browser] || browser)
     end
   end
 
