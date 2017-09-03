@@ -171,7 +171,7 @@ bcp() {
 
 # mnemonic: [F]ind [P]ath
 fp() {
-  echo $(echo $PATH | sed -e $'s/:/\\\n/g' | fzf > /dev/null)
+  echo $PATH | sed -e $'s/:/\\\n/g' | fzf-tmux -d $FZF_TMUX_HEIGHT > /dev/null
 }
 
 # mnemonic: [K]ill [P]rocess
@@ -196,7 +196,9 @@ ks() {
 
 zle     -N   kp
 zle     -N   ks
+zle     -N   fp
 zle     -N   fzf-open-file-or-dir
 bindkey '^W' ks
 bindkey '^Q' kp
+bindkey '^E' fp
 bindkey '^P' fzf-open-file-or-dir
