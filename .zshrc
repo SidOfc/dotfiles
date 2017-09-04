@@ -26,7 +26,7 @@ source $ZSH/oh-my-zsh.sh
 setopt prompt_subst
 
 # exports
-export PROMPT='%{$fg[blue]%}$(shrink_path -f)%{$fg[yellow]%} ❯ '
+export PROMPT='%{$fg[blue]%}$(shrink_path -f)%{$fg[yellow]%}$(git_prompt_info)%{$fg[yellow]%} ❯ '
 export EDITOR='vim'
 export EVENT_NOKQUEUE=1
 
