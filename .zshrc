@@ -169,10 +169,15 @@ bcp() {
 
 ### LASTPASS
 lps() {
-  local selected=$(lpass ls --long | fzf-tmux -d $FZF_TMUX_HEIGHT | awk '{print $5}' | cut -d] -f1)
+  if [[ $(lpass status | grep '^Not logged in') ]]; then
+    echo "\nNot logged in, please login using: lpass login [--trust] USERNAME"
+    zle reset-prompt
+  else
+    local selected=$(lpass ls --long | fzf-tmux -d $FZF_TMUX_HEIGHT | awk '{print $5}' | cut -d] -f1)
 
-  if [[ $selected ]]; then
-    lpass show -c --password "$selected"
+    if [[ $selected ]]; then
+      lpass show -c --password "$selected"
+    fi
   fi
 }
 
