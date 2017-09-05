@@ -23,8 +23,7 @@ Plugin 'tpope/vim-haml'                 " HAML support
 Plugin 'tpope/vim-repeat'               " better repeat, extensible by plugins
 Plugin 'tpope/vim-vinegar'              " enhance netrw
 Plugin 'tpope/vim-surround'             " change any surrounding with ease, e.g. { to [ or (.
-Plugin 'w0rp/ale'                       " async linting of files, alternative to syntastic
-Plugin 'wellle/targets.vim'             " more flexible text-objects
+Plugin 'w0rp/ale'                       " async linting of files
 Plugin 'AndrewRadev/splitjoin.vim'      " toggle single line to multiline stuff
 Plugin 'benmills/vimux'                 " Run commands from vim
 Plugin 'vitalk/vim-shebang'             " filetype detection with shebang
@@ -76,6 +75,9 @@ set noerrorbells                      " do not show error bells
 set novisualbell                      " do not use visual bell
 set gdefault                          " invert meaning of 'g' => s/// = global, s///g = single
 set ttimeoutlen=50                    " keycode delay
+set showcmd                           " show command keystrokes
+set wildmenu                          " vim autocomplete
+set wildmode="list:longest"           " autocomplete mode
 set wildignore+=.git,.DS_Store,.,..   " ignore files
 colorscheme base16-default-dark       " apply color scheme
 
@@ -84,6 +86,9 @@ let g:ale_echo_msg_error_str = 'E'                       " error sign
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]' " status line format
 let g:ale_echo_msg_warning_str = 'W'                     " warning sign
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']   " error status format
+let g:ale_lint_delay = 1000                              " relint max once per second
+let g:ale_set_loclist = 0                                " do not use location list
+let g:ale_set_quickfix = 1                               " but do use quickfix list
 let g:incsearch#auto_nohlsearch = 1                      " auto unhighlight after searching
 let g:incsearch#magic = '\v'                             " sheer awesomeness
 let g:incsearch#do_not_save_error_message_history = 1    " do not store incsearch errors in history
