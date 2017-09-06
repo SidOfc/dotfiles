@@ -46,6 +46,7 @@ endif
 
 filetype plugin indent on
 syntax enable                         " cuz white text is going to be awesome to edit :D
+set path+=**                          " add cwd and 1 level of nesting to path
 set hidden                            " debatable, allow switching from unsaved buffer without '!'
 set ignorecase                        " ignore case in search
 set smartcase                         " use case-sensitive if a capital letter is included
@@ -77,8 +78,8 @@ set gdefault                          " invert meaning of 'g' => s/// = global, 
 set ttimeoutlen=50                    " keycode delay
 set showcmd                           " show command keystrokes
 set wildmenu                          " vim autocomplete
-set wildmode="list:longest"           " autocomplete mode
-set wildignore+=.git,.DS_Store,.,..   " ignore files
+set wildmode=longest:full,full        " autocomplete mode
+set wildignore+=.git,.DS_Store        " ignore files
 colorscheme base16-default-dark       " apply color scheme
 
 let mapleader = " "                                      " remap leader
