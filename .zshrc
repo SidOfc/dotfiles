@@ -80,7 +80,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # caniuse for quick access to global support list
 cani() {
-  local feats=$(~/dotfiles/bin/ciu | sort -rn | fzf -m | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
+  local feats=$(~/dotfiles/bin/ciu | sort -rn | fzf -m --header="[caniuse:info]" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
 
   if [[ $feats ]]; then
     for feat in $(echo $feats)
@@ -90,16 +90,11 @@ cani() {
 }
 
 # vim-like CtrlP in zsh.
-# - When dir, CD into it
-# - When file, run "$EDITOR file"
-fzf-open-file-or-dir() {
-  local out=$(eval $FZF_DEFAULT_COMMAND | fzf-tmux -d $FZF_TMUX_HEIGHT --exit-0)
+fzf-ctrlp-open-in-vim() {
+  local out=$(eval $FZF_DEFAULT_COMMAND | fzf-tmux -d $FZF_TMUX_HEIGHT --exit-0 --header="[vim:open]")
 
   if [ -f "$out" ]; then
     $EDITOR "$out" < /dev/tty
-  elif [ -d "$out" ]; then
-    cd "$out"
-    zle reset-prompt
   fi
 }
 
@@ -185,7 +180,7 @@ lps() {
     echo "\nNot logged in, please login using: lpass login [--trust] USERNAME"
     zle reset-prompt
   else
-    local selected=$(lpass ls --long | fzf-tmux -d $FZF_TMUX_HEIGHT | awk '{print $5}' | cut -d] -f1)
+    local selected=$(lpass ls --long | fzf-tmux -d $FZF_TMUX_HEIGHT --header="[lastpass:copy]" | awk '{print $5}' | cut -d] -f1)
 
     if [[ $selected ]]; then
       lpass show -c --password "$selected"
@@ -197,12 +192,12 @@ lps() {
 
 # mnemonic: [F]ind [P]ath
 fp() {
-  echo $PATH | sed -e $'s/:/\\\n/g' | fzf-tmux -d $FZF_TMUX_HEIGHT > /dev/null
+  echo $PATH | sed -e $'s/:/\\\n/g' | fzf-tmux -d $FZF_TMUX_HEIGHT --header="[debug:path]" > /dev/null
 }
 
 # mnemonic: [K]ill [P]rocess
 kp() {
-  local pid=$(ps -ef | sed 1d | fzf-tmux -d $FZF_TMUX_HEIGHT -m | awk '{print $2}')
+  local pid=$(ps -ef | sed 1d | fzf-tmux -d $FZF_TMUX_HEIGHT -m --header="[kill:process]" | awk '{print $2}')
 
   if [ "x$pid" != "x" ]
   then
@@ -212,7 +207,7 @@ kp() {
 
 # mnemonic: [K]ill [S]erver
 ks() {
-  local pid=$(lsof -Pwni tcp | sed 1d | fzf-tmux -d $FZF_TMUX_HEIGHT -m | awk '{print $2}')
+  local pid=$(lsof -Pwni tcp | sed 1d | fzf-tmux -d $FZF_TMUX_HEIGHT -m --header="[kill:tcp]" | awk '{print $2}')
 
   if [ "x$pid" != "x" ]
   then
@@ -224,9 +219,9 @@ zle     -N   kp
 zle     -N   ks
 zle     -N   fp
 zle     -N   lps
-zle     -N   fzf-open-file-or-dir
+zle     -N   fzf-ctrlp-open-in-vim
 bindkey '^W' ks
 bindkey '^Q' kp
 bindkey '^Z' lps
 bindkey '^X' fp
-bindkey '^P' fzf-open-file-or-dir
+bindkey '^P' fzf-ctrlp-open-in-vim
