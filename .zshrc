@@ -103,31 +103,43 @@ fzf-open-file-or-dir() {
   fi
 }
 
-### ASDF functions
+### ASDF
+# mnemonic [V]ersion [M]anager [I]nstall
 vmi() {
   local lang=${1}
 
-  if [[ ! $lang ]]; then
-    lang=$(asdf plugin-list | fzf)
+  if [[ !$lang ]]; then
+    lang=$(asdf plugin-list-all | fzf -m --header="[asdf:install]")
   fi
 
   if [[ $lang ]]; then
-    for version in $(asdf list-all $lang | sort -nrk1,1 | fzf -m)
-    do asdf install $lang $version
+    for lng in $(echo $lang); do
+      if [[ -z $(asdf plugin-list | rg $lng) ]]; then
+        asdf plugin-add $lng
+      else
+        asdf plugin-update $lng &!
+      fi
+
+      for version in $(asdf list-all $lng | sort -nrk1,1 | fzf -m --header="[asdf:${lng}:install]")
+      do asdf install $lng $version
+      done
     done
   fi
 }
 
+# mnemonic [V]ersion [M]anager [C]lean
 vmc() {
   local lang=${1}
 
-  if [[ ! $lang ]]; then
-    lang=$(asdf plugin-list | fzf)
+  if [[ -z $lang ]]; then
+    lang=$(asdf plugin-list | fzf -m --header="[asdf:clean]")
   fi
 
   if [[ $lang ]]; then
-    for version in $(asdf list $lang | sort -nrk1,1 | fzf -m)
-    do asdf uninstall $lang $version
+    for lng in $(echo $lang); do
+      for version in $(asdf list $lng | sort -nrk1,1 | fzf -m --header="[asdf:${lng}:clean]")
+      do asdf uninstall $lng $version &!
+      done
     done
   fi
 }
