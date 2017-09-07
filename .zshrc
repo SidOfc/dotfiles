@@ -108,7 +108,7 @@ fzf-open-file-or-dir() {
 vmi() {
   local lang=${1}
 
-  if [[ !$lang ]]; then
+  if [[ -z $lang ]]; then
     lang=$(asdf plugin-list-all | fzf -m --header="[asdf:install]")
   fi
 
@@ -117,7 +117,7 @@ vmi() {
       if [[ -z $(asdf plugin-list | rg $lng) ]]; then
         asdf plugin-add $lng
       else
-        asdf plugin-update $lng &!
+        asdf plugin-update $lng > /dev/null &!
       fi
 
       for version in $(asdf list-all $lng | sort -nrk1,1 | fzf -m --header="[asdf:${lng}:install]")
@@ -138,7 +138,7 @@ vmc() {
   if [[ $lang ]]; then
     for lng in $(echo $lang); do
       for version in $(asdf list $lng | sort -nrk1,1 | fzf -m --header="[asdf:${lng}:clean]")
-      do asdf uninstall $lng $version &!
+      do asdf uninstall $lng $version > /dev/null &!
       done
     done
   fi
@@ -148,7 +148,7 @@ vmc() {
 
 # mnemonic [B]rew [I]nstall [P]lugin
 bip() {
-  local inst=$(brew search | fzf -m)
+  local inst=$(brew search | fzf -m --header="[brew:install]")
 
   if [[ $inst ]]; then
     for prog in $(echo $inst)
@@ -159,22 +159,22 @@ bip() {
 
 # mnemonic [B]rew [U]pdate [P]lugin
 bup() {
-  local upd=$(brew leaves | fzf -m)
+  local upd=$(brew leaves | fzf -m --header="[brew:update]")
 
   if [[ $upd ]]; then
     for prog in $(echo $upd)
-    do brew upgrade $prog
+    do brew upgrade $prog > /dev/null &!
     done
   fi
 }
 
 # mnemonic [B]rew [C]lean [P]lugin (e.g. uninstall)
 bcp() {
-  local uninst=$(brew leaves | fzf -m)
+  local uninst=$(brew leaves | fzf -m --header="[brew:clean]")
 
   if [[ $uninst ]]; then
     for prog in $(echo $uninst)
-    do brew uninstall $prog
+    do brew uninstall $prog > /dev/null &!
     done
   fi
 }
