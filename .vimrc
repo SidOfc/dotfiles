@@ -70,7 +70,7 @@ set backspace=2                 " restore backspace
 set nowrap                      " do not wrap text at `textwidth`
 set noerrorbells                " do not show error bells
 set novisualbell                " do not use visual bell
-set timeoutlen=250              " mapping delay
+set timeoutlen=350              " mapping delay
 set ttimeoutlen=50              " keycode delay
 set wildignore+=.git,.DS_Store  " ignore files
 colorscheme base16-default-dark " apply color scheme
