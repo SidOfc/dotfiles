@@ -53,6 +53,7 @@ set smartcase                         " use case-sensitive if a capital letter i
 set noshowmode                        " statusline makes -- INSERT -- info irrelevant
 set number                            " show lines
 set relativenumber                    " show relative number
+set cursorline                        " highlight cursor line
 set splitbelow                        " split below instead of above
 set splitright                        " split after instead of before
 set termguicolors                     " enable termguicolors for better highlighting
