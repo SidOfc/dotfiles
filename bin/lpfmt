@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+llen   = 0
+flen   = 0
+ilen   = 0
+ulen   = 0
+spacer = '   '
+
+filtered = ARGF.read.split("\n").map do |line|
+  res = line.scan(/\[(\w+):\s*([^\]]+)\]/i).to_h
+  folder, label = line.match(/[^\d:\-\s]+([^\s]+)/i)[0].to_s
+                      .downcase.gsub(/[\(\)\\\,]/, '').split('/')
+
+  res['folder'] = folder
+  res['label']  = label
+
+  cilen = res['id'].to_s.size
+  cllen = res['label'].to_s.size
+  culen = res['username'].to_s.size
+  cflen = res['folder'].to_s.size
+
+  ilen = cilen if cilen > ilen
+  ulen = culen if culen > ulen
+  llen = cllen if cllen > llen
+  flen = cflen if cflen > flen
+
+  res
+end
+
+filtered.each do |item|
+  puts [item['id'].to_s.ljust(ilen), item['folder'].to_s.ljust(flen),
+        item['label'].to_s.ljust(llen), item['username'].to_s.ljust(ulen)].join spacer
+end
