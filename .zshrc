@@ -32,6 +32,7 @@ export EVENT_NOKQUEUE=1
 
 # aliasses
 alias cr='crystal'
+alias bb='brew bundle --global'
 alias zz="$EDITOR ~/.zshrc"
 alias zx="source ~/.zshrc"
 alias vv="$EDITOR ~/.vimrc"
@@ -116,7 +117,7 @@ vmi() {
       if [[ -z $(asdf plugin-list | rg $lng) ]]; then
         asdf plugin-add $lng
       else
-        asdf plugin-update $lng > /dev/null &!
+        asdf plugin-update $lng >/dev/null 2>/dev/null &!
       fi
 
       for version in $(asdf list-all $lng | sort -nrk1,1 | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:${lng}:install]'")
@@ -138,7 +139,7 @@ vmc() {
   if [[ $lang ]]; then
     for lng in $(echo $lang); do
       for version in $(asdf list $lng | sort -nrk1,1 | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:${lng}:clean]'")
-      do asdf uninstall $lng $version > /dev/null &!
+      do asdf uninstall $lng $version >/dev/null 2>/dev/null &!
       done
     done
   fi
@@ -164,9 +165,11 @@ bup() {
 
   if [[ $upd ]]; then
     for prog in $(echo $upd)
-    do brew upgrade $prog > /dev/null &!
+    do brew upgrade $prog >/dev/null 2>/dev/null &!
     done
   fi
+
+  return 0
 }
 
 # uninstall multiple packages at once, async
@@ -176,9 +179,11 @@ bcp() {
 
   if [[ $uninst ]]; then
     for prog in $(echo $uninst)
-    do brew uninstall $prog > /dev/null &!
+    do brew uninstall $prog >/dev/null 2>/dev/null &!
     done
   fi
+
+  return 0
 }
 
 ### LASTPASS
@@ -247,6 +252,7 @@ ks     [kill:tcp]
 lps    [lastpass:copy]
 vmc    [asdf:clean]
 vmi    [asdf:install]
+bb     [alias]              brew bundle --global
 cr     [alias]              crystal
 ga     [alias]              git add .
 gc     [alias]              git commit -m \${1}
