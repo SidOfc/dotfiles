@@ -40,13 +40,11 @@ The missing package manager for macOS
 
 ### 2.2 Packages
 
-Additional packages / dependencies
+Install additional packages / dependencies using [brew bundle](https://github.com/Homebrew/homebrew-bundle)
 
-    $ brew install zsh zsh-completions zsh-syntax-highlighting zsh-autosuggestions
-    $ brew install gnupg autojump wget diff-so-fancy ripgrep fzf
-    $ brew install tmux reattach-to-user-namespace
-    $ brew install vim --with-python3 --with-luajit
-    $ brew install lastpass-cli --with-pinentry
+    $ brew tap Homebrew/bundle
+    $ cd ~
+    $ brew bundle
 
 After installing fzf, also run: `/usr/local/opt/fzf/install`
 
@@ -79,7 +77,7 @@ The following are additional "version managers" for different languages.
 
 # Commands
 
-Additionally, I run the following commands:
+Optionally, run the following commands:
 
     $ defaults write com.apple.finder AppleShowAllFiles YES
     $ defaults write com.apple.dock autohide-delay -float 1000; killall Dock
@@ -87,4 +85,8 @@ Additionally, I run the following commands:
 # Finally
 
     $ cd ~
-    $ git clone https://github.com/sidofc/dotfiles .
+    $ git clone https://github.com/sidofc/dotfiles ./.dotfiles
+    $ cd .dotfiles
+    $ ./install -f # forcefully symlink into ~
+    # after restarting shell, run `u` to list commands and aliasses defined in zshrc
+    $ u
