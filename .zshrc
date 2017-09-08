@@ -180,10 +180,10 @@ lps() {
     echo "\nNot logged in, please login using: lpass login [--trust] USERNAME"
     zle reset-prompt
   else
-    local selected=$(lpass ls -l | ~/dotfiles/bin/lpfmt | fzf-tmux -d $FZF_TMUX_HEIGHT --header="[lastpass:copy]" | awk '{print $5}' | cut -d] -f1)
+    local selected=$(lpass ls -l | ~/dotfiles/bin/lpfmt | fzf-tmux -d $FZF_TMUX_HEIGHT --header="[lastpass:copy]" | awk '{$1=$2=""}1')
 
     if [[ $selected ]]; then
-      lpass show -c --password "$selected"
+      lpass show -cp $(echo $selected)
     fi
   fi
 }
