@@ -179,10 +179,10 @@ bcp() {
 
 ### LASTPASS
 lps() {
+  local uname=$ZSH_LPS_USERNAME
   local loggedin=1
 
   if [[ $(lpass status | grep '^Not logged in') ]]; then
-    local uname=$ZSH_LPS_USERNAME
     loggedin=""
 
     if [[ -z $uname ]]; then
@@ -192,11 +192,11 @@ lps() {
 
 
     if [[ -n $uname ]]; then
-      loggedin=$(lpass login --trust $uname)
+      lpass login --trust $uname > /dev/null
     fi
   fi
 
-  if [[ -n $loggedin ]]; then
+  if [ $? -eq 0 ]; then
     local selected=$(lpass ls -l | ~/dotfiles/bin/lpfmt | fzf-tmux -d $FZF_TMUX_HEIGHT --header="[lastpass:copy]" | awk '{$1=$2=""}1')
 
     if [[ $selected ]]; then
@@ -245,8 +245,14 @@ vmi     [asdf:install]
 vmc     [asdf:clean]
 cani    [caniuse:features]"
 
-echo $helptxt | awk 'NR>1' | sort | fzf --header="[util:show]" > /dev/null
+local cmd=$(echo $helptxt | awk 'NR>1' | sort | fzf --header="[util:show]" | awk '{print $1}')
+
+if [[ -n $cmd ]]; then
+  eval ${cmd}
+fi
 }
+
+alias u="utils"
 
 zle     -N   fzf-ctrlp-open-in-vim
 bindkey '^P' fzf-ctrlp-open-in-vim
