@@ -73,8 +73,7 @@ source ~/.fzf.zsh
 typeset -U PATH
 
 # additional FZF exports
-export FZF_TMUX=1
-export FZF_TMUX_HEIGHT=20
+export FZF_DEFAULT_OPTS="--height=50% --min-height=15 --reverse"
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
@@ -83,7 +82,7 @@ export ZSH_LPS_USERNAME="sidneyliebrand@gmail.com"
 
 # caniuse for quick access to global support list
 cani() {
-  local feats=$(~/dotfiles/bin/ciu | sort -rn | fzf -m --header="[caniuse:features]" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
+  local feats=$(~/dotfiles/bin/ciu | sort -rn | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[caniuse:features]'" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
 
   if [[ $feats ]]; then
     for feat in $(echo $feats)
@@ -94,20 +93,23 @@ cani() {
 
 # vim-like CtrlP in zsh.
 fzf-ctrlp-open-in-vim() {
-  local out=$(eval $FZF_DEFAULT_COMMAND | fzf-tmux -d $FZF_TMUX_HEIGHT --exit-0 --header="[vim:open]")
+  local out=$(eval $FZF_DEFAULT_COMMAND | eval "fzf ${FZF_DEFAULT_OPTS} --exit-0 --header='[vim:open]'")
 
   if [ -f "$out" ]; then
     $EDITOR "$out" < /dev/tty
   fi
+
+  zle reset-prompt
 }
 
 ### ASDF
+# install multiple languages at once, async
 # mnemonic [V]ersion [M]anager [I]nstall
 vmi() {
   local lang=${1}
 
   if [[ -z $lang ]]; then
-    lang=$(asdf plugin-list-all | fzf -m --header="[asdf:install]")
+    lang=$(asdf plugin-list-all | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:install]'")
   fi
 
   if [[ $lang ]]; then
@@ -118,24 +120,25 @@ vmi() {
         asdf plugin-update $lng > /dev/null &!
       fi
 
-      for version in $(asdf list-all $lng | sort -nrk1,1 | fzf -m --header="[asdf:${lng}:install]")
+      for version in $(asdf list-all $lng | sort -nrk1,1 | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:${lng}:install]'")
       do asdf install $lng $version
       done
     done
   fi
 }
 
+# uninstall multiple languages at once, async
 # mnemonic [V]ersion [M]anager [C]lean
 vmc() {
   local lang=${1}
 
   if [[ -z $lang ]]; then
-    lang=$(asdf plugin-list | fzf -m --header="[asdf:clean]")
+    lang=$(asdf plugin-list | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:clean]'")
   fi
 
   if [[ $lang ]]; then
     for lng in $(echo $lang); do
-      for version in $(asdf list $lng | sort -nrk1,1 | fzf -m --header="[asdf:${lng}:clean]")
+      for version in $(asdf list $lng | sort -nrk1,1 | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:${lng}:clean]'")
       do asdf uninstall $lng $version > /dev/null &!
       done
     done
@@ -146,7 +149,7 @@ vmc() {
 
 # mnemonic [B]rew [I]nstall [P]lugin
 bip() {
-  local inst=$(brew search | fzf -m --header="[brew:install]")
+  local inst=$(brew search | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[brew:install]'")
 
   if [[ $inst ]]; then
     for prog in $(echo $inst)
@@ -155,9 +158,10 @@ bip() {
   fi
 }
 
+# update multiple packages at once, async
 # mnemonic [B]rew [U]pdate [P]lugin
 bup() {
-  local upd=$(brew leaves | fzf -m --header="[brew:update]")
+  local upd=$(brew leaves | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[brew:update]'")
 
   if [[ $upd ]]; then
     for prog in $(echo $upd)
@@ -166,9 +170,10 @@ bup() {
   fi
 }
 
+# uninstall multiple packages at once, async
 # mnemonic [B]rew [C]lean [P]lugin (e.g. uninstall)
 bcp() {
-  local uninst=$(brew leaves | fzf -m --header="[brew:clean]")
+  local uninst=$(brew leaves | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[brew:clean]'")
 
   if [[ $uninst ]]; then
     for prog in $(echo $uninst)
@@ -197,7 +202,7 @@ lps() {
   fi
 
   if [ $? -eq 0 ]; then
-    local selected=$(lpass ls -l | ~/dotfiles/bin/lpfmt | fzf-tmux -d $FZF_TMUX_HEIGHT --header="[lastpass:copy]" | awk '{$1=$2=""}1')
+    local selected=$(lpass ls -l | ~/dotfiles/bin/lpfmt | eval "fzf ${FZF_DEFAULT_OPTS} --header='[lastpass:copy]'" | awk '{$1=$2=""}1')
 
     if [[ $selected ]]; then
       lpass show -cp $(echo $selected)
@@ -209,12 +214,12 @@ lps() {
 
 # mnemonic: [F]ind [P]ath
 fp() {
-  echo $PATH | sed -e $'s/:/\\\n/g' | fzf-tmux -d $FZF_TMUX_HEIGHT --header="[debug:path]" > /dev/null
+  echo $PATH | sed -e $'s/:/\\\n/g' | eval "fzf ${FZF_DEFAULT_OPTS} --header='[debug:path]' >/dev/null"
 }
 
 # mnemonic: [K]ill [P]rocess
 kp() {
-  local pid=$(ps -ef | sed 1d | fzf-tmux -d $FZF_TMUX_HEIGHT -m --header="[kill:process]" | awk '{print $2}')
+  local pid=$(ps -ef | sed 1d | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[kill:process]'" | awk '{print $2}')
 
   if [ "x$pid" != "x" ]
   then
@@ -224,7 +229,7 @@ kp() {
 
 # mnemonic: [K]ill [S]erver
 ks() {
-  local pid=$(lsof -Pwni tcp | sed 1d | fzf-tmux -d $FZF_TMUX_HEIGHT -m --header="[kill:tcp]" | awk '{print $2}')
+  local pid=$(lsof -Pwni tcp | sed 1d | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[kill:tcp]'" | awk '{print $2}')
 
   if [ "x$pid" != "x" ]
   then
@@ -245,7 +250,7 @@ vmi     [asdf:install]
 vmc     [asdf:clean]
 cani    [caniuse:features]"
 
-local cmd=$(echo $helptxt | awk 'NR>1' | sort | fzf --header="[util:show]" | awk '{print $1}')
+local cmd=$(echo $helptxt | awk 'NR>1' | sort | eval "fzf ${FZF_DEFAULT_OPTS} --header='[utils:show]'" | awk '{print $1}')
 
 if [[ -n $cmd ]]; then
   eval ${cmd}
