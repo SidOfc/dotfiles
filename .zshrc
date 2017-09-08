@@ -192,7 +192,7 @@ lps() {
 
 
     if [[ -n $uname ]]; then
-      lpass login --trust $uname > /dev/null
+      lpass login --trust $uname > /dev/null 2>/dev/null
     fi
   fi
 
