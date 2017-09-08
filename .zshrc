@@ -78,9 +78,12 @@ export FZF_TMUX_HEIGHT=20
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
+# lps command default username
+export ZSH_LPS_USERNAME="sidneyliebrand@gmail.com"
+
 # caniuse for quick access to global support list
 cani() {
-  local feats=$(~/dotfiles/bin/ciu | sort -rn | fzf -m --header="[caniuse:info]" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
+  local feats=$(~/dotfiles/bin/ciu | sort -rn | fzf -m --header="[caniuse:features]" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
 
   if [[ $feats ]]; then
     for feat in $(echo $feats)
@@ -176,10 +179,24 @@ bcp() {
 
 ### LASTPASS
 lps() {
+  local loggedin=1
+
   if [[ $(lpass status | grep '^Not logged in') ]]; then
-    echo "\nNot logged in, please login using: lpass login [--trust] USERNAME"
-    zle reset-prompt
-  else
+    local uname=$ZSH_LPS_USERNAME
+    loggedin=""
+
+    if [[ -z $uname ]]; then
+      echo -n "Lastpass username: "
+      read uname
+    fi
+
+
+    if [[ -n $uname ]]; then
+      loggedin=$(lpass login --trust $uname)
+    fi
+  fi
+
+  if [[ -n $loggedin ]]; then
     local selected=$(lpass ls -l | ~/dotfiles/bin/lpfmt | fzf-tmux -d $FZF_TMUX_HEIGHT --header="[lastpass:copy]" | awk '{$1=$2=""}1')
 
     if [[ $selected ]]; then
@@ -215,13 +232,21 @@ ks() {
   fi
 }
 
-zle     -N   kp
-zle     -N   ks
-zle     -N   fp
-zle     -N   lps
+utils() {
+  local helptxt="
+fp      [debug:path]
+kp      [kill:path]
+ks      [kill:tcp]
+lps     [lastpass:copy]
+bip     [brew:install]
+bup     [brew:update]
+bcp     [brew:clean]
+vmi     [asdf:install]
+vmc     [asdf:clean]
+cani    [caniuse:features]"
+
+echo $helptxt | awk 'NR>1' | sort | fzf --header="[util:show]" > /dev/null
+}
+
 zle     -N   fzf-ctrlp-open-in-vim
-bindkey '^W' ks
-bindkey '^Q' kp
-bindkey '^Z' lps
-bindkey '^X' fp
 bindkey '^P' fzf-ctrlp-open-in-vim
