@@ -40,9 +40,8 @@ alias vup="vim +PluginUpdate"
 alias vcp="vim +PluginClean +qall"
 alias tt="$EDITOR ~/.tmux.conf"
 alias v="$EDITOR ."
-alias rv="source $HOME/.rvm/scripts/rvm"
 alias la="ls -al"
-alias laf="ls -al | grep ${1}"
+alias lf="ls -al | grep ${1}"
 alias ga="git add ."
 alias gc="git commit -m ${1}"
 alias gs="git status"
@@ -50,11 +49,11 @@ alias gd="git diff"
 alias gdt="git difftool"
 alias gmt="git mergetool"
 alias gpl="git pull ${1} ${2}"
-alias grb="git rebase ${1}"
+alias grb="git rebase ${1} ${2}"
 alias gp="git push ${1} ${2}"
 
+# set terminal to 256-color mode in xterm
 if [[ $TERM == xterm ]]; then
-  # set terminal to 256-color mode
   TERM=xterm-256color
 fi
 
@@ -214,7 +213,7 @@ lps() {
 
 # mnemonic: [F]ind [P]ath
 fp() {
-  echo $PATH | sed -e $'s/:/\\\n/g' | eval "fzf ${FZF_DEFAULT_OPTS} --header='[debug:path]' >/dev/null"
+  echo $PATH | sed -e $'s/:/\\\n/g' | eval "fzf ${FZF_DEFAULT_OPTS} --header='[find:path]' >/dev/null"
 }
 
 # mnemonic: [K]ill [P]rocess
@@ -238,23 +237,42 @@ ks() {
 }
 
 utils() {
-  local helptxt="
-fp      [debug:path]
-kp      [kill:path]
-ks      [kill:tcp]
-lps     [lastpass:copy]
-bip     [brew:install]
-bup     [brew:update]
-bcp     [brew:clean]
-vmi     [asdf:install]
-vmc     [asdf:clean]
-cani    [caniuse:features]"
+  local helptxt="bcp    [brew:clean]
+bip    [brew:install]
+bup    [brew:update]
+cani   [caniuse:features]
+fp     [find:path]
+kp     [kill:path]
+ks     [kill:tcp]
+lps    [lastpass:copy]
+vmc    [asdf:clean]
+vmi    [asdf:install]
+cr     [alias]              crystal
+ga     [alias]              git add .
+gc     [alias]              git commit -m \${1}
+gd     [alias]              git diff
+gdt    [alias]              git difftool
+gmt    [alias]              git mergetool
+gp     [alias]              git push   \${1} \${2}
+gpl    [alias]              git pull   \${1} \${2}
+grb    [alias]              git rebase \${1} \${2}
+gs     [alias]              git status
+la     [alias]              ls -al
+lf     [alias]              ls -al | grep \${1}
+tt     [alias]              $EDITOR ~/.tmux.conf
+v      [alias]              $EDITOR .
+vcp    [alias]              vim +PluginClean +qall
+vip    [alias]              vim +PluginInstall +qall
+vup    [alias]              vim +PluginUpdate
+vv     [alias]              $EDITOR ~/.vimrc
+zx     [alias]              source ~/.zshrc
+zz     [alias]              $EDITOR ~/.zshrc"
 
-local cmd=$(echo $helptxt | awk 'NR>1' | sort | eval "fzf ${FZF_DEFAULT_OPTS} --header='[utils:show]'" | awk '{print $1}')
+  local cmd=$(echo $helptxt | eval "fzf ${FZF_DEFAULT_OPTS} --header='[utils:show]'" | awk '{print $1}')
 
-if [[ -n $cmd ]]; then
-  eval ${cmd}
-fi
+  if [[ -n $cmd ]]; then
+    eval ${cmd}
+  fi
 }
 
 alias u="utils"
