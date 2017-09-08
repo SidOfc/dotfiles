@@ -22,7 +22,7 @@ Plugin 'tpope/vim-fugitive'             " vim git wrapper, also used by vimagit
 Plugin 'tpope/vim-repeat'               " better repeat, extensible by plugins
 Plugin 'tpope/vim-vinegar'              " enhance netrw
 Plugin 'tpope/vim-surround'             " change/add/remove surrounding brackets
-Plugin 'junegunn/vim-slash'             " auto nohlsearch and some extra search goodies
+Plugin 'haya14busa/incsearch.vim'       " auto nohlsearch and some extra search goodies
 Plugin 'junegunn/vim-easy-align'        " align code easier
 Plugin 'junegunn/fzf.vim'               " fzf as vim plugin
 
@@ -40,8 +40,6 @@ endif
 filetype plugin indent on
 syntax enable                   " cuz white text is going to be awesome to edit :D
 set path+=**                    " add cwd and 1 level of nesting to path
-set hlsearch                    " highlight search matches
-set incsearch                   " highlight search matches while typing
 set hidden                      " debatable, allow switching from unsaved buffer without '!'
 set ignorecase                  " ignore case in search
 set smartcase                   " use case-sensitive if a capital letter is included
@@ -76,7 +74,10 @@ set wildignore+=.git,.DS_Store  " ignore files
 colorscheme base16-default-dark " apply color scheme
 
 let mapleader = " "                                      " remap leader
-let g:ale_echo_msg_error_str = 'E'                       " error sign
+let g:incsearch#auto_nohlsearch = 1                      " auto unhighlight after searching
+let g:incsearch#magic = '\v'                             " sheer awesomeness
+let g:incsearch#do_not_save_error_message_history = 1    " do not store incsearch errors in history
+let g:incsearch#consistent_n_direction = 1               " when searching backward, do not invert meaning of n and Nlet g:ale_echo_msg_error_str = 'E'                       " error sign
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]' " status line format
 let g:ale_echo_msg_warning_str = 'W'                     " warning sign
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']   " error status format
@@ -168,6 +169,9 @@ endif
 
 " mappings
 nnoremap <C-x> :bd<CR>
+map      / <Plug>(incsearch-forward)
+map      ? <Plug>(incsearch-backward)
+map      g/ <Plug>(incsearch-stay)
 nmap     ga <Plug>(EasyAlign)
 xmap     ga <Plug>(EasyAlign)
 nmap     <C-p> :Files<CR>
