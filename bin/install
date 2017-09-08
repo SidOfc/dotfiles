@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 
 module Dotfiles
-  SOURCE  = 'dotfiles'.freeze
-  IGNORE  = %w[. .. .git].freeze
+  SOURCE  = '.dotfiles'.freeze
+  IGNORE  = %w[. .. .git bin README.md].freeze
 
   module_function
 
   def list
-    @@l ||= Dir.glob("#{Dir.home}/#{SOURCE}/\.*")
+    @@l ||= Dir.glob("#{Dir.home}/#{SOURCE}/{*,.*}")
                .map    { |path|    path.split('/').last }
                .reject { |dotfile| IGNORE.include? dotfile }
   end
@@ -16,7 +16,7 @@ module Dotfiles
     list.map do |dotfile|
       path = File.expand_path "~/#{dotfile}"
 
-      File.delete path if File.exists? path
+      File.unlink path if File.exists? path
     end
   end
 
@@ -24,8 +24,15 @@ module Dotfiles
     list.map do |dotfile|
       dotf = "#{Dir.home}/#{dotfile}"
       src  = "#{Dir.home}/#{SOURCE}/#{dotfile}"
-
-      system "ln -s #{src} #{dotf}" if !File.exists?(dotf) && File.exists?(src)
+      rstr = "#{src} ~> #{dotf}"
+      begin
+        res = File.symlink src, dotf if !File.symlink?(dotf) || !File.exists?(dotf) && File.exists?(src)
+        puts "[#{res ? '++' : '--'}] #{rstr}"
+        true
+      rescue
+        puts "[--] #{rstr}"
+        false
+      end
     end.all?
   end
 
