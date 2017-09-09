@@ -27,9 +27,9 @@ esac
 # case insensitive autocomplete
 CASE_SENSITIVE="false"
 
-# enable prompt substitution
-setopt prompt_subst
-setopt auto_cd
+setopt prompt_subst     # enable prompt substitution
+setopt auto_cd          # attempt cd if you typed in a directory name that was not a command name
+setopt hist_ignore_dups # do not save duplicate entries
 
 # exports
 export PROMPT='%{$fg[blue]%}$(shrink_path -f)%{$fg[yellow]%}$(git_prompt_info)%{$fg[yellow]%} ❯ '
