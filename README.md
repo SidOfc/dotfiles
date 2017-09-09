@@ -40,9 +40,9 @@ The missing package manager for macOS
 
 ### 2.2 Packages
 
-Install additional packages / dependencies using [brew bundle](https://github.com/Homebrew/homebrew-bundle)
+Install additional packages / dependencies
 
-    $ brew install zsh zplug gnupg wget diff-so-fancy ripgrep
+    $ brew install zsh zplug gnupg wget diff-so-fancy ripgrep fzf
     $ brew install tmux reattach-to-user-namespace
     $ brew install vim --with-python3 --with-luajit
     $ brew install lastpass-cli --with-pinentry

@@ -2,7 +2,6 @@
 export ZPLUG_HOME=/usr/local/opt/zplug
 source $ZPLUG_HOME/init.zsh
 
-zplug "junegunn/fzf-bin",                       from:"gh-r", as:"command", rename-to:"fzf"
 zplug "themes/kphoen",                          from:"oh-my-zsh"
 zplug "plugins/shrink-path",                    from:"oh-my-zsh"
 zplug "plugins/autojump",                       from:"oh-my-zsh"
