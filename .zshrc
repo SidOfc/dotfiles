@@ -29,6 +29,7 @@ CASE_SENSITIVE="false"
 
 # enable prompt substitution
 setopt prompt_subst
+setopt auto_cd
 
 # exports
 export PROMPT='%{$fg[blue]%}$(shrink_path -f)%{$fg[yellow]%}$(git_prompt_info)%{$fg[yellow]%} ❯ '
