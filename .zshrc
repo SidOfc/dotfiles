@@ -64,7 +64,6 @@ if [[ $TERM == xterm ]]; then
 fi
 
 # keybindings
-bindkey -v
 bindkey '^e' autosuggest-accept
 
 # sourcing
@@ -86,7 +85,7 @@ export LPS_DEFAULT_USERNAME="sidneyliebrand@gmail.com"
 # caniuse for quick access to global support list
 # also runs the `caniuse` command if installed
 cani() {
-  local feats=$(ciu | sort -rn | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[caniuse:features]'" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
+  local feats=$(ciu | sort -rn | eval "fzf ${FZF_DEFAULT_OPTS} -m --ansi --header='[caniuse:features]'" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
 
   if [[ $feats ]]; then
     for feat in $(echo $feats)
@@ -210,7 +209,7 @@ lps() {
   fi
 
   if [ $? -eq 0 ]; then
-    local selected=$(lpass ls -l | lpfmt | eval "fzf ${FZF_DEFAULT_OPTS} --header='[lastpass:copy]'" | awk '{$1=$2=""}1')
+    local selected=$(lpass ls -l | lpfmt | eval "fzf ${FZF_DEFAULT_OPTS} --ansi --header='[lastpass:copy]'" | awk '{$1=$2=""}1')
 
     if [[ $selected ]]; then
       lpass show -cp $(echo $selected)

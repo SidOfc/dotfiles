@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
+require 'colorize'
 require 'json'
 
 module Ciu
@@ -19,7 +21,12 @@ module Ciu
   end
 
   def self.row ft
-    [status(ft['status']), support(ft['usage_perc_y']), title(ft['title']), *stats(ft['stats'])].join COL
+    [
+      status(ft['status']).green,
+      support(ft['usage_perc_y']).light_black,
+      title(ft['title']),
+      stats(ft['stats']).light_black
+    ].join(COL).bold
   end
 
   def self.title title, max_width = 30, filler = '...'
@@ -39,7 +46,7 @@ module Ciu
       stats[browser].values.last(VER_BACK)
         .map { |ypn| STAT_SYMS.fetch ypn, '-' }
         .join + (NAMES[browser] || browser)
-    end
+    end.join COL
   end
 
   def self.data
