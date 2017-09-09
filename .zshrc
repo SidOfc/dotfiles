@@ -1,26 +1,31 @@
-# plugins
-plugins=(tmux shrink-path)
+# zplug specifics
+export ZPLUG_HOME=/usr/local/opt/zplug
+source $ZPLUG_HOME/init.zsh
 
-# zsh tmux
-ZSH_TMUX_AUTOSTART=true
-ZSH_TMUX_AUTOSTART_ONCE=false
-ZSH_TMUX_FIXTERM_WITHOUT_256COLOR="xterm"
-ZSH_TMUX_FIXTERM_WITHOUT_256COLOR="xterm-256-color"
+zplug "modules/tmux",                           from:"prezto"
+zplug "themes/kphoen",                          from:"oh-my-zsh"
+zplug "plugins/shrink-path",                    from:"oh-my-zsh"
+zplug "plugins/autojump",                       from:"oh-my-zsh"
+zplug "zsh-users/zsh-history-substring-search", defer:1
+zplug "zsh-users/zsh-autosuggestions",          defer:2
+zplug "zsh-users/zsh-syntax-highlighting",      defer:2
 
-# zsh autosuggest
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-ZSH_AUTOSUGGEST_USE_ASYNC=true
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+zplug load
+
+# autostart tmux session
+case $- in *i*)
+    [ -z "$TMUX" ] && exec tmux new -A -s 'local'
+esac
 
 # case insensitive autocomplete
 CASE_SENSITIVE="false"
-
-# ssh connection
-[[ -n "$SSH_CLIENT" ]] || DEFAULT_USER="$(whoami)"
-
-# zsh
-export ZSH_THEME="kphoen"
-export ZSH="$HOME/.oh-my-zsh"
-source $ZSH/oh-my-zsh.sh
 
 # enable prompt substitution
 setopt prompt_subst
@@ -63,13 +68,11 @@ bindkey -v
 bindkey '^e' autosuggest-accept
 
 # sourcing
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/local/etc/profile.d/autojump.sh
 source $HOME/.asdf/asdf.sh
 source ~/.fzf.zsh
 
 # final path adjustments
+export PATH="$HOME/bin:$PATH"
 typeset -U PATH
 
 # additional FZF exports
@@ -78,11 +81,12 @@ export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # lps command default username
-export ZSH_LPS_USERNAME="sidneyliebrand@gmail.com"
+export LPS_DEFAULT_USERNAME="sidneyliebrand@gmail.com"
 
 # caniuse for quick access to global support list
+# also runs the `caniuse` command if installed
 cani() {
-  local feats=$(~/dotfiles/bin/ciu | sort -rn | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[caniuse:features]'" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
+  local feats=$(ciu | sort -rn | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[caniuse:features]'" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
 
   if [[ $feats ]]; then
     for feat in $(echo $feats)
@@ -188,7 +192,7 @@ bcp() {
 
 ### LASTPASS
 lps() {
-  local uname=$ZSH_LPS_USERNAME
+  local uname=$LPS_DEFAULT_USERNAME
   local loggedin=1
 
   if [[ $(lpass status | grep '^Not logged in') ]]; then
@@ -206,7 +210,7 @@ lps() {
   fi
 
   if [ $? -eq 0 ]; then
-    local selected=$(lpass ls -l | ~/dotfiles/bin/lpfmt | eval "fzf ${FZF_DEFAULT_OPTS} --header='[lastpass:copy]'" | awk '{$1=$2=""}1')
+    local selected=$(lpass ls -l | lpfmt | eval "fzf ${FZF_DEFAULT_OPTS} --header='[lastpass:copy]'" | awk '{$1=$2=""}1')
 
     if [[ $selected ]]; then
       lpass show -cp $(echo $selected)

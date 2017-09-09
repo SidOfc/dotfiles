@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+
+module Dotfiles
+  IGNORE     = /.*(?:\.\.?|README\.md|\.git|\.DS_Store)$/.freeze
+  HOME       = Dir.home.freeze
+  REPOSITORY = "#{HOME}/.dotfiles".freeze
+
+  def self.run!
+    send *ARGV
+  rescue
+    exit 1
+  end
+
+  def self.help
+    puts "Usage: dot COMMAND [ARGS]"
+    puts ""
+    puts "COMMAND        ARGS        DESC"
+    puts ""
+    puts "    ln                     symlink ~/.dotfiles to ~"
+    puts "    ln!                    same as ln, but use force"
+    puts "    ls         [SRC]       list filename and symlink in ~ that matches a file in ~/.dotfiles"
+    puts "                           [SRC] can be one of 'src' or 'home' which will show matching"
+    puts "                           matching dotfiles in ~ for 'home' and ~/.dotfiles for 'src'"
+  end
+
+  def self.src
+    @@src ||= Dir.glob("#{REPOSITORY}/{*,.*}").reject { |path| path.match IGNORE }
+  end
+
+  def self.home
+    @@home ||= Dir.glob("#{HOME}/{#{src.map(&File.method(:basename)).join(',')}}")
+  end
+
+  def self.ls path = nil
+    return send path if path && respond_to?(path)
+
+    ml = home.map(&:size).max
+    src.zip(home).map { |sd, hd| "#{hd.ljust(ml)} ~> #{File.realpath(hd)}" }
+  end
+
+  def self.ln!
+    home.map(&File.method(:unlink)) && ln
+  end
+
+  def self.ln
+    maxlen = src.map(&:size).max
+
+    src.map do |srcdot|
+      dst = "#{HOME}/#{File.basename(srcdot)}"
+
+      File.symlink srcdot, dst if (link = !File.exists?(dst))
+      "[#{link ? '++' : '--'}] #{srcdot.ljust(maxlen)} ~> #{dst}"
+    end
+  end
+end
+
+puts Dotfiles.run!
