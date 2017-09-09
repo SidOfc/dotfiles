@@ -49,17 +49,17 @@ Install additional packages / dependencies using [brew bundle](https://github.co
 
 After installing fzf, also run: `/usr/local/opt/fzf/install`
 
-## 4.0 [asdf](https://github.com/asdf-vm/asdf)
+## 3.0 [asdf](https://github.com/asdf-vm/asdf)
 
 A replacement for all version managers out there like [rvm](https://rvm.io/) or [nvm](https://github.com/creationix/nvm)
 
-### 4.1 Install
+### 3.1 Install
 
 At the time of writing, the current version is `0.3.0` - check upstream regularly!
 
     $ git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.3.0
 
-### 4.2 Plugins
+### 3.2 Plugins
 
 The following are additional "version managers" for different languages.
 
