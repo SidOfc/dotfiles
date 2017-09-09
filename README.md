@@ -42,19 +42,12 @@ The missing package manager for macOS
 
 Install additional packages / dependencies using [brew bundle](https://github.com/Homebrew/homebrew-bundle)
 
-    $ brew tap Homebrew/bundle
-    $ cd ~
-    $ brew bundle
+    $ brew install zsh zplug gnupg wget diff-so-fancy ripgrep
+    $ brew install tmux reattach-to-user-namespace
+    $ brew install vim --with-python3 --with-luajit
+    $ brew install lastpass-cli --with-pinentry
 
 After installing fzf, also run: `/usr/local/opt/fzf/install`
-
-## 3.0 [OMZ](https://github.com/robbyrussell/oh-my-zsh)
-
-A wrapper for `zsh` shell
-
-### 3.1 Install
-
-    $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 ## 4.0 [asdf](https://github.com/asdf-vm/asdf)
 

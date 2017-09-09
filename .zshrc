@@ -2,7 +2,7 @@
 export ZPLUG_HOME=/usr/local/opt/zplug
 source $ZPLUG_HOME/init.zsh
 
-zplug "modules/tmux",                           from:"prezto"
+zplug "junegunn/fzf-bin",                       from:"gh-r", as:"command", rename-to:"fzf"
 zplug "themes/kphoen",                          from:"oh-my-zsh"
 zplug "plugins/shrink-path",                    from:"oh-my-zsh"
 zplug "plugins/autojump",                       from:"oh-my-zsh"
@@ -21,7 +21,7 @@ zplug load
 
 # autostart tmux session
 case $- in *i*)
-    [ -z "$TMUX" ] && exec tmux new -A -s 'local'
+    [ -z "$TMUX" ] && exec tmux -2
 esac
 
 # case insensitive autocomplete
@@ -38,7 +38,6 @@ export EVENT_NOKQUEUE=1
 
 # aliasses
 alias cr='crystal'
-alias bb='brew bundle --global'
 alias zz="$EDITOR ~/.zshrc"
 alias zx="source ~/.zshrc"
 alias vv="$EDITOR ~/.vimrc"
@@ -69,7 +68,6 @@ bindkey '^e' autosuggest-accept
 
 # sourcing
 source $HOME/.asdf/asdf.sh
-source ~/.fzf.zsh
 
 # final path adjustments
 export PATH="$HOME/bin:$PATH"
@@ -256,7 +254,6 @@ ks     [kill:tcp]
 lps    [lastpass:copy]
 vmc    [asdf:clean]
 vmi    [asdf:install]
-bb     [alias]              brew bundle --global
 cr     [alias]              crystal
 ga     [alias]              git add .
 gc     [alias]              git commit -m \${1}
