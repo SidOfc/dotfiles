@@ -1,6 +1,7 @@
 # zplug specifics
 export ZPLUG_HOME=/usr/local/opt/zplug
 source $ZPLUG_HOME/init.zsh
+source ~/.fzf.zsh
 
 zplug "themes/kphoen",                          from:"oh-my-zsh"
 zplug "plugins/shrink-path",                    from:"oh-my-zsh"

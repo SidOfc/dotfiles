@@ -80,6 +80,8 @@ Optionally, run the following commands:
     $ cd ~
     $ git clone https://github.com/sidofc/dotfiles ./.dotfiles
     $ cd .dotfiles
-    $ ./install -f # forcefully symlink into ~
+    $ ./bin/dot ln! # forcefully symlink into ~
     # after restarting shell, run `u` to list commands and aliasses defined in zshrc
     $ u
+    # install vim plugins
+    $ vip
