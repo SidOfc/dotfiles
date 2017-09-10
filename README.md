@@ -8,9 +8,9 @@ reference to get started, comments can be found within dotfiles.
 
 **[ITerm3](https://www.iterm2.com/version3.html)**
 
-[Install instructions](https://www.iterm2.com/version3.html)
-[Color presets](https://github.com/mbadolato/iTerm2-Color-Schemes)
-[Powerline fonts](https://github.com/powerline/fonts)
+- [Install instructions](https://www.iterm2.com/version3.html)
+- [Color presets](https://github.com/mbadolato/iTerm2-Color-Schemes)
+- [Powerline fonts](https://github.com/powerline/fonts)
 
 **[Homebrew](https://brew.sh)**
 
