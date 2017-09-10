@@ -1,4 +1,4 @@
-" Init {{{
+" Init / Vundle {{{
   set nocompatible
   filetype off
 
@@ -68,37 +68,37 @@
   set nowrap                      " do not wrap text at `textwidth`
   set noerrorbells                " do not show error bells
   set novisualbell                " do not use visual bell
-  set timeoutlen=350              " mapping delay
+  set timeoutlen=250              " mapping delay
   set ttimeoutlen=50              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files
-  set lazyredraw                  " do not update screen when executing macro's / scripts
+  set scrolloff=10                " show 10 lines of context around cursor
 
-  imap     <Up>       <Nop>
-  imap     <Down>     <Nop>
-  imap     <Left>     <Nop>
-  imap     <Right>    <Nop>
-  map      <Up>       <Nop>
-  map      <Down>     <Nop>
-  map      <Left>     <Nop>
-  map      <Right>    <Nop>
-  map      $          <Nop>
-  map      ^          <Nop>
-  inoremap <silent>   <Esc> <C-O>:stopinsert<CR>
-  inoremap <>         <><left>
-  inoremap ()         ()<left>
-  inoremap {}         {}<left>
-  inoremap []         []<left>
-  inoremap ""         ""<left>
-  inoremap ''         ''<left>
-  inoremap ``         ``<left>
-  inoremap \|\|       \|\|<left>
-  nnoremap H          ^
-  nnoremap L          $
+  inoremap <Silent>   <Esc> <C-o>:stopinsert<Cr>
+  inoremap <>         <><Left>
+  inoremap ()         ()<Left>
+  inoremap {}         {}<Left>
+  inoremap []         []<Left>
+  inoremap ""         ""<Left>
+  inoremap ''         ''<Left>
+  inoremap ``         ``<Left>
+  inoremap \|\|       \|\|<Left>
+  noremap  K          {
+  noremap  J          }
+  noremap  H          ^
+  noremap  L          $
   noremap  <C-x>      :bp<Bar>bd #<Cr>
   nnoremap <Tab>      >>
   nnoremap <S-Tab>    <<
   vnoremap <Tab>      >><Esc>gv
   vnoremap <S-Tab>    <<<Esc>gv
+  nmap     <Up>       <Nop>
+  nmap     <Down>     <Nop>
+  nmap     <Left>     <Nop>
+  nmap     <Right>    <Nop>
+  map      $          <Nop>
+  map      ^          <Nop>
+  map      {          <Nop>
+  map      }          <Nop>
 
   " fix jsx highlighting of end xml tags
   hi link xmlEndTag xmlTag
@@ -116,12 +116,11 @@
   endif
 " }}}
 
-
 " Netrw {{{
-  let g:netrw_banner = 0
-  let g:netrw_winsize = 20
-  let g:netrw_liststyle= 3
-  let g:netrw_altv = 1
+  let g:netrw_banner    = 0
+  let g:netrw_winsize   = 20
+  let g:netrw_liststyle = 3
+  let g:netrw_altv      = 1
 " }}}
 
 " Tmuxline {{{
@@ -266,4 +265,3 @@
     au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indent languages
   augroup END
 " }}}
-

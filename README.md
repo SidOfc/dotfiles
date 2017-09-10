@@ -43,7 +43,7 @@ The missing package manager for macOS
 
 Install additional packages / dependencies
 
-    $ brew install zsh zplug gnupg wget diff-so-fancy ripgrep fzf
+    $ brew install zsh gnupg wget ripgrep fzf
     $ brew install tmux reattach-to-user-namespace
     $ brew install vim --with-python3 --with-luajit
     $ brew install lastpass-cli --with-pinentry
