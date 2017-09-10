@@ -44,6 +44,11 @@
   typeset -U PATH
 # }}}
 
+# Sourcing {{{
+  source $HOME/.asdf/asdf.sh
+  source ~/.fzf.zsh
+# }}}
+
 # Tmux {{{
   case $- in *i*)
     [ -z "$TMUX" ] && exec tmux -2
@@ -273,14 +278,14 @@ grb    [alias]              git rebase \${1} \${2}
 gs     [alias]              git status
 la     [alias]              ls -al
 lf     [alias]              ls -al | grep \${1}
-tt     [alias]              $EDITOR ~/.tmux.conf
-v      [alias]              $EDITOR .
+tt     [alias]              \$EDITOR ~/.tmux.conf
+v      [alias]              \$EDITOR .
 vcp    [alias]              vim +PluginClean +qall
 vip    [alias]              vim +PluginInstall +qall
 vup    [alias]              vim +PluginUpdate
-vv     [alias]              $EDITOR ~/.vimrc
+vv     [alias]              \$EDITOR ~/.vimrc
 zx     [alias]              source ~/.zshrc
-zz     [alias]              $EDITOR ~/.zshrc"
+zz     [alias]              \$EDITOR ~/.zshrc"
 
     local cmd=$(echo $helptxt | eval "fzf ${FZF_DEFAULT_OPTS} --header='[utils:show]'" | awk '{print $1}')
 
@@ -288,9 +293,4 @@ zz     [alias]              $EDITOR ~/.zshrc"
       eval ${cmd}
     fi
   }
-# }}}
-
-# Sourcing {{{
-  source $HOME/.asdf/asdf.sh
-  source ~/.fzf.zsh
 # }}}
