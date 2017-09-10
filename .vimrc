@@ -68,20 +68,12 @@
   set nowrap                      " do not wrap text at `textwidth`
   set noerrorbells                " do not show error bells
   set novisualbell                " do not use visual bell
-  set timeoutlen=250              " mapping delay
+  set timeoutlen=350              " mapping delay
   set ttimeoutlen=50              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files
   set scrolloff=10                " show 10 lines of context around cursor
 
   inoremap <silent>   <Esc> <C-o>:stopinsert<Cr>
-  inoremap <>         <><Left>
-  inoremap ()         ()<Left>
-  inoremap {}         {}<Left>
-  inoremap []         []<Left>
-  inoremap ""         ""<Left>
-  inoremap ''         ''<Left>
-  inoremap ``         ``<Left>
-  inoremap \|\|       \|\|<Left>
   noremap  K          {
   noremap  J          }
   noremap  H          ^
