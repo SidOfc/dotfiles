@@ -252,35 +252,35 @@
 
   utils() {
     local helptxt="bcp    [brew:clean]
-  bip    [brew:install]
-  bup    [brew:update]
-  cani   [caniuse:features]
-  fp     [find:path]
-  kp     [kill:path]
-  ks     [kill:tcp]
-  lps    [lastpass:copy]
-  vmc    [asdf:clean]
-  vmi    [asdf:install]
-  cr     [alias]              crystal
-  ga     [alias]              git add .
-  gc     [alias]              git commit -m \${1}
-  gd     [alias]              git diff
-  gdt    [alias]              git difftool
-  gmt    [alias]              git mergetool
-  gp     [alias]              git push   \${1} \${2}
-  gpl    [alias]              git pull   \${1} \${2}
-  grb    [alias]              git rebase \${1} \${2}
-  gs     [alias]              git status
-  la     [alias]              ls -al
-  lf     [alias]              ls -al | grep \${1}
-  tt     [alias]              $EDITOR ~/.tmux.conf
-  v      [alias]              $EDITOR .
-  vcp    [alias]              vim +PluginClean +qall
-  vip    [alias]              vim +PluginInstall +qall
-  vup    [alias]              vim +PluginUpdate
-  vv     [alias]              $EDITOR ~/.vimrc
-  zx     [alias]              source ~/.zshrc
-  zz     [alias]              $EDITOR ~/.zshrc"
+bip    [brew:install]
+bup    [brew:update]
+cani   [caniuse:features]
+fp     [find:path]
+kp     [kill:path]
+ks     [kill:tcp]
+lps    [lastpass:copy]
+vmc    [asdf:clean]
+vmi    [asdf:install]
+cr     [alias]              crystal
+ga     [alias]              git add .
+gc     [alias]              git commit -m \${1}
+gd     [alias]              git diff
+gdt    [alias]              git difftool
+gmt    [alias]              git mergetool
+gp     [alias]              git push   \${1} \${2}
+gpl    [alias]              git pull   \${1} \${2}
+grb    [alias]              git rebase \${1} \${2}
+gs     [alias]              git status
+la     [alias]              ls -al
+lf     [alias]              ls -al | grep \${1}
+tt     [alias]              $EDITOR ~/.tmux.conf
+v      [alias]              $EDITOR .
+vcp    [alias]              vim +PluginClean +qall
+vip    [alias]              vim +PluginInstall +qall
+vup    [alias]              vim +PluginUpdate
+vv     [alias]              $EDITOR ~/.vimrc
+zx     [alias]              source ~/.zshrc
+zz     [alias]              $EDITOR ~/.zshrc"
 
     local cmd=$(echo $helptxt | eval "fzf ${FZF_DEFAULT_OPTS} --header='[utils:show]'" | awk '{print $1}')
 
