@@ -102,6 +102,18 @@ let g:netrw_winsize = 20
 let g:netrw_liststyle= 3
 let g:netrw_altv = 1
 
+" tmuxline preset
+let g:tmuxline_preset = {
+        \    'a':    '⬤',
+        \    'win':  '#I #W',
+        \    'cwin': '#I #W',
+        \    'y':    '%d·%m·%Y',
+        \    'z':    '%R',
+        \    'options': {
+        \      'status-justify': 'left'
+        \    }
+        \ }
+
 " additional ale settings
 let g:ale_linters = {
       \ 'ruby': ['rubocop'],
@@ -152,18 +164,6 @@ let g:lightline = {
       \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" }
       \ }
 
-" tmuxline preset
-let g:tmuxline_preset = {
-        \    'a':    '⬤',
-        \    'win':  '#I #W',
-        \    'cwin': '#I #W',
-        \    'y':    '%d·%m·%Y',
-        \    'z':    '%R',
-        \    'options': {
-        \      'status-justify': 'left'
-        \    }
-        \ }
-"
 " use ripgrep as grepprg
 if executable('rg')
   set grepprg=rg\ --color=never\ --vimgrep\ --no-ignore-vcs\ --follow\ --hidden\ --glob\ ''
@@ -195,6 +195,15 @@ nmap     <Leader>7  <Plug>lightline#bufferline#go(7)
 nmap     <Leader>8  <Plug>lightline#bufferline#go(8)
 nmap     <Leader>9  <Plug>lightline#bufferline#go(9)
 nmap     <Leader>0  <Plug>lightline#bufferline#go(10)
+inoremap <silent>   <Esc> <C-O>:stopinsert<CR>
+inoremap <>         <><left>
+inoremap ()         ()<left>
+inoremap {}         {}<left>
+inoremap []         []<left>
+inoremap ""         ""<left>
+inoremap ''         ''<left>
+inoremap ``         ``<left>
+inoremap \|\|       \|\|<left>
 noremap  <C-x>      :bp<Bar>bd #<Cr>
 noremap  <Leader>j  :SplitjoinJoin<Cr>
 noremap  <Leader>J  :SplitjoinSplit<Cr>

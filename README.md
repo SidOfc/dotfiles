@@ -19,7 +19,8 @@ Follow instructions [here](https://www.iterm2.com/version3.html)
     $ cd ~
     $ git clone https://github.com/mbadolato/iTerm2-Color-Schemes
 
-Then, launch ITerm3 and open preferences (<kbd>cmd</kbd>+<kbd>,</kbd>) and navigate to _profiles_ > _colors_ > _color presets_ and press _import..._. In the finder window, navigate to ~/iTerm2-Color-Schemes/schemes and select them all.
+Then, launch ITerm3 and open preferences (<kbd>cmd</kbd>+<kbd>,</kbd>) and navigate to _profiles_ > _colors_ > _color presets_ and press _import..._.
+In the finder window, navigate to ~/iTerm2-Color-Schemes/schemes and select them all.
 
 ### 1.3 [Powerline fonts](https://github.com/powerline/fonts)
 
