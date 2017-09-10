@@ -1,8 +1,6 @@
 # zplug specifics
 export ZPLUG_HOME=/usr/local/opt/zplug
 source $ZPLUG_HOME/init.zsh
-source $HOME/.asdf/asdf.sh
-source ~/.fzf.zsh
 
 zplug "themes/kphoen",                          from:"oh-my-zsh"
 zplug "lib/history",                            from:"oh-my-zsh"
@@ -31,15 +29,12 @@ export PATH="$HOME/bin:$PATH"
 typeset -U PATH
 
 # additional FZF options
-FZF_DEFAULT_OPTS="--height=50% --min-height=15 --reverse"
-FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
-FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_OPTS="--height=50% --min-height=15 --reverse"
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # lps command default username
-LPS_DEFAULT_USERNAME="sidneyliebrand@gmail.com"
-
-# case insensitive autocomplete
-CASE_SENSITIVE="false"
+export LPS_DEFAULT_USERNAME="sidneyliebrand@gmail.com"
 
 # enable prompt substitution (path / branch info per entered command etc..)
 # and implicit CD (e.g. $ ~ == $ cd ~)
@@ -284,3 +279,6 @@ alias u="utils"
 
 zle     -N   fzf-ctrlp-open-in-vim
 bindkey '^P' fzf-ctrlp-open-in-vim
+
+source $HOME/.asdf/asdf.sh
+source ~/.fzf.zsh

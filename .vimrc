@@ -71,6 +71,7 @@ set novisualbell                " do not use visual bell
 set timeoutlen=350              " mapping delay
 set ttimeoutlen=50              " keycode delay
 set wildignore+=.git,.DS_Store  " ignore files
+set lazyredraw                  " do not update screen when executing macro's / scripts
 colorscheme base16-default-dark " apply color scheme
 
 let mapleader = " "                                      " remap leader
@@ -169,6 +170,16 @@ if executable('rg')
 endif
 
 " mappings
+imap     <Up>       <Nop>
+imap     <Down>     <Nop>
+imap     <Left>     <Nop>
+imap     <Right>    <Nop>
+map      <Up>       <Nop>
+map      <Down>     <Nop>
+map      <Left>     <Nop>
+map      <Right>    <Nop>
+map      $          <Nop>
+map      ^          <Nop>
 map      Q          <Nop>
 map      /          <Plug>(incsearch-forward)
 map      ?          <Plug>(incsearch-backward)
@@ -184,10 +195,6 @@ nmap     <Leader>7  <Plug>lightline#bufferline#go(7)
 nmap     <Leader>8  <Plug>lightline#bufferline#go(8)
 nmap     <Leader>9  <Plug>lightline#bufferline#go(9)
 nmap     <Leader>0  <Plug>lightline#bufferline#go(10)
-noremap  <Up>       <Nop>
-noremap  <Down>     <Nop>
-noremap  <Left>     <Nop>
-noremap  <Right>    <Nop>
 noremap  <C-x>      :bp<Bar>bd #<Cr>
 noremap  <Leader>j  :SplitjoinJoin<Cr>
 noremap  <Leader>J  :SplitjoinSplit<Cr>
