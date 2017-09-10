@@ -77,7 +77,8 @@ let mapleader = " "                                      " remap leader
 let g:incsearch#auto_nohlsearch = 1                      " auto unhighlight after searching
 let g:incsearch#magic = '\v'                             " sheer awesomeness
 let g:incsearch#do_not_save_error_message_history = 1    " do not store incsearch errors in history
-let g:incsearch#consistent_n_direction = 1               " when searching backward, do not invert meaning of n and Nlet g:ale_echo_msg_error_str = 'E'                       " error sign
+let g:incsearch#consistent_n_direction = 1               " when searching backward, do not invert meaning of n and N
+let g:ale_echo_msg_error_str = 'E'                       " error sign
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]' " status line format
 let g:ale_echo_msg_warning_str = 'W'                     " warning sign
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']   " error status format
