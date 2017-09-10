@@ -168,41 +168,43 @@ if executable('rg')
 endif
 
 " mappings
-nnoremap <C-x> :bd<CR>
-map      / <Plug>(incsearch-forward)
-map      ? <Plug>(incsearch-backward)
-map      g/ <Plug>(incsearch-stay)
-nmap     ga <Plug>(EasyAlign)
-xmap     ga <Plug>(EasyAlign)
-nmap     <C-p> :Files<CR>
-nmap     <C-m> :Ag<CR>
-noremap  <Leader>j :SplitjoinJoin<CR>
-noremap  <Leader>J :SplitjoinSplit<CR>
-noremap  <Leader>m :MagitO<CR>
-noremap  <Leader>p :VimuxRunCommand("git pull")<CR>
-noremap  <Leader>P :VimuxRunCommand("git push")<CR>
-noremap  <Leader>rt :VimuxRunCommand("clear;" . &ft . " " . bufname("%"))<CR>
-noremap  <Leader>rr :VimuxPromptCommand<CR>
-noremap  <Leader>rl :VimuxRunLastCommand<CR>
-noremap  <Leader>re :VimuxCloseRunner<CR>
-nmap     <Leader>1 <Plug>lightline#bufferline#go(1)
-nmap     <Leader>2 <Plug>lightline#bufferline#go(2)
-nmap     <Leader>3 <Plug>lightline#bufferline#go(3)
-nmap     <Leader>4 <Plug>lightline#bufferline#go(4)
-nmap     <Leader>5 <Plug>lightline#bufferline#go(5)
-nmap     <Leader>6 <Plug>lightline#bufferline#go(6)
-nmap     <Leader>7 <Plug>lightline#bufferline#go(7)
-nmap     <Leader>8 <Plug>lightline#bufferline#go(8)
-nmap     <Leader>9 <Plug>lightline#bufferline#go(9)
-nmap     <Leader>0 <Plug>lightline#bufferline#go(10)
-nmap     <Tab> >>
-nmap     <S-Tab> <<
-vmap     <Tab> >><ESC>gv
-vmap     <S-Tab> <<<ESC>gv
-noremap  <Up>    <NOP>
-noremap  <Down>  <NOP>
-noremap  <Left>  <NOP>
-noremap  <Right> <NOP>
+map      Q          <Nop>
+map      /          <Plug>(incsearch-forward)
+map      ?          <Plug>(incsearch-backward)
+xmap     ga         <Plug>(EasyAlign)
+nmap     ga         <Plug>(EasyAlign)
+nmap     <Leader>1  <Plug>lightline#bufferline#go(1)
+nmap     <Leader>2  <Plug>lightline#bufferline#go(2)
+nmap     <Leader>3  <Plug>lightline#bufferline#go(3)
+nmap     <Leader>4  <Plug>lightline#bufferline#go(4)
+nmap     <Leader>5  <Plug>lightline#bufferline#go(5)
+nmap     <Leader>6  <Plug>lightline#bufferline#go(6)
+nmap     <Leader>7  <Plug>lightline#bufferline#go(7)
+nmap     <Leader>8  <Plug>lightline#bufferline#go(8)
+nmap     <Leader>9  <Plug>lightline#bufferline#go(9)
+nmap     <Leader>0  <Plug>lightline#bufferline#go(10)
+noremap  <Up>       <Nop>
+noremap  <Down>     <Nop>
+noremap  <Left>     <Nop>
+noremap  <Right>    <Nop>
+noremap  <C-x>      :bp<Bar>bd #<Cr>
+noremap  <Leader>j  :SplitjoinJoin<Cr>
+noremap  <Leader>J  :SplitjoinSplit<Cr>
+noremap  <Leader>m  :MagitO<Cr>
+noremap  <Leader>p  :VimuxRunCommand("git pull")<Cr>
+noremap  <Leader>P  :VimuxRunCommand("git push")<Cr>
+noremap  <Leader>rt :VimuxRunCommand("clear;" . &ft . " " . bufname("%"))<Cr>
+noremap  <Leader>rr :VimuxPromptCommand<Cr>
+noremap  <Leader>rl :VimuxRunLastCommand<Cr>
+noremap  <Leader>re :VimuxCloseRunner<Cr>
+nnoremap <C-p>      :Files<Cr>
+nnoremap <C-m>      :Ag<Cr>
+nnoremap H          ^
+nnoremap L          $
+nnoremap <Tab>      >>
+nnoremap <S-Tab>    <<
+vnoremap <Tab>      >><Esc>gv
+vnoremap <S-Tab>    <<<Esc>gv
 
 " fix jsx highlighting of end xml tags
 hi link xmlEndTag xmlTag
@@ -211,7 +213,7 @@ hi link xmlEndTag xmlTag
 augroup Files
   au!
   au BufWritePre *                %s/\s\+$//e          " remove trailing whitespace
-  au FileType javascript,jsx      call s:IndentSize(4) " 4 space indent languages
+  au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indent languages
 augroup END
 
 " global autocmds

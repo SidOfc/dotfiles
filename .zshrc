@@ -1,12 +1,13 @@
 # zplug specifics
 export ZPLUG_HOME=/usr/local/opt/zplug
 source $ZPLUG_HOME/init.zsh
+source $HOME/.asdf/asdf.sh
 source ~/.fzf.zsh
 
 zplug "themes/kphoen",                          from:"oh-my-zsh"
+zplug "lib/history",                            from:"oh-my-zsh"
 zplug "plugins/shrink-path",                    from:"oh-my-zsh"
 zplug "plugins/autojump",                       from:"oh-my-zsh"
-zplug "zsh-users/zsh-history-substring-search", defer:1
 zplug "zsh-users/zsh-autosuggestions",          defer:2
 zplug "zsh-users/zsh-syntax-highlighting",      defer:2
 
@@ -19,17 +20,31 @@ fi
 
 zplug load
 
-# autostart tmux session
-case $- in *i*)
-    [ -z "$TMUX" ] && exec tmux -2
-esac
+# autostart tmux session if tmux available
+case $- in *i*); [ -z "$TMUX" ] && exec tmux -2; esac
+
+# set terminal to 256-color mode in xterm
+if [[ $TERM == xterm ]]; then; TERM=xterm-256color; fi
+
+# path adjustment, upon reloading zshrc, filter duplicate path entries
+export PATH="$HOME/bin:$PATH"
+typeset -U PATH
+
+# additional FZF options
+FZF_DEFAULT_OPTS="--height=50% --min-height=15 --reverse"
+FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
+FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# lps command default username
+LPS_DEFAULT_USERNAME="sidneyliebrand@gmail.com"
 
 # case insensitive autocomplete
 CASE_SENSITIVE="false"
 
-setopt prompt_subst     # enable prompt substitution
-setopt auto_cd          # attempt cd if you typed in a directory name that was not a command name
-setopt hist_ignore_dups # do not save duplicate entries
+# enable prompt substitution (path / branch info per entered command etc..)
+# and implicit CD (e.g. $ ~ == $ cd ~)
+setopt prompt_subst
+setopt auto_cd
 
 # exports
 export PROMPT='%{$fg[blue]%}$(shrink_path -f)%{$fg[yellow]%}$(git_prompt_info)%{$fg[yellow]%} ❯ '
@@ -58,28 +73,11 @@ alias gpl="git pull ${1} ${2}"
 alias grb="git rebase ${1} ${2}"
 alias gp="git push ${1} ${2}"
 
-# set terminal to 256-color mode in xterm
-if [[ $TERM == xterm ]]; then
-  TERM=xterm-256color
-fi
-
 # keybindings
 bindkey '^e' autosuggest-accept
 
 # sourcing
-source $HOME/.asdf/asdf.sh
 
-# final path adjustments
-export PATH="$HOME/bin:$PATH"
-typeset -U PATH
-
-# additional FZF exports
-export FZF_DEFAULT_OPTS="--height=50% --min-height=15 --reverse"
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
-# lps command default username
-export LPS_DEFAULT_USERNAME="sidneyliebrand@gmail.com"
 
 # caniuse for quick access to global support list
 # also runs the `caniuse` command if installed
