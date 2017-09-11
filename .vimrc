@@ -69,7 +69,7 @@
   set noerrorbells                " do not show error bells
   set novisualbell                " do not use visual bell
   set timeoutlen=350              " mapping delay
-  set ttimeoutlen=50              " keycode delay
+  set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files
   set scrolloff=10                " show 10 lines of context around cursor
 
