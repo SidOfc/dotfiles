@@ -99,9 +99,10 @@
     local feats=$(ciu | sort -rn | eval "fzf ${FZF_DEFAULT_OPTS} -m --ansi --header='[caniuse:features]'" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
 
     if [[ $feats ]]; then
-      for feat in $(echo $feats)
-      do if [[ $feat ]]; then; caniuse $feat; fi
-      done
+      for feat in $feats
+      do if [[ $feat ]]
+      then; caniuse $feat; fi
+    done
     fi
   }
 

@@ -73,7 +73,6 @@
   set wildignore+=.git,.DS_Store  " ignore files
   set scrolloff=10                " show 10 lines of context around cursor
 
-  inoremap <silent>   <Esc> <C-o>:stopinsert<Cr>
   noremap  K          {
   noremap  J          }
   noremap  H          ^
