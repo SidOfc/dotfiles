@@ -24,13 +24,10 @@ reference to get started, comments can be found within dotfiles.
 
     $ git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 
-## Commands
+## Setup
 
     $ defaults write com.apple.finder AppleShowAllFiles YES
     $ defaults write com.apple.dock autohide-delay -float 1000; killall Dock
-
-## Clone
-
     $ git clone https://github.com/sidofc/dotfiles ~/.dotfiles
     $ cd ~/.dotfiles
     $ ./bin/dot ln! # forcefully symlink into ~
