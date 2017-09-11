@@ -49,12 +49,6 @@
   source ~/.fzf.zsh
 # }}}
 
-# Tmux {{{
-  case $- in *i*)
-    [ -z "$TMUX" ] && exec tmux -2
-  esac
-# }}}
-
 # Colors {{{
   if [[ $TERM == xterm ]]
   then
@@ -297,4 +291,13 @@ zz     [alias]              \$EDITOR ~/.zshrc"
       eval ${cmd}
     fi
   }
+# }}}
+
+# Tmux {{{
+  if hash tmux &> /dev/null; then
+    case $- in *i*)
+      [ -z "$TMUX" ] && exec tmux
+    esac
+  else
+  fi
 # }}}
