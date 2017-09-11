@@ -67,7 +67,8 @@
   set backspace=2                 " restore backspace
   set nowrap                      " do not wrap text at `textwidth`
   set noerrorbells                " do not show error bells
-  set novisualbell                " do not use visual bell
+  set visualbell                  " do not use visual bell
+  set t_vb=                       " do not flash screen with visualbell
   set timeoutlen=350              " mapping delay
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files
@@ -82,6 +83,8 @@
   nnoremap <S-Tab>    <<
   vnoremap <Tab>      >><Esc>gv
   vnoremap <S-Tab>    <<<Esc>gv
+  inoremap <S-Tab>    <Esc>
+  onoremap <S-Tab>    <Esc>
   nmap     <Up>       <Nop>
   nmap     <Down>     <Nop>
   nmap     <Left>     <Nop>
