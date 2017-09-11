@@ -64,26 +64,27 @@
 
 # Aliasses {{{
   alias cr='crystal'
-  alias zz="$EDITOR ~/.zshrc"
-  alias zx="source ~/.zshrc"
-  alias vv="$EDITOR ~/.vimrc"
-  alias vip="vim +PluginInstall +qall"
-  alias vup="vim +PluginUpdate"
-  alias vcp="vim +PluginClean +qall"
-  alias tt="$EDITOR ~/.tmux.conf"
-  alias v="$EDITOR ."
-  alias la="ls -al"
-  alias lf="ls -al | grep ${1}"
   alias ga="git add ."
   alias gc="git commit -m ${1}"
-  alias gs="git status"
   alias gd="git diff"
   alias gdt="git difftool"
   alias gmt="git mergetool"
+  alias gp="git push ${1} ${2}"
   alias gpl="git pull ${1} ${2}"
   alias grb="git rebase ${1} ${2}"
-  alias gp="git push ${1} ${2}"
+  alias gs="git status"
+  alias la="ls -al"
+  alias lf="ls -al | grep ${1}"
+  alias ls="ls -Gl"
+  alias tt="$EDITOR ~/.tmux.conf"
   alias u="utils"
+  alias v="$EDITOR ."
+  alias vcp="vim +PluginClean +qall"
+  alias vip="vim +PluginInstall +qall"
+  alias vup="vim +PluginUpdate"
+  alias vv="$EDITOR ~/.vimrc"
+  alias zx="source ~/.zshrc"
+  alias zz="$EDITOR ~/.zshrc"
 # }}}
 
 # Keybindings {{{
@@ -278,7 +279,9 @@ grb    [alias]              git rebase \${1} \${2}
 gs     [alias]              git status
 la     [alias]              ls -al
 lf     [alias]              ls -al | grep \${1}
+ls     [alias]              ls -G
 tt     [alias]              \$EDITOR ~/.tmux.conf
+u      [alias]              utils
 v      [alias]              \$EDITOR .
 vcp    [alias]              vim +PluginClean +qall
 vip    [alias]              vim +PluginInstall +qall
