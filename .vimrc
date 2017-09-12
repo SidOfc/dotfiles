@@ -88,7 +88,6 @@
   map      ^       <Nop>
   map      {       <Nop>
   map      }       <Nop>
-  map      Q       <Nop>
 
   " easier navigation in normal / visual / operator pending mode
   noremap  K       {
@@ -96,6 +95,12 @@
   noremap  H       ^
   noremap  L       $
   noremap  <C-x>   :bp<Bar>bd #<Cr>
+
+  " make Y consistent with C and D
+  nnoremap Y y$
+
+  " use qq to record, q to stop, Q to play a macro
+  nnoremap Q @q
 
   " use tab and shift tab to indent and de-indent code
   nnoremap <Tab>   >>
