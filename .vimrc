@@ -69,30 +69,54 @@
   set noerrorbells                " do not show error bells
   set visualbell                  " do not use visual bell
   set t_vb=                       " do not flash screen with visualbell
-  set timeoutlen=350              " mapping delay
+  set timeoutlen=500              " mapping delay
   set ttimeoutlen=10              " keycode delay
-  set wildignore+=.git,.DS_Store  " ignore files
+  set wildignore+=.git,.DS_Store  " ignore files (netrw)
   set scrolloff=10                " show 10 lines of context around cursor
 
-  noremap  K          {
-  noremap  J          }
-  noremap  H          ^
-  noremap  L          $
-  noremap  <C-x>      :bp<Bar>bd #<Cr>
-  nnoremap <Tab>      >>
-  nnoremap <S-Tab>    <<
-  vnoremap <Tab>      >><Esc>gv
-  vnoremap <S-Tab>    <<<Esc>gv
-  inoremap <S-Tab>    <Esc>
-  onoremap <S-Tab>    <Esc>
-  nmap     <Up>       <Nop>
-  nmap     <Down>     <Nop>
-  nmap     <Left>     <Nop>
-  nmap     <Right>    <Nop>
-  map      $          <Nop>
-  map      ^          <Nop>
-  map      {          <Nop>
-  map      }          <Nop>
+  " remap bad habits to do nothing
+  nmap     <Up>    <Nop>
+  nmap     <Down>  <Nop>
+  nmap     <Left>  <Nop>
+  nmap     <Right> <Nop>
+  nmap     >>      <Nop>
+  nmap     <<      <Nop>
+  vmap     >>      <Nop>
+  vmap     <<      <Nop>
+  map      $       <Nop>
+  map      ^       <Nop>
+  map      {       <Nop>
+  map      }       <Nop>
+  map      Q       <Nop>
+
+  " easier navigation in normal / visual / operator pending mode
+  noremap  K       {
+  noremap  J       }
+  noremap  H       ^
+  noremap  L       $
+  noremap  <C-x>   :bp<Bar>bd #<Cr>
+
+  " use tab and shift tab to indent and de-indent code
+  nnoremap <Tab>   >>
+  nnoremap <S-Tab> <<
+  vnoremap <Tab>   >><Esc>gv
+  vnoremap <S-Tab> <<<Esc>gv
+
+  " use q to exit visual mode
+  vnoremap q <Esc>
+
+  " use shift tab to exit insert and operator-pending mode
+  inoremap <S-Tab> <Esc>
+  onoremap <S-Tab> <Esc>
+
+  " when pairing some braces or quotes, put cursor between them
+  inoremap <> <><Left>
+  inoremap () ()<Left>
+  inoremap {} {}<Left>
+  inoremap [] []<Left>
+  inoremap "" ""<Left>
+  inoremap '' ''<Left>
+  inoremap `` ``<Left>
 
   " fix jsx highlighting of end xml tags
   hi link xmlEndTag xmlTag
@@ -100,7 +124,7 @@
   " convenience function for setting filetype specific spacing
   if !exists('*s:IndentSize')
     function s:IndentSize(amount)
-      execute("setlocal expandtab ts=" . a:amount . " sts=" . a:amount . " sw=" . a:amount)
+      exe "setlocal expandtab ts=" . a:amount . " sts=" . a:amount . " sw=" . a:amount
     endfunction
   endif
 
