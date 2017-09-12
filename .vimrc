@@ -26,6 +26,7 @@
   Plugin 'haya14busa/incsearch.vim'       " auto nohlsearch and some extra search goodies
   Plugin 'junegunn/vim-easy-align'        " align code easier
   Plugin 'junegunn/fzf.vim'               " fzf as vim plugin
+  Plugin 'fmoralesc/vim-pad'              " notes
 
   " only emable to update tmux statusline look
   " Plugin 'edkolev/tmuxline.vim'
@@ -139,6 +140,15 @@
   let g:netrw_winsize   = 20
   let g:netrw_liststyle = 3
   let g:netrw_altv      = 1
+" }}}
+
+" Vim-pad {{{
+  let g:pad#dir = '~/notes'
+  let g:pad#set_mappings = 0
+  let g:pad#open_in_split = 0
+
+  noremap <Leader>n :Pad ls<Cr>
+  noremap <Leader>N :Pad new<Cr>
 " }}}
 
 " Tmuxline {{{
