@@ -153,6 +153,7 @@
 
 " Vim-pad {{{
   let g:pad#dir = '~/notes'
+  let g:pad#window_height = 20
   let g:pad#set_mappings = 0
   let g:pad#open_in_split = 0
 
