@@ -27,7 +27,6 @@
   Plugin 'junegunn/vim-easy-align'        " align code easier
   Plugin 'junegunn/fzf.vim'               " fzf as vim plugin
   Plugin 'fmoralesc/vim-pad'              " notes
-  Plugin 'justinmk/vim-sneak'             " easymotion-like seeking
 
   " only emable to update tmux statusline look
   " Plugin 'edkolev/tmuxline.vim'
@@ -143,12 +142,6 @@
   let g:netrw_winsize   = 20
   let g:netrw_liststyle = 3
   let g:netrw_altv      = 1
-" }}}
-
-" Sneak {{{
-  let g:sneak#label = 1
-
-  hi link Sneak Search
 " }}}
 
 " Vim-pad {{{
