@@ -27,6 +27,7 @@
   Plugin 'junegunn/vim-easy-align'        " align code easier
   Plugin 'junegunn/fzf.vim'               " fzf as vim plugin
   Plugin 'fmoralesc/vim-pad'              " notes
+  Plugin 'justinmk/vim-sneak'             " easymotion-like seeking
 
   " only emable to update tmux statusline look
   " Plugin 'edkolev/tmuxline.vim'
@@ -108,9 +109,6 @@
   vnoremap <Tab>   >><Esc>gv
   vnoremap <S-Tab> <<<Esc>gv
 
-  " use q to exit visual mode
-  vnoremap q <Esc>
-
   " use shift tab to exit insert and operator-pending mode
   inoremap <S-Tab> <Esc>
   onoremap <S-Tab> <Esc>
@@ -145,6 +143,12 @@
   let g:netrw_winsize   = 20
   let g:netrw_liststyle = 3
   let g:netrw_altv      = 1
+" }}}
+
+" Sneak {{{
+  let g:sneak#label = 1
+
+  hi link Sneak Search
 " }}}
 
 " Vim-pad {{{
