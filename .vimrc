@@ -76,6 +76,10 @@
   set scrolloff=10                " show 10 lines of context around cursor
 
   " remap bad habits to do nothing
+  imap     <Up>    <Nop>
+  imap     <Down>  <Nop>
+  imap     <Left>  <Nop>
+  imap     <Right> <Nop>
   nmap     <Up>    <Nop>
   nmap     <Down>  <Nop>
   nmap     <Left>  <Nop>
@@ -90,11 +94,17 @@
   map      }       <Nop>
 
   " easier navigation in normal / visual / operator pending mode
-  noremap  K       {
-  noremap  J       }
-  noremap  H       ^
-  noremap  L       $
-  noremap  <C-x>   :bp<Bar>bd #<Cr>
+  noremap  K     {
+  noremap  J     }
+  noremap  H     ^
+  noremap  L     $
+  noremap  <C-x> :bp<Bar>bd #<Cr>
+
+  " easier navigation in insert mode
+  inoremap <C-k> <C-o>k
+  inoremap <C-j> <C-o>j
+  inoremap <C-h> <C-o>h
+  inoremap <C-l> <C-o>a
 
   " make Y consistent with C and D
   nnoremap Y y$
@@ -120,6 +130,20 @@
   inoremap "" ""<Left>
   inoremap '' ''<Left>
   inoremap `` ``<Left>
+
+  if &diff
+    " use familiar C-n and C-p binds to move between hunks
+    nnoremap <C-n> ]c
+    nnoremap <C-p> [c
+
+    " unbind indent and de-indent keys in diff mode
+    nunmap <S-tab>
+    nunmap <Tab>
+
+    " instead use tab to inject local change and shift tab for remote change
+    nnoremap <Tab>   :diffg LO<Cr>
+    nnoremap <S-Tab> :diffg RE<Cr>
+  endif
 
   " fix jsx highlighting of end xml tags
   hi link xmlEndTag xmlTag
@@ -263,8 +287,11 @@
   " use bottom positioned 20% height bottom split
   let g:fzf_layout = { 'down': '~20%' }
 
-  nnoremap <C-p> :Files<Cr>
-  nnoremap <C-g> :Ag<Cr>
+  " only use FZF shortcuts in non diff-mode
+  if !&diff
+    nnoremap <C-p> :Files<Cr>
+    nnoremap <C-g> :Ag<Cr>
+  endif
 " }}}
 
 " Vimagit {{{
