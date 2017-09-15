@@ -101,10 +101,10 @@
   noremap  <C-x> :bp<Bar>bd #<Cr>
 
   " easier navigation in insert mode
-  inoremap <C-k> <C-o>k
-  inoremap <C-j> <C-o>j
-  inoremap <C-h> <C-o>h
-  inoremap <C-l> <C-o>a
+  inoremap <C-k> <Up>
+  inoremap <C-j> <Down>
+  inoremap <C-h> <Left>
+  inoremap <C-l> <Right>
 
   " make Y consistent with C and D
   nnoremap Y y$
