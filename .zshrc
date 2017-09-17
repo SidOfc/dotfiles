@@ -228,7 +228,11 @@
 
   # mnemonic: [F]ind [P]ath
   fp() {
-    echo $PATH | sed -e $'s/:/\\\n/g' | eval "fzf ${FZF_DEFAULT_OPTS} --header='[find:path]' >/dev/null"
+    local loc=$(echo $PATH | sed -e $'s/:/\\\n/g' | eval "fzf ${FZF_DEFAULT_OPTS} --header='[find:path]'")
+
+    if [[ -d $loc ]]; then
+      echo "$(rg --files $loc | rev | cut -d"/" -f1 | rev)" | eval "fzf ${FZF_DEFAULT_OPTS} --header='[find:path]' >/dev/null"
+    fi
   }
 
   # mnemonic: [K]ill [P]rocess
