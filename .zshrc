@@ -302,7 +302,7 @@ zz     [alias]              \$EDITOR ~/.zshrc"
 # Tmux {{{
   if hash tmux &> /dev/null; then
     case $- in *i*)
-      [ -z "$TMUX" ] && exec tmux
+      [ -z "$TMUX" ] && tmux -2
     esac
   else
   fi
