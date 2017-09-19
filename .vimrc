@@ -16,12 +16,11 @@
   Plugin 'mgee/lightline-bufferline'      " show open buffers at top of window
   Plugin 'jreybert/vimagit'               " interactive git staging
   Plugin 'benmills/vimux'                 " Run commands from vim
-  Plugin 'tpope/vim-abolish'              " smart case replace and much more
   Plugin 'tpope/vim-commentary'           " code commenting
   Plugin 'tpope/vim-endwise'              " auto insert 'end'-like keywords
   Plugin 'tpope/vim-fugitive'             " vim git wrapper, also used by vimagit
   Plugin 'tpope/vim-repeat'               " better repeat, extensible by plugins
-  Plugin 'tpope/vim-vinegar'              " enhance netrw
+  Plugin 'tpope/vim-obsession'            " store sessions to reopen later
   Plugin 'tpope/vim-surround'             " change/add/remove surrounding brackets
   Plugin 'haya14busa/incsearch.vim'       " auto nohlsearch and some extra search goodies
   Plugin 'junegunn/vim-easy-align'        " align code easier
@@ -30,7 +29,6 @@
 
   " only emable to update tmux statusline look
   " Plugin 'edkolev/tmuxline.vim'
-
   call vundle#end()
 " }}}
 
@@ -233,18 +231,21 @@
         \    'bufferinfo':   'lightline#buffer#bufferinfo',
         \ },
         \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ],
+        \   'left': [ [ 'mode', 'paste', 'session' ],
         \             [ 'modified', 'fugitive', 'filename' ] ],
         \   'right': [ [ 'lineinfo'],
         \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
         \ },
         \ 'component': {
+        \   'session':  '%{ObsessionStatus("●", "❚❚")}',
         \   'mode':     '%{lightline#mode()[0]}',
         \   'readonly': '%{&filetype=="help"?"":&readonly?"[!]":""}',
         \   'modified': '%{&filetype=="help"?"":&modified?"[+]":&modifiable?"":"[-]"}',
         \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
         \ },
         \ 'component_visible_condition': {
+        \   'session':  '(ObsessionStatus()!="")',
+        \   'paste':    '(&paste!="nopaste")',
         \   'readonly': '(&filetype!="help"&& &readonly)',
         \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
         \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
@@ -322,4 +323,10 @@
     au BufWritePre *                %s/\s\+$//e          " remove trailing whitespace
     au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indent languages
   augroup END
+" }}}
+
+" {{{
+  if filereadable("./Session.vim")
+    silent so ./Session.vim
+  endif
 " }}}

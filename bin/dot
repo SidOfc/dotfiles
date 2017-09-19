@@ -1,16 +1,19 @@
 #!/usr/bin/env ruby
 
+# Dotfiles
 module Dotfiles
-  IGNORE     = /.*(?:\.\.?|README\.md|\.git|\.DS_Store)$/.freeze
+  IGNORE     = /.*(?:\.\.?|README\.md|\.git|\.DS_Store|ssion\.vim)$/
   HOME       = Dir.home.freeze
   REPOSITORY = "#{HOME}/.dotfiles".freeze
 
   def self.run!
-    send *ARGV
+    send(*ARGV)
   rescue
     exit 1
   end
 
+  # rubocop:disable Style/StringLiterals
+  # rubocop:disable Metrics/LineLength
   def self.help
     puts "Usage: dot COMMAND [ARGS]"
     puts ""
@@ -22,20 +25,21 @@ module Dotfiles
     puts "                           [SRC] can be one of 'src' or 'home' which will show matching"
     puts "                           matching dotfiles in ~ for 'home' and ~/.dotfiles for 'src'"
   end
+  # rubocop:enable
 
   def self.src
-    @@src ||= Dir.glob("#{REPOSITORY}/{*,.*}").reject { |path| path.match IGNORE }
+    @src ||= Dir.glob("#{REPOSITORY}/{*,.*}").reject { |path| path.match IGNORE }
   end
 
   def self.home
-    @@home ||= Dir.glob("#{HOME}/{#{src.map(&File.method(:basename)).join(',')}}")
+    @home ||= Dir.glob("#{HOME}/{#{src.map(&File.method(:basename)).join(',')}}")
   end
 
-  def self.ls path = nil
+  def self.ls(path = nil)
     return send path if path && respond_to?(path)
 
     ml = home.map(&:size).max
-    src.zip(home).map { |sd, hd| "#{hd.ljust(ml)} ~> #{File.realpath(hd)}" }
+    home.map { |hd| "#{hd.ljust(ml)} ~> #{File.realpath(hd)}" }
   end
 
   def self.ln!
@@ -48,7 +52,7 @@ module Dotfiles
     src.map do |srcdot|
       dst = "#{HOME}/#{File.basename(srcdot)}"
 
-      File.symlink srcdot, dst if (link = !File.exists?(dst))
+      File.symlink srcdot, dst if (link = !File.exist?(dst))
       "[#{link ? '++' : '--'}] #{srcdot.ljust(maxlen)} ~> #{dst}"
     end
   end
