@@ -235,6 +235,7 @@
 
     if [[ -d $loc ]]; then
       echo "$(rg --files $loc | rev | cut -d"/" -f1 | rev)" | eval "fzf ${FZF_DEFAULT_OPTS} --header='[find:path]' >/dev/null"
+      fp
     fi
   }
 
