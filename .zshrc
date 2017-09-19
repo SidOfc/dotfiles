@@ -72,7 +72,6 @@
   alias ls="ls -Gl"
   alias tt="$EDITOR ~/.tmux.conf"
   alias u="utils"
-  alias v="$EDITOR ."
   alias vcp="vim +PluginClean +qall"
   alias vip="vim +PluginInstall +qall"
   alias vup="vim +PluginUpdate"
@@ -87,6 +86,15 @@
 # }}}
 
 # Commands {{{
+  # when a session is found, just open Vim
+  v() {
+    if [[ -f "$PWD/Session.vim" ]]; then
+      $EDITOR
+    else
+      $EDITOR .
+    fi
+  }
+
   # caniuse for quick access to global support list
   # also runs the `caniuse` command if installed
   cani() {
