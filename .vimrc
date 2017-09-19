@@ -179,7 +179,7 @@
 " Tmuxline {{{
   " tmux statusline custom format
   let g:tmuxline_preset = {
-        \ 'a':    '⬤',
+        \ 'a':    '⊞',
         \ 'win':  '#I #W',
         \ 'cwin': '#I #W',
         \ 'y':    '%d·%m·%Y',
