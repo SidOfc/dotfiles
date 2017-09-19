@@ -97,7 +97,12 @@
   noremap  J     }
   noremap  H     ^
   noremap  L     $
-  noremap  <C-x> :bp<Bar>bd #<Cr>
+
+  " various buffer commands
+  nnoremap <C-s> :update<Cr>
+  vnoremap <C-s> <C-c>:update<Cr>
+  inoremap <C-s> <C-o>:update<Cr>
+  noremap  <C-w> :bd<Cr>
 
   " easier navigation in insert mode
   inoremap <C-k> <Up>

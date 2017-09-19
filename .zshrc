@@ -1,6 +1,8 @@
 # Options {{{
   setopt prompt_subst
   setopt auto_cd
+
+  stty -ixon
 # }}}
 
 # Zplug {{{
