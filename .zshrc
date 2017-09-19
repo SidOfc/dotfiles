@@ -13,6 +13,7 @@
     source ~/.zplug/init.zsh
   fi
 
+  zplug "zplug/zplug"
   zplug "themes/kphoen",                          from:"oh-my-zsh"
   zplug "lib/history",                            from:"oh-my-zsh"
   zplug "plugins/shrink-path",                    from:"oh-my-zsh"
