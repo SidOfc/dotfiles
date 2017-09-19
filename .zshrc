@@ -246,6 +246,7 @@
     if [ "x$pid" != "x" ]
     then
       echo $pid | xargs kill -${1:-9}
+      kp
     fi
   }
 
@@ -256,6 +257,7 @@
     if [ "x$pid" != "x" ]
     then
       echo $pid | xargs kill -${1:-9}
+      ks
     fi
   }
 
