@@ -20,7 +20,6 @@
   Plugin 'tpope/vim-endwise'              " auto insert 'end'-like keywords
   Plugin 'tpope/vim-fugitive'             " vim git wrapper, also used by vimagit
   Plugin 'tpope/vim-repeat'               " better repeat, extensible by plugins
-  Plugin 'tpope/vim-obsession'            " store sessions to reopen later
   Plugin 'tpope/vim-surround'             " change/add/remove surrounding brackets
   Plugin 'haya14busa/incsearch.vim'       " auto nohlsearch and some extra search goodies
   Plugin 'junegunn/vim-easy-align'        " align code easier
@@ -28,6 +27,8 @@
   Plugin 'fmoralesc/vim-pad'              " notes
 
   " only emable to update tmux statusline look
+  " Tmuxline lightline[_[insert|visual]] to preview
+  " TmuxlineSnapshot! ~/.dotfiles/.tmuxline-colors.conf to save
   " Plugin 'edkolev/tmuxline.vim'
   call vundle#end()
 " }}}
@@ -231,20 +232,18 @@
         \    'bufferinfo':   'lightline#buffer#bufferinfo',
         \ },
         \ 'active': {
-        \   'left': [ [ 'mode', 'paste', 'session' ],
+        \   'left': [ [ 'mode', 'paste' ],
         \             [ 'modified', 'fugitive', 'filename' ] ],
         \   'right': [ [ 'lineinfo'],
         \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
         \ },
         \ 'component': {
-        \   'session':  '%{ObsessionStatus("●", "❚❚")}',
         \   'mode':     '%{lightline#mode()[0]}',
         \   'readonly': '%{&filetype=="help"?"":&readonly?"[!]":""}',
         \   'modified': '%{&filetype=="help"?"":&modified?"[+]":&modifiable?"":"[-]"}',
         \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
         \ },
         \ 'component_visible_condition': {
-        \   'session':  '(ObsessionStatus()!="")',
         \   'paste':    '(&paste!="nopaste")',
         \   'readonly': '(&filetype!="help"&& &readonly)',
         \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
@@ -323,10 +322,4 @@
     au BufWritePre *                %s/\s\+$//e          " remove trailing whitespace
     au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indent languages
   augroup END
-" }}}
-
-" {{{
-  if filereadable("./Session.vim")
-    silent so ./Session.vim
-  endif
 " }}}
