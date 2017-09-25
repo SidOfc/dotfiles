@@ -212,7 +212,6 @@
         read uname
       fi
 
-
       if [[ -n $uname ]]; then
         lpass login --trust $uname > /dev/null 2>/dev/null
       fi
@@ -306,7 +305,7 @@ zz     [alias]              \$EDITOR ~/.zshrc"
 # Tmux {{{
   if hash tmux &> /dev/null; then
     case $- in *i*)
-      [ -z "$TMUX" ] && tmux -2
+      [ -z "$TMUX" ] && tmux
     esac
   else
   fi
