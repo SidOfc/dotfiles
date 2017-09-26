@@ -74,6 +74,11 @@
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
   set scrolloff=10                " show 10 lines of context around cursor
 
+  " change cursor shape in various modes
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+
   " remap bad habits to do nothing
   imap     <Up>    <Nop>
   imap     <Down>  <Nop>
@@ -122,9 +127,9 @@
   vnoremap <Tab>   >><Esc>gv
   vnoremap <S-Tab> <<<Esc>gv
 
-  " use shift tab to exit insert and operator-pending mode
-  inoremap <S-Tab> <Esc>
-  onoremap <S-Tab> <Esc>
+  " add i| and a| operator pending motions for pipe characters
+  onoremap i\| :<C-u>normal! f\|lvt\|<Cr>
+  onoremap a\| :<C-u>normal! f\|vf\|<Cr>
 
   " when pairing some braces or quotes, put cursor between them
   inoremap <> <><Left>
