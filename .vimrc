@@ -88,6 +88,7 @@
   nmap     <Down>  <Nop>
   nmap     <Left>  <Nop>
   nmap     <Right> <Nop>
+  nmap     <S-s>   <Nop>
   nmap     >>      <Nop>
   nmap     <<      <Nop>
   vmap     >>      <Nop>
@@ -103,10 +104,15 @@
   noremap  H     ^
   noremap  L     $
 
-  " various buffer commands
+  " save using <C-s> in every mode
+  " when in operator-pending or insert, takes you to normal mode
   nnoremap <C-s> :update<Cr>
   vnoremap <C-s> <C-c>:update<Cr>
-  inoremap <C-s> <C-o>:update<Cr>
+  inoremap <C-s> <Esc>:update<Cr>
+  onoremap <C-s> <Esc>:update<Cr>
+
+  " close pane using <C-w> since I know it from Chrome / Atom (cmd+w) and do
+  " not use the <C-w> mappings anyway
   noremap  <C-w> :bd<Cr>
 
   " easier navigation in insert mode
