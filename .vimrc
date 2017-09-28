@@ -172,7 +172,8 @@
 
   " use ripgrep as grepprg
   if executable('rg')
-    set grepprg=rg\ --color=never\ --vimgrep\ --no-ignore-vcs\ --follow\ --hidden\ --glob\ ''
+    set grepprg=rg\ --vimgrep\ --hidden\ --no-ignore-vcs
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
   endif
 " }}}
 
