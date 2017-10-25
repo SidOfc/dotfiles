@@ -60,6 +60,11 @@
 # }}}
 
 # Aliasses {{{
+  # prefer nvim over vim when present
+  if type nvim > /dev/null 2>&1; then
+    alias vim='nvim'
+  fi
+
   alias cr='crystal'
   alias ga="git add ."
   alias gc="git commit -m ${1}"

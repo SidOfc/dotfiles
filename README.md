@@ -15,7 +15,7 @@ reference to get started, comments can be found within dotfiles.
 **[Homebrew](https://brew.sh)**
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    $ brew install tmux zsh gnupg wget ripgrep fzf reattach-to-user-namespace
+    $ brew install nvim tmux zsh gnupg wget ripgrep fzf reattach-to-user-namespace
     $ brew install vim --with-python3 --with-luajit
     $ brew install lastpass-cli --with-pinentry
     $ /usr/local/opt/fzf/install
@@ -31,3 +31,6 @@ reference to get started, comments can be found within dotfiles.
     $ git clone https://github.com/sidofc/dotfiles ~/.dotfiles
     $ cd ~/.dotfiles
     $ ./bin/dot ln! # forcefully symlink into ~
+
+After completion, the `dot` command can be used anywhere on the command line run `dot help` for more information.
+**NOTE:** the `dot` command will **not** make a backup of your original dotfiles (they should be on github anyway, right? :P).

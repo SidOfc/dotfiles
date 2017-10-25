@@ -34,14 +34,14 @@
 " }}}
 
 " General {{{
-  let mapleader = " " " remap leader
+  let mapleader = ' ' " remap leader
 
   filetype plugin indent on
-  colorscheme base16-default-dark " apply color scheme
   syntax enable                   " cuz white text is going to be awesome to edit :D
   set path+=**                    " add cwd and 1 level of nesting to path
   set hidden                      " debatable, allow switching from unsaved buffer without '!'
   set ignorecase                  " ignore case in search
+  set nohlsearch                  " do not highlight searches, incsearch plugin does this
   set smartcase                   " use case-sensitive if a capital letter is included
   set noshowmode                  " statusline makes -- INSERT -- info irrelevant
   set number                      " show lines
@@ -73,6 +73,7 @@
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
   set scrolloff=10                " show 10 lines of context around cursor
+  colorscheme base16-default-dark " apply color scheme
 
   " change cursor shape in various modes
   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
@@ -212,8 +213,6 @@
   let g:ale_echo_msg_warning_str = 'W'                     " warning sign
   let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']   " error status format
   let g:ale_lint_delay = 1000                              " relint max once per second
-  let g:ale_set_loclist = 0                                " do not use location list
-  let g:ale_set_quickfix = 1                               " but do use quickfix list
   let g:ale_linters = {
         \ 'ruby': ['rubocop'],
         \ 'javascript': ['eslint']
