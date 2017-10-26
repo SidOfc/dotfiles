@@ -15,8 +15,7 @@ reference to get started, comments can be found within dotfiles.
 **[Homebrew](https://brew.sh)**
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    $ brew install nvim tmux zsh gnupg wget ripgrep fzf reattach-to-user-namespace
-    $ brew install vim --with-python3 --with-luajit
+    $ brew install neovim tmux zsh gnupg wget ripgrep fzf reattach-to-user-namespace
     $ brew install lastpass-cli --with-pinentry
     $ /usr/local/opt/fzf/install
 
