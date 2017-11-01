@@ -25,6 +25,7 @@
   Plugin 'junegunn/vim-easy-align'        " align code easier
   Plugin 'junegunn/fzf.vim'               " fzf as vim plugin
   Plugin 'wellle/targets.vim'             " add more text objects to vim
+  Plugin 'vimwiki/vimwiki'                " notes
 
   call vundle#end()
 " }}}
@@ -189,6 +190,11 @@
     set grepprg=rg\ --vimgrep\ --hidden\ --no-ignore-vcs
     set grepformat=%f:%l:%c:%m,%f:%l:%m
   endif
+" }}}
+
+" Vimwiki {{{
+  let g:vimwiki_list = [{'path': '~/notes/',
+                       \ 'syntax': 'markdown', 'ext': '.md'}]
 " }}}
 
 " Netrw {{{
