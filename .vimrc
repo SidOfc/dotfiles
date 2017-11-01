@@ -24,13 +24,26 @@
   Plugin 'haya14busa/incsearch.vim'       " auto nohlsearch and some extra search goodies
   Plugin 'junegunn/vim-easy-align'        " align code easier
   Plugin 'junegunn/fzf.vim'               " fzf as vim plugin
-  Plugin 'fmoralesc/vim-pad'              " notes
+  Plugin 'wellle/targets.vim'             " add more text objects to vim
 
+  call vundle#end()
+" }}}
+
+" Tmuxline {{{
   " only emable to update tmux statusline look
   " Tmuxline lightline[_[insert|visual]] to preview
   " TmuxlineSnapshot! ~/.dotfiles/.tmuxline-colors.conf to save
   " Plugin 'edkolev/tmuxline.vim'
-  call vundle#end()
+
+  " tmux statusline custom format
+  " let g:tmuxline_preset = {
+  "       \ 'a':    '⊞',
+  "       \ 'win':  '#I #W',
+  "       \ 'cwin': '#I #W',
+  "       \ 'y':    '%d·%m·%Y',
+  "       \ 'z':    '%R',
+  "       \ 'options': { 'status-justify': 'left' }
+  "       \ }
 " }}}
 
 " General {{{
@@ -183,28 +196,6 @@
   let g:netrw_winsize   = 20
   let g:netrw_liststyle = 3
   let g:netrw_altv      = 1
-" }}}
-
-" Vim-pad {{{
-  let g:pad#dir = '~/notes'
-  let g:pad#window_height = 20
-  let g:pad#set_mappings = 0
-  let g:pad#open_in_split = 0
-
-  noremap <Leader>n :Pad ls<Cr>
-  noremap <Leader>N :Pad new<Cr>
-" }}}
-
-" Tmuxline {{{
-  " tmux statusline custom format
-  let g:tmuxline_preset = {
-        \ 'a':    '⊞',
-        \ 'win':  '#I #W',
-        \ 'cwin': '#I #W',
-        \ 'y':    '%d·%m·%Y',
-        \ 'z':    '%R',
-        \ 'options': { 'status-justify': 'left' }
-        \ }
 " }}}
 
 " Ale {{{
