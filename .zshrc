@@ -98,13 +98,10 @@
   # caniuse for quick access to global support list
   # also runs the `caniuse` command if installed
   cani() {
-    local feats=$(ciu | sort -rn | eval "fzf ${FZF_DEFAULT_OPTS} -m --ansi --header='[caniuse:features]'" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
+    local feat=$(ciu | sort -rn | eval "fzf ${FZF_DEFAULT_OPTS} --ansi --header='[caniuse:features]'" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
 
-    if [[ $feats ]]; then
-      for feat in $feats
-      do if [[ $feat ]]
-      then; caniuse $feat; fi
-    done
+    if hash caniuse &> /dev/null && [[ $feat ]] then
+      caniuse $feat
     fi
   }
 
