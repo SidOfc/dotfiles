@@ -25,7 +25,6 @@
   Plugin 'junegunn/vim-easy-align'        " align code easier
   Plugin 'junegunn/fzf.vim'               " fzf as vim plugin
   Plugin 'wellle/targets.vim'             " add more text objects to vim
-  Plugin 'vimwiki/vimwiki'                " notes
 
   call vundle#end()
 " }}}
