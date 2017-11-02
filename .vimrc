@@ -71,18 +71,18 @@
   set fileencoding=utf-8          " utf-8 files
   set fileformat=unix             " use unix line endings
   set fileformats=unix,dos        " try unix line endings before dos, use unix
-  set laststatus=2                " always show statusline
   set expandtab                   " softtabs, always (e.g. convert tabs to spaces)
   set shiftwidth=2                " tabsize 2 spaces (by default)
   set softtabstop=2               " tabsize 2 spaces (by default)
   set tabstop=2                   " tabsize 2 spaces (by default)
+  set laststatus=2                " always show statusline
   set showtabline=2               " always show statusline
   set backspace=2                 " restore backspace
   set nowrap                      " do not wrap text at `textwidth`
   set noerrorbells                " do not show error bells
   set visualbell                  " do not use visual bell
   set t_vb=                       " do not flash screen with visualbell
-  set timeoutlen=500              " mapping delay
+  set timeoutlen=400              " mapping delay
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
   set scrolloff=10                " show 10 lines of context around cursor
@@ -94,36 +94,44 @@
   let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
 
   " remap bad habits to do nothing
-  imap     <Up>    <Nop>
-  imap     <Down>  <Nop>
-  imap     <Left>  <Nop>
-  imap     <Right> <Nop>
-  nmap     <Up>    <Nop>
-  nmap     <Down>  <Nop>
-  nmap     <Left>  <Nop>
-  nmap     <Right> <Nop>
-  nmap     <S-s>   <Nop>
-  nmap     >>      <Nop>
-  nmap     <<      <Nop>
-  vmap     >>      <Nop>
-  vmap     <<      <Nop>
-  map      $       <Nop>
-  map      ^       <Nop>
-  map      {       <Nop>
-  map      }       <Nop>
+  imap <Up>    <Nop>
+  imap <Down>  <Nop>
+  imap <Left>  <Nop>
+  imap <Right> <Nop>
+  nmap <Up>    <Nop>
+  nmap <Down>  <Nop>
+  nmap <Left>  <Nop>
+  nmap <Right> <Nop>
+  nmap <S-s>   <Nop>
+  nmap >>      <Nop>
+  nmap <<      <Nop>
+  vmap >>      <Nop>
+  vmap <<      <Nop>
+  map  $       <Nop>
+  map  ^       <Nop>
+  map  {       <Nop>
+  map  }       <Nop>
+  map <C-z>    <Nop>
 
   " easier navigation in normal / visual / operator pending mode
-  noremap  K     {
-  noremap  J     }
-  noremap  H     ^
-  noremap  L     $
+  noremap K     {
+  noremap J     }
+  noremap H     ^
+  noremap L     $
+
+  " use <Meta> + [hjkl] to move per 5 lines / cols
+  " Note, proper ESC sequence must be sent from terminal emulator
+  noremap <M-k> 5k
+  noremap <M-j> 5j
+  noremap <M-h> 5h
+  noremap <M-l> 5l
 
   " save using <C-s> in every mode
   " when in operator-pending or insert, takes you to normal mode
-  nnoremap <C-s> :update<Cr>
-  vnoremap <C-s> <C-c>:update<Cr>
-  inoremap <C-s> <Esc>:update<Cr>
-  onoremap <C-s> <Esc>:update<Cr>
+  nnoremap <C-s> :write<Cr>
+  vnoremap <C-s> <C-c>:write<Cr>
+  inoremap <C-s> <Esc>:write<Cr>
+  onoremap <C-s> <Esc>:write<Cr>
 
   " close pane using <C-w> since I know it from Chrome / Atom (cmd+w) and do
   " not use the <C-w> mappings anyway
@@ -177,9 +185,30 @@
   " fix jsx highlighting of end xml tags
   hi link xmlEndTag xmlTag
 
+  " delete existing notes in ~/notes
+  if !exists('*s:DeleteNote')
+    function! s:DeleteNote(lines)
+      call delete(a:lines)
+    endfunction
+  endif
+
+  " create a new note in ~/notes
+  if !exists('*s:NewNote')
+    function! s:NewNote()
+      call inputsave()
+      let l:fname = input('Note name: ')
+      call inputrestore()
+
+      if strlen(l:fname) > 0
+        let l:fpath = expand('~/notes/' . fnameescape(substitute(l:fname, ' ', '-', '')))
+        exe "tabe " . l:fpath . ".md"
+      endif
+    endfunction
+  endif
+
   " convenience function for setting filetype specific spacing
   if !exists('*s:IndentSize')
-    function s:IndentSize(amount)
+    function! s:IndentSize(amount)
       exe "setlocal expandtab ts=" . a:amount . " sts=" . a:amount . " sw=" . a:amount
     endfunction
   endif
@@ -294,8 +323,14 @@
   " use bottom positioned 20% height bottom split
   let g:fzf_layout = { 'down': '~20%' }
 
+  " simple notes bindings using fzf wrapper
+  nnoremap <Leader>n :call fzf#run(fzf#wrap({'source': 'rg --files ~/notes', 'options': '--header="[notes:search]" --preview="cat {}"'}))<Cr>
+  nnoremap <Leader>N :call <SID>NewNote()<Cr>
+  nnoremap <Leader>nd :call fzf#run(fzf#wrap({'source': 'rg --files ~/notes', 'options': '--header="[notes:delete]" --preview="cat {}"', 'sink': function('<SID>DeleteNote')}))<Cr>
+
   " only use FZF shortcuts in non diff-mode
   if !&diff
+    nnoremap <C-o> :Buffers<Cr>
     nnoremap <C-p> :Files<Cr>
     nnoremap <C-g> :Ag<Cr>
   endif
@@ -312,8 +347,8 @@
         \ '>': {'pattern': '>>\|=>\|>'}
         \ }
 
-  xmap ga <Plug>(EasyAlign)
-  nmap ga <Plug>(EasyAlign)
+  xmap gr <Plug>(EasyAlign)
+  nmap gr <Plug>(EasyAlign)
 " }}}
 
 " Autocommands {{{
