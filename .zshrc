@@ -90,8 +90,8 @@
 # }}}
 
 # Keybindings {{{
+  bindkey -e
   bindkey '^e' autosuggest-accept
-  bindkey '^P' fzf-ctrlp-open-in-vim
 # }}}
 
 # Commands {{{
@@ -106,18 +106,6 @@
       then; caniuse $feat; fi
     done
     fi
-  }
-
-  # vim-like CtrlP in zsh.
-  zle -N fzf-ctrlp-open-in-vim
-  fzf-ctrlp-open-in-vim() {
-    local out=$(eval $FZF_DEFAULT_COMMAND | eval "fzf ${FZF_DEFAULT_OPTS} --exit-0 --header='[vim:open]'")
-
-    if [ -f "$out" ]; then
-      $EDITOR "$out" < /dev/tty
-    fi
-
-    zle reset-prompt
   }
 
   ### ASDF
