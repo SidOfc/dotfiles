@@ -200,7 +200,7 @@
       call inputrestore()
 
       if strlen(l:fname) > 0
-        let l:fpath = expand('~/notes/' . fnameescape(substitute(l:fname, ' ', '-', '')))
+        let l:fpath = expand('~/notes/' . fnameescape(substitute(tolower(l:fname), ' ', '-', 'g')))
         exe "tabe " . l:fpath . ".md"
       endif
     endfunction
@@ -218,11 +218,6 @@
     set grepprg=rg\ --vimgrep\ --hidden\ --no-ignore-vcs
     set grepformat=%f:%l:%c:%m,%f:%l:%m
   endif
-" }}}
-
-" Vimwiki {{{
-  let g:vimwiki_list = [{'path': '~/notes/',
-                       \ 'syntax': 'markdown', 'ext': '.md'}]
 " }}}
 
 " Netrw {{{
@@ -356,6 +351,38 @@
   nmap gr <Plug>(EasyAlign)
 " }}}
 
+" Markdown {{{
+  if !exists('*s:ToggleCheckbox')
+    function! s:ToggleCheckbox(reverse)
+      let l:list    = [" ", "\\~", "x", "\\!"]
+      let l:curline = getline('.')
+      let l:len     = len(l:list) - 1
+
+      if (a:reverse == 1)
+        let l:list = reverse(l:list)
+      endif
+
+      for mrk in l:list
+        if (match(l:curline, "\\[" . mrk . "\\]") != -1)
+          let l:nidx    = index(l:list, mrk)
+          let l:nidx    = l:nidx >= l:len ? 0 : l:nidx + 1
+          let l:curline = substitute(l:curline, "\\[" . mrk . "\\]", "\\[" . l:list[l:nidx] . "\\]", "")
+          break
+        endif
+      endfor
+
+      call setline('.', l:curline)
+    endfunction
+  endif
+
+  if !exists('*s:EnhanceMD')
+    function! s:EnhanceMD()
+      nnoremap <Leader>= :call <SID>ToggleCheckbox(0)<Cr>
+      nnoremap <Leader>- :call <SID>ToggleCheckbox(1)<Cr>
+    endfunction
+  endif
+" }}}
+
 " Autocommands {{{
   augroup Global
     au!
@@ -367,6 +394,7 @@
   augroup Files
     au!
     au BufWritePre *                %s/\s\+$//e          " remove trailing whitespace
+    au FileType md,mkd,markdown     call s:EnhanceMD()   " some markdown enhancements
     au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indent languages
   augroup END
 " }}}
