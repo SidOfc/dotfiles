@@ -295,7 +295,7 @@ zz     [alias]              \$EDITOR ~/.zshrc"
 # Tmux {{{
   if hash tmux &> /dev/null; then
     case $- in *i*)
-      [ -z "$TMUX" ] && tmux attach > /dev/null 2>&1 || tmux new > /dev/null 2>&1
+      [ -z "$TMUX" ] && tmux
     esac
   else
   fi

@@ -25,6 +25,7 @@
   Plugin 'junegunn/vim-easy-align'        " align code easier
   Plugin 'junegunn/fzf.vim'               " fzf as vim plugin
   Plugin 'wellle/targets.vim'             " add more text objects to vim
+  Plugin 'SidOfc/mdx'                     " markdown nicies
 
   call vundle#end()
 " }}}
@@ -160,13 +161,14 @@
   onoremap a\| :<C-u>normal! f\|vf\|<Cr>
 
   " when pairing some braces or quotes, put cursor between them
-  inoremap <> <><Left>
-  inoremap () ()<Left>
-  inoremap {} {}<Left>
-  inoremap [] []<Left>
-  inoremap "" ""<Left>
-  inoremap '' ''<Left>
-  inoremap `` ``<Left>
+  inoremap <>   <><Left>
+  inoremap \|\| \|\|<Left>
+  inoremap ()   ()<Left>
+  inoremap {}   {}<Left>
+  inoremap []   []<Left>
+  inoremap ""   ""<Left>
+  inoremap ''   ''<Left>
+  inoremap ``   ``<Left>
 
   if &diff
     " use familiar C-n and C-p binds to move between hunks
@@ -351,38 +353,6 @@
   nmap gr <Plug>(EasyAlign)
 " }}}
 
-" Markdown {{{
-  if !exists('*s:ToggleCheckbox')
-    function! s:ToggleCheckbox(reverse)
-      let l:list    = [" ", "\\~", "x", "\\!"]
-      let l:curline = getline('.')
-      let l:len     = len(l:list) - 1
-
-      if (a:reverse == 1)
-        let l:list = reverse(l:list)
-      endif
-
-      for mrk in l:list
-        if (match(l:curline, "\\[" . mrk . "\\]") != -1)
-          let l:nidx    = index(l:list, mrk)
-          let l:nidx    = l:nidx >= l:len ? 0 : l:nidx + 1
-          let l:curline = substitute(l:curline, "\\[" . mrk . "\\]", "\\[" . l:list[l:nidx] . "\\]", "")
-          break
-        endif
-      endfor
-
-      call setline('.', l:curline)
-    endfunction
-  endif
-
-  if !exists('*s:EnhanceMD')
-    function! s:EnhanceMD()
-      nnoremap <Leader>= :call <SID>ToggleCheckbox(0)<Cr>
-      nnoremap <Leader>- :call <SID>ToggleCheckbox(1)<Cr>
-    endfunction
-  endif
-" }}}
-
 " Autocommands {{{
   augroup Global
     au!
@@ -394,7 +364,6 @@
   augroup Files
     au!
     au BufWritePre *                %s/\s\+$//e          " remove trailing whitespace
-    au FileType md,mkd,markdown     call s:EnhanceMD()   " some markdown enhancements
     au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indent languages
   augroup END
 " }}}
