@@ -25,7 +25,6 @@ fonts
 .pylint*
 .v8flags*
 *cache*
-*doc/*
 .oh-my-zsh
 .config
 .vim/bundle
