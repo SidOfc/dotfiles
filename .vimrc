@@ -25,7 +25,7 @@
   Plugin 'junegunn/vim-easy-align'        " align code easier
   Plugin 'junegunn/fzf.vim'               " fzf as vim plugin
   Plugin 'wellle/targets.vim'             " add more text objects to vim
-  Plugin 'SidOfc/mdx'                     " markdown nicies
+  Plugin 'SidOfc/mkdx'                    " markdown nicies
 
   call vundle#end()
 " }}}
@@ -327,7 +327,7 @@
   let g:fzf_colors =
   \ { 'fg':      ['fg', 'Normal'],
     \ 'bg':      ['bg', 'Clear'],
-    \ 'hl':      ['fg', 'Comment'],
+    \ 'hl':      ['fg', 'String'],
     \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
     \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
     \ 'hl+':     ['fg', 'Statement'],
