@@ -339,9 +339,9 @@
     \ 'header':  ['fg', 'Comment'] }
 
   " simple notes bindings using fzf wrapper
-  nnoremap <Leader>n :call fzf#run(fzf#wrap({'source': 'rg --files ~/notes', 'options': '--header="[notes:search]" --preview="cat {}"'}))<Cr>
-  nnoremap <Leader>N :call <SID>NewNote()<Cr>
-  nnoremap <Leader>nd :call fzf#run(fzf#wrap({'source': 'rg --files ~/notes', 'options': '--header="[notes:delete]" --preview="cat {}"', 'sink': function('<SID>DeleteNote')}))<Cr>
+  nnoremap <silent> <Leader>n :call fzf#run(fzf#wrap({'source': 'rg --files ~/notes', 'options': '--header="[notes:search]" --preview="cat {}"'}))<Cr>
+  nnoremap <silent> <Leader>N :call <SID>NewNote()<Cr>
+  nnoremap <silent> <Leader>nd :call fzf#run(fzf#wrap({'source': 'rg --files ~/notes', 'options': '--header="[notes:delete]" --preview="cat {}"', 'sink': function('<SID>DeleteNote')}))<Cr>
 
   command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
