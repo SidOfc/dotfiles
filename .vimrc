@@ -25,7 +25,12 @@
   Plugin 'junegunn/vim-easy-align'        " align code easier
   Plugin 'junegunn/fzf.vim'               " fzf as vim plugin
   Plugin 'wellle/targets.vim'             " add more text objects to vim
-  Plugin 'SidOfc/mkdx'                    " markdown nicies
+
+  if $VIM_DEV
+    set rtp+=~/Dev/sidney/viml/mkdx
+  else
+    Plugin 'SidOfc/mkdx'
+  endif
 
   call vundle#end()
 " }}}

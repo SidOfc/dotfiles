@@ -42,6 +42,7 @@
   export EDITOR='vim'
   export EVENT_NOKQUEUE=1
   export PATH="$HOME/bin:$PATH"
+  export VIM_DEV=0
 
   # every time we load .zshrc, ditch duplicate path entries
   typeset -U PATH
@@ -95,6 +96,19 @@
 # }}}
 
 # Commands {{{
+  ### toggle vim in "dev" mode (see .vimrc: $VIM_DEV)
+  # allows me to easily load plugins from local directory rather than ~/.vim/bundle
+  vdm() {
+    if [[ "$VIM_DEV" == "1" ]] then
+      export VIM_DEV=0
+    else
+      export VIM_DEV=1
+    fi
+
+    echo "vdm: $VIM_DEV"
+  }
+
+  ### Caniuse
   # caniuse for quick access to global support list
   # also runs the `caniuse` command if installed
   cani() {
@@ -278,6 +292,7 @@ tt     [alias]              \$EDITOR ~/.tmux.conf
 u      [alias]              utils
 v      [alias]              \$EDITOR .
 vcp    [alias]              vim +PluginClean +qall
+vdm    [function]           Toggle \$VIM_DEV between 1 and 0
 vip    [alias]              vim +PluginInstall +qall
 vup    [alias]              vim +PluginUpdate
 vv     [alias]              \$EDITOR ~/.vimrc
