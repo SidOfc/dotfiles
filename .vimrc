@@ -1,45 +1,40 @@
-" Init / Vundle {{{
+"' Init / Plugins {{{
   set nocompatible
-  filetype off
 
-  set rtp+=~/.vim/bundle/Vundle.vim
-  set rtp+=/usr/local/opt/fzf
-  call vundle#begin()
-
-  Plugin 'VundleVim/Vundle.vim'           " let vundle manage itself
-  Plugin 'w0rp/ale'                       " async linting of files
-  Plugin 'sheerun/vim-polyglot'           " lots of language packs in one plugin
-  Plugin 'christoomey/vim-tmux-navigator' " seamless pane switching between tmux and vim using vim binds
-  Plugin 'AndrewRadev/splitjoin.vim'      " toggle single line to multiline stuff
-  Plugin 'chriskempson/base16-vim'        " color scheme
-  Plugin 'itchyny/lightline.vim'          " bottom line displaying mode / file / time etc...
-  Plugin 'mgee/lightline-bufferline'      " show open buffers at top of window
-  Plugin 'jreybert/vimagit'               " interactive git staging
-  Plugin 'benmills/vimux'                 " Run commands from vim
-  Plugin 'tpope/vim-commentary'           " code commenting
-  Plugin 'tpope/vim-endwise'              " auto insert 'end'-like keywords
-  Plugin 'tpope/vim-fugitive'             " vim git wrapper, also used by vimagit
-  Plugin 'tpope/vim-repeat'               " better repeat, extensible by plugins
-  Plugin 'tpope/vim-surround'             " change/add/remove surrounding brackets
-  Plugin 'haya14busa/incsearch.vim'       " auto nohlsearch and some extra search goodies
-  Plugin 'junegunn/vim-easy-align'        " align code easier
-  Plugin 'junegunn/fzf.vim'               " fzf as vim plugin
-  Plugin 'wellle/targets.vim'             " add more text objects to vim
-  Plugin 'tommcdo/vim-exchange'           " easily change two sections of text
-
-  if $VIM_DEV
-    set rtp+=~/Dev/sidney/viml/mkdx
-  else
-    Plugin 'SidOfc/mkdx'
+  if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   endif
 
-  call vundle#end()
+  set rtp+=/usr/local/opt/fzf
+  call plug#begin('~/.vim/plugged')
+
+  Plug 'w0rp/ale'
+  Plug 'sheerun/vim-polyglot'
+  Plug 'christoomey/vim-tmux-navigator'
+  Plug 'AndrewRadev/splitjoin.vim'
+  Plug 'chriskempson/base16-vim'
+  Plug 'itchyny/lightline.vim'
+  Plug 'mgee/lightline-bufferline'
+  Plug 'jreybert/vimagit'
+  Plug 'benmills/vimux'
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-endwise'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-surround'
+  Plug 'haya14busa/incsearch.vim'
+  Plug 'junegunn/vim-easy-align'
+  Plug 'junegunn/fzf.vim'
+  Plug 'wellle/targets.vim'
+  Plug 'tommcdo/vim-exchange'
+  Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
+
+  call plug#end()
 " }}}
 
 " Tmuxline {{{
-  " only emable to update tmux statusline look
-  " Tmuxline lightline[_[insert|visual]] to preview
-  " TmuxlineSnapshot! ~/.dotfiles/.tmuxline-colors.conf to save
   " Plugin 'edkolev/tmuxline.vim'
 
   " tmux statusline custom format
@@ -56,8 +51,6 @@
 " General {{{
   let mapleader = ' ' " remap leader
 
-  filetype plugin indent on
-  syntax enable                   " cuz white text is going to be awesome to edit :D
   set path+=**                    " add cwd and 1 level of nesting to path
   set hidden                      " debatable, allow switching from unsaved buffer without '!'
   set ignorecase                  " ignore case in search
