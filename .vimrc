@@ -25,6 +25,7 @@
   Plugin 'junegunn/vim-easy-align'        " align code easier
   Plugin 'junegunn/fzf.vim'               " fzf as vim plugin
   Plugin 'wellle/targets.vim'             " add more text objects to vim
+  Plugin 'tommcdo/vim-exchange'           " easily change two sections of text
 
   if $VIM_DEV
     set rtp+=~/Dev/sidney/viml/mkdx

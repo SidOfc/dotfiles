@@ -32,5 +32,6 @@ fonts
 *.jpg
 *.jpeg
 *.png
+*.gif
 *.min*
 *history*
