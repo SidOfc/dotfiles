@@ -1,0 +1,142 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/157918c/
+""	.vimrc	/^  inoremap ""   ""<Left>$/;"	m
+$	.vimrc	/^  map  $       <Nop>$/;"	m
+''	.vimrc	/^  inoremap ''   ''<Left>$/;"	m
+()	.vimrc	/^  inoremap ()   ()<Left>$/;"	m
+/	.vimrc	/^  map \/ <Plug>(incsearch-forward)$/;"	m
+<<	.vimrc	/^  nmap <<      <Nop>$/;"	m
+<<	.vimrc	/^  vmap <<      <Nop>$/;"	m
+<>	.vimrc	/^  inoremap <>   <><Left>$/;"	m
+<C-g>	.vimrc	/^    nnoremap <C-g> :Rg<Cr>$/;"	m
+<C-h>	.vimrc	/^  inoremap <C-h> <Left>$/;"	m
+<C-j>	.vimrc	/^  inoremap <C-j> <Down>$/;"	m
+<C-k>	.vimrc	/^  inoremap <C-k> <Up>$/;"	m
+<C-l>	.vimrc	/^  inoremap <C-l> <Right>$/;"	m
+<C-n>	.vimrc	/^    nnoremap <C-n> ]c$/;"	m
+<C-o>	.vimrc	/^    nnoremap <C-o> :Buffers<Cr>$/;"	m
+<C-p>	.vimrc	/^    nnoremap <C-p> :Files<Cr>$/;"	m
+<C-p>	.vimrc	/^    nnoremap <C-p> [c$/;"	m
+<C-s>	.vimrc	/^  inoremap <C-s> <Esc>:write<Cr>$/;"	m
+<C-s>	.vimrc	/^  nnoremap <C-s> :write<Cr>$/;"	m
+<C-s>	.vimrc	/^  onoremap <C-s> <Esc>:write<Cr>$/;"	m
+<C-s>	.vimrc	/^  vnoremap <C-s> <C-c>:write<Cr>$/;"	m
+<C-w>	.vimrc	/^  noremap  <C-w> :bd<Cr>$/;"	m
+<C-z>	.vimrc	/^  map <C-z>    <Nop>$/;"	m
+<Down>	.vimrc	/^  imap <Down>  <Nop>$/;"	m
+<Down>	.vimrc	/^  nmap <Down>  <Nop>$/;"	m
+<Leader>0	.vimrc	/^  nmap <Leader>0 <Plug>lightline#bufferline#go(10)$/;"	m
+<Leader>1	.vimrc	/^  nmap <Leader>1 <Plug>lightline#bufferline#go(1)$/;"	m
+<Leader>2	.vimrc	/^  nmap <Leader>2 <Plug>lightline#bufferline#go(2)$/;"	m
+<Leader>3	.vimrc	/^  nmap <Leader>3 <Plug>lightline#bufferline#go(3)$/;"	m
+<Leader>4	.vimrc	/^  nmap <Leader>4 <Plug>lightline#bufferline#go(4)$/;"	m
+<Leader>5	.vimrc	/^  nmap <Leader>5 <Plug>lightline#bufferline#go(5)$/;"	m
+<Leader>6	.vimrc	/^  nmap <Leader>6 <Plug>lightline#bufferline#go(6)$/;"	m
+<Leader>7	.vimrc	/^  nmap <Leader>7 <Plug>lightline#bufferline#go(7)$/;"	m
+<Leader>8	.vimrc	/^  nmap <Leader>8 <Plug>lightline#bufferline#go(8)$/;"	m
+<Leader>9	.vimrc	/^  nmap <Leader>9 <Plug>lightline#bufferline#go(9)$/;"	m
+<Leader>J	.vimrc	/^  noremap <Leader>J :SplitjoinSplit<Cr>$/;"	m
+<Leader>N	.vimrc	/^  nnoremap <silent> <Leader>N :call <SID>NewNote()<Cr>$/;"	m
+<Leader>P	.vimrc	/^  noremap <Leader>P  :VimuxRunCommand("git push")<Cr>$/;"	m
+<Leader>j	.vimrc	/^  noremap <Leader>j :SplitjoinJoin<Cr>$/;"	m
+<Leader>m	.vimrc	/^  noremap  <Leader>m :MagitO<Cr>$/;"	m
+<Leader>n	.vimrc	/^  nnoremap <silent> <Leader>n :call fzf#run(fzf#wrap({'source': 'rg --files ~\/notes', 'options'/;"	m
+<Leader>nd	.vimrc	/^  nnoremap <silent> <Leader>nd :call fzf#run(fzf#wrap({'source': 'rg --files ~\/notes', 'options/;"	m
+<Leader>p	.vimrc	/^  noremap <Leader>p  :VimuxRunCommand("git pull")<Cr>$/;"	m
+<Leader>re	.vimrc	/^  noremap <Leader>re :VimuxCloseRunner<Cr>$/;"	m
+<Leader>rl	.vimrc	/^  noremap <Leader>rl :VimuxRunLastCommand<Cr>$/;"	m
+<Leader>rr	.vimrc	/^  noremap <Leader>rr :VimuxPromptCommand<Cr>$/;"	m
+<Leader>rt	.vimrc	/^  noremap <Leader>rt :VimuxRunCommand("clear;" . &ft . " " . bufname("%"))<Cr>$/;"	m
+<Left>	.vimrc	/^  imap <Left>  <Nop>$/;"	m
+<Left>	.vimrc	/^  nmap <Left>  <Nop>$/;"	m
+<M-h>	.vimrc	/^  noremap <M-h> 5h$/;"	m
+<M-j>	.vimrc	/^  noremap <M-j> 5j$/;"	m
+<M-k>	.vimrc	/^  noremap <M-k> 5k$/;"	m
+<M-l>	.vimrc	/^  noremap <M-l> 5l$/;"	m
+<Right>	.vimrc	/^  imap <Right> <Nop>$/;"	m
+<Right>	.vimrc	/^  nmap <Right> <Nop>$/;"	m
+<S-Tab>	.vimrc	/^    nnoremap <S-Tab> :diffg RE<Cr>$/;"	m
+<S-Tab>	.vimrc	/^  nnoremap <S-Tab> <<$/;"	m
+<S-Tab>	.vimrc	/^  vnoremap <S-Tab> <<<Esc>gv$/;"	m
+<S-s>	.vimrc	/^  nmap <S-s>   <Nop>$/;"	m
+<Tab>	.vimrc	/^    nnoremap <Tab>   :diffg LO<Cr>$/;"	m
+<Tab>	.vimrc	/^  nnoremap <Tab>   >>$/;"	m
+<Tab>	.vimrc	/^  vnoremap <Tab>   >><Esc>gv$/;"	m
+<Up>	.vimrc	/^  imap <Up>    <Nop>$/;"	m
+<Up>	.vimrc	/^  nmap <Up>    <Nop>$/;"	m
+>>	.vimrc	/^  nmap >>      <Nop>$/;"	m
+>>	.vimrc	/^  vmap >>      <Nop>$/;"	m
+?	.vimrc	/^  map ? <Plug>(incsearch-backward)$/;"	m
+Ciu	bin/ciu	/^module Ciu$/;"	m
+Dotfiles	bin/dot	/^module Dotfiles$/;"	m
+Files	.vimrc	/^  augroup Files$/;"	a
+Global	.vimrc	/^  augroup Global$/;"	a
+H	.vimrc	/^  noremap H     ^$/;"	m
+J	.vimrc	/^  noremap J     }$/;"	m
+K	.vimrc	/^  noremap K     {$/;"	m
+L	.vimrc	/^  noremap L     \$$/;"	m
+Q	.vimrc	/^  nnoremap Q @q$/;"	m
+Rg	.vimrc	/^  command! -bang -nargs=* Rg$/;"	c
+Y	.vimrc	/^  nnoremap Y y\$$/;"	m
+[]	.vimrc	/^  inoremap []   []<Left>$/;"	m
+\\|\\|	.vimrc	/^  inoremap \\|\\| \\|\\|<Left>$/;"	m
+^	.vimrc	/^  map  ^       <Nop>$/;"	m
+``	.vimrc	/^  inoremap ``   ``<Left>$/;"	m
+a\\|	.vimrc	/^  onoremap a\\| :<C-u>normal! f\\|vf\\|<Cr>$/;"	m
+data	bin/ciu	/^  def self.data$/;"	S	module:Ciu
+download!	bin/ciu	/^  def self.download!$/;"	S	module:Ciu
+features	bin/ciu	/^  def self.features$/;"	S	module:Ciu
+g:VimuxPromptString	.vimrc	/^  let g:VimuxPromptString = '% '         " change default vim prompt string$/;"	v
+g:VimuxResetSequence	.vimrc	/^  let g:VimuxResetSequence = 'q C-u C-l' " clear output before running a command$/;"	v
+g:ale_echo_msg_error_str	.vimrc	/^  let g:ale_echo_msg_error_str = 'E'                       " error sign$/;"	v
+g:ale_echo_msg_format	.vimrc	/^  let g:ale_echo_msg_format = '[%linter%] %s [%severity%]' " status line format$/;"	v
+g:ale_echo_msg_warning_str	.vimrc	/^  let g:ale_echo_msg_warning_str = 'W'                     " warning sign$/;"	v
+g:ale_lint_delay	.vimrc	/^  let g:ale_lint_delay = 1000                              " relint max once per second$/;"	v
+g:ale_linters	.vimrc	/^  let g:ale_linters = {$/;"	v
+g:ale_statusline_format	.vimrc	/^  let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']   " error status format$/;"	v
+g:easy_align_delimiters	.vimrc	/^  let g:easy_align_delimiters = {$/;"	v
+g:fzf_colors	.vimrc	/^  let g:fzf_colors =$/;"	v
+g:fzf_layout	.vimrc	/^  let g:fzf_layout = { 'down': '~20%' }$/;"	v
+g:incsearch#auto_nohlsearch	.vimrc	/^  let g:incsearch#auto_nohlsearch = 1                   " auto unhighlight after searching$/;"	v
+g:incsearch#consistent_n_direction	.vimrc	/^  let g:incsearch#consistent_n_direction = 1            " when searching backward, do not invert/;"	v
+g:incsearch#do_not_save_error_message_history	.vimrc	/^  let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in histo/;"	v
+g:incsearch#magic	.vimrc	/^  let g:incsearch#magic = '\\v'                          " sheer awesomeness$/;"	v
+g:lightline	.vimrc	/^  let g:lightline = {$/;"	v
+g:lightline#bufferline#modified	.vimrc	/^  let g:lightline#bufferline#modified = '[+]'  " modifier buffer label$/;"	v
+g:lightline#bufferline#read_only	.vimrc	/^  let g:lightline#bufferline#read_only = '[!]' " readonly buffer label$/;"	v
+g:lightline#bufferline#shorten_path	.vimrc	/^  let g:lightline#bufferline#shorten_path = 1  " do not show full path$/;"	v
+g:lightline#bufferline#show_number	.vimrc	/^  let g:lightline#bufferline#show_number = 2   " show buf number in bufferline$/;"	v
+g:lightline#bufferline#unnamed	.vimrc	/^  let g:lightline#bufferline#unnamed = '[*]'   " unnamed buffer label$/;"	v
+g:netrw_altv	.vimrc	/^  let g:netrw_altv      = 1$/;"	v
+g:netrw_banner	.vimrc	/^  let g:netrw_banner    = 0$/;"	v
+g:netrw_liststyle	.vimrc	/^  let g:netrw_liststyle = 3$/;"	v
+g:netrw_winsize	.vimrc	/^  let g:netrw_winsize   = 20$/;"	v
+g:splitjoin_join_mapping	.vimrc	/^  let g:splitjoin_join_mapping = ''  " reset splitjoin mappings$/;"	v
+g:splitjoin_split_mapping	.vimrc	/^  let g:splitjoin_split_mapping = '' " reset splitjoin mappings$/;"	v
+gr	.vimrc	/^  nmap gr <Plug>(EasyAlign)$/;"	m
+gr	.vimrc	/^  xmap gr <Plug>(EasyAlign)$/;"	m
+help	bin/dot	/^  def self.help$/;"	S	module:Dotfiles
+home	bin/dot	/^  def self.home$/;"	S	module:Dotfiles
+i\\|	.vimrc	/^  onoremap i\\| :<C-u>normal! f\\|lvt\\|<Cr>$/;"	m
+ln	bin/dot	/^  def self.ln$/;"	S	module:Dotfiles
+ln!	bin/dot	/^  def self.ln!$/;"	S	module:Dotfiles
+ls	bin/dot	/^  def self.ls(path = nil)$/;"	S	module:Dotfiles
+mapleader	.vimrc	/^  let mapleader = ' '$/;"	v
+row	bin/ciu	/^  def self.row(ft)$/;"	S	module:Ciu
+run!	bin/dot	/^  def self.run!$/;"	S	module:Dotfiles
+s:DeleteNote	.vimrc	/^    function! s:DeleteNote(lines)$/;"	f
+s:IndentSize	.vimrc	/^    function! s:IndentSize(amount)$/;"	f
+s:NewNote	.vimrc	/^    function! s:NewNote()$/;"	f
+src	bin/dot	/^  def self.src$/;"	S	module:Dotfiles
+stats	bin/ciu	/^  def self.stats(stats)$/;"	S	module:Ciu
+status	bin/ciu	/^  def self.status(status)$/;"	S	module:Ciu
+support	bin/ciu	/^  def self.support(percentage)$/;"	S	module:Ciu
+title	bin/ciu	/^  def self.title(str, maxw = 30, fill = '...')$/;"	S	module:Ciu
+{	.vimrc	/^  map  {       <Nop>$/;"	m
+{}	.vimrc	/^  inoremap {}   {}<Left>$/;"	m
+}	.vimrc	/^  map  }       <Nop>$/;"	m

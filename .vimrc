@@ -7,16 +7,13 @@
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   endif
 
-  set rtp+=/usr/local/opt/fzf
   call plug#begin('~/.vim/plugged')
-
   Plug 'w0rp/ale'
   Plug 'sheerun/vim-polyglot'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'chriskempson/base16-vim'
   Plug 'itchyny/lightline.vim'
-  Plug 'mgee/lightline-bufferline'
   Plug 'jreybert/vimagit'
   Plug 'benmills/vimux'
   Plug 'tpope/vim-commentary'
@@ -26,12 +23,10 @@
   Plug 'tpope/vim-surround'
   Plug 'haya14busa/incsearch.vim'
   Plug 'junegunn/vim-easy-align'
+  Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
-  Plug 'wellle/targets.vim'
-  Plug 'tommcdo/vim-exchange'
   Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
   if $VIM_DEV | Plug 'edkolev/tmuxline.vim' | endif
-
   call plug#end()
 " }}}
 
@@ -81,7 +76,7 @@
   set softtabstop=2               " tabsize 2 spaces (by default)
   set tabstop=2                   " tabsize 2 spaces (by default)
   set laststatus=2                " always show statusline
-  set showtabline=2               " always show statusline
+  set showtabline=0               " never show tab bar
   set backspace=2                 " restore backspace
   set nowrap                      " do not wrap text at `textwidth`
   set noerrorbells                " do not show error bells
@@ -123,13 +118,6 @@
   noremap J     }
   noremap H     ^
   noremap L     $
-
-  " use <Meta> + [hjkl] to move per 5 lines / cols
-  " Note, proper ESC sequence must be sent from terminal emulator
-  noremap <M-k> 5k
-  noremap <M-j> 5j
-  noremap <M-h> 5h
-  noremap <M-l> 5l
 
   " save using <C-s> in every mode
   " when in operator-pending or insert, takes you to normal mode
@@ -178,14 +166,6 @@
     " use familiar C-n and C-p binds to move between hunks
     nnoremap <C-n> ]c
     nnoremap <C-p> [c
-
-    " unbind indent and de-indent keys in diff mode
-    nunmap <S-tab>
-    nunmap <Tab>
-
-    " instead use tab to inject local change and shift tab for remote change
-    nnoremap <Tab>   :diffg LO<Cr>
-    nnoremap <S-Tab> :diffg RE<Cr>
   endif
 
   " fix jsx highlighting of end xml tags
@@ -193,8 +173,8 @@
 
   " delete existing notes in ~/notes
   if !exists('*s:DeleteNote')
-    function! s:DeleteNote(lines)
-      call delete(a:lines)
+    function! s:DeleteNote(paths)
+      call delete(a:paths)
     endfunction
   endif
 
@@ -235,10 +215,10 @@
 
 " Ale {{{
   let g:ale_echo_msg_error_str = 'E'                       " error sign
-  let g:ale_echo_msg_format = '[%linter%] %s [%severity%]' " status line format
   let g:ale_echo_msg_warning_str = 'W'                     " warning sign
+  let g:ale_echo_msg_format = '[%linter%] %s [%severity%]' " status line format
   let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']   " error status format
-  let g:ale_lint_delay = 1000                              " relint max once per second
+  let g:ale_lint_delay = 2000                              " relint max once per second
   let g:ale_linters = {
         \ 'ruby': ['rubocop'],
         \ 'javascript': ['eslint']
@@ -256,23 +236,10 @@
 " }}}
 
 " Lightline {{{
-  let g:lightline#bufferline#show_number = 2   " show buf number in bufferline
-  let g:lightline#bufferline#shorten_path = 1  " do not show full path
-  let g:lightline#bufferline#modified = '[+]'  " modifier buffer label
-  let g:lightline#bufferline#read_only = '[!]' " readonly buffer label
-  let g:lightline#bufferline#unnamed = '[*]'   " unnamed buffer label
   let g:lightline = {
         \ 'colorscheme':      'wombat',
-        \ 'tabline':          { 'left': [[ 'buffers' ]] },
-        \ 'component_expand': { 'buffers': 'lightline#bufferline#buffers' },
-        \ 'component_type':   { 'buffers': 'tabsel' },
         \ 'separator':        { 'left': "\ue0b0", 'right': "\ue0b2" },
         \ 'subseparator':     { 'left': "\ue0b1", 'right': "\ue0b3" },
-        \ 'component_function': {
-        \    'bufferbefore': 'lightline#buffer#bufferbefore',
-        \    'bufferafter':  'lightline#buffer#bufferafter',
-        \    'bufferinfo':   'lightline#buffer#bufferinfo',
-        \ },
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ],
         \             [ 'modified', 'fugitive', 'filename' ] ],
@@ -281,8 +248,8 @@
         \ },
         \ 'component': {
         \   'mode':     '%{lightline#mode()[0]}',
-        \   'readonly': '%{&filetype=="help"?"":&readonly?"[!]":""}',
-        \   'modified': '%{&filetype=="help"?"":&modified?"[+]":&modifiable?"":"[-]"}',
+        \   'readonly': '%{&filetype=="help"?"":&readonly?"!":""}',
+        \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
         \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
         \ },
         \ 'component_visible_condition': {
@@ -292,17 +259,6 @@
         \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
         \ }
         \ }
-
-  nmap <Leader>1 <Plug>lightline#bufferline#go(1)
-  nmap <Leader>2 <Plug>lightline#bufferline#go(2)
-  nmap <Leader>3 <Plug>lightline#bufferline#go(3)
-  nmap <Leader>4 <Plug>lightline#bufferline#go(4)
-  nmap <Leader>5 <Plug>lightline#bufferline#go(5)
-  nmap <Leader>6 <Plug>lightline#bufferline#go(6)
-  nmap <Leader>7 <Plug>lightline#bufferline#go(7)
-  nmap <Leader>8 <Plug>lightline#bufferline#go(8)
-  nmap <Leader>9 <Plug>lightline#bufferline#go(9)
-  nmap <Leader>0 <Plug>lightline#bufferline#go(10)
 " }}}
 
 " Vimux {{{
@@ -356,7 +312,6 @@
 
   " only use FZF shortcuts in non diff-mode
   if !&diff
-    nnoremap <C-o> :Buffers<Cr>
     nnoremap <C-p> :Files<Cr>
     nnoremap <C-g> :Rg<Cr>
   endif
@@ -378,7 +333,7 @@
 " }}}
 
 " Autocommands {{{
-  augroup Global
+  augroup Windows
     au!
     au BufEnter,WinEnter,WinNew,VimResized *,*.*
           \ let &scrolloff=getwininfo(win_getid())[0]['height']/2 " keep cursor centered
@@ -387,7 +342,9 @@
 
   augroup Files
     au!
-    au BufWritePre *                %s/\s\+$//e          " remove trailing whitespace
-    au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indent languages
+    au BufWritePre *                %s/\s\+$//e          " remove trailing whitespace before saving buffer
+    au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indents for JS/JSX/JSON
+    au FileType markdown,python     call s:IndentSize(4) " 4 space indents for markdown and python
+    au FileType help                nmap <buffer> q :q<Cr>
   augroup END
 " }}}
