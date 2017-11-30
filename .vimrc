@@ -30,14 +30,19 @@
   Plug 'wellle/targets.vim'
   Plug 'tommcdo/vim-exchange'
   Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
+  if $VIM_DEV | Plug 'edkolev/tmuxline.vim' | endif
 
   call plug#end()
 " }}}
 
-" Tmuxline {{{
-  " Plugin 'edkolev/tmuxline.vim'
+" Development {{{{
+  if $VIM_DEV
+    echom 'got here'
+    nnoremap <Leader>R :so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim<Cr>
+  endif
+" }}}
 
-  " tmux statusline custom format
+" Tmuxline {{{
   " let g:tmuxline_preset = {
   "       \ 'a':    '⊞',
   "       \ 'win':  '#I #W',
@@ -49,15 +54,15 @@
 " }}}
 
 " General {{{
-  let mapleader = ' ' " remap leader
+  let mapleader = ' '
 
   set path+=**                    " add cwd and 1 level of nesting to path
-  set hidden                      " debatable, allow switching from unsaved buffer without '!'
+  set hidden                      " allow switching from unsaved buffer without '!'
   set ignorecase                  " ignore case in search
   set nohlsearch                  " do not highlight searches, incsearch plugin does this
   set smartcase                   " use case-sensitive if a capital letter is included
   set noshowmode                  " statusline makes -- INSERT -- info irrelevant
-  set number                      " show lines
+  set number                      " show line numbers
   set relativenumber              " show relative number
   set cursorline                  " highlight cursor line
   set splitbelow                  " split below instead of above
