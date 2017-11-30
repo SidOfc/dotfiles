@@ -27,8 +27,6 @@
   Plug 'haya14busa/incsearch.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'junegunn/fzf.vim'
-  Plug 'wellle/targets.vim'
-  Plug 'tommcdo/vim-exchange'
   Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
 
   call plug#end()
