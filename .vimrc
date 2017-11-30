@@ -32,7 +32,6 @@
 
 " Development {{{{
   if $VIM_DEV
-    echom 'got here'
     nnoremap <Leader>R :so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim<Cr>
   endif
 " }}}
