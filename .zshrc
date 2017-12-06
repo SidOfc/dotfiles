@@ -310,7 +310,7 @@ zz     [alias]              \$EDITOR ~/.zshrc"
 # Tmux {{{
   if hash tmux &> /dev/null; then
     case $- in *i*)
-      [ -z "$TMUX" ] && tmux
+      [ -z "$TMUX" ] && tmux new -A -s $(whoami)
     esac
   else
   fi
