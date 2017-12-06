@@ -33,18 +33,16 @@
 " Development {{{{
   if $VIM_DEV
     nnoremap <Leader>R :so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim<Cr>
-  endif
-" }}}
 
-" Tmuxline {{{
-  " let g:tmuxline_preset = {
-  "       \ 'a':    '⊞',
-  "       \ 'win':  '#I #W',
-  "       \ 'cwin': '#I #W',
-  "       \ 'y':    '%d·%m·%Y',
-  "       \ 'z':    '%R',
-  "       \ 'options': { 'status-justify': 'left' }
-  "       \ }
+    let g:tmuxline_preset = {
+          \ 'a':    '⊞',
+          \ 'win':  '#I #W',
+          \ 'cwin': '#I #W',
+          \ 'y':    '%d·%m·%Y',
+          \ 'z':    '%R',
+          \ 'options': { 'status-justify': 'left' }
+          \ }
+  endif
 " }}}
 
 " General {{{
