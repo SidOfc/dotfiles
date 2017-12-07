@@ -60,6 +60,8 @@
   set splitbelow                  " split below instead of above
   set splitright                  " split after instead of before
   set termguicolors               " enable termguicolors for better highlighting
+  set list                        " show invisibles
+  set lcs=tab:·\                  " show tab as that thing
   set background=dark             " set bg dark
   set nobackup                    " do not keep backups
   set noswapfile                  " no more swapfiles
