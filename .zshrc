@@ -43,6 +43,8 @@
   export EVENT_NOKQUEUE=1
   export PATH="$HOME/bin:$PATH"
   export VIM_DEV=0
+  export BASE16_SHELL=$HOME/.config/base16-shell/
+  [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 
   # every time we load .zshrc, ditch duplicate path entries
   typeset -U PATH
