@@ -23,10 +23,6 @@ reference to get started, comments can be found within dotfiles.
 
     $ git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 
-**[Vundle](https://github.com/VundleVim/Vundle.vim#quick-start)**
-
-    $ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-
 ## Setup
 
     $ defaults write com.apple.finder AppleShowAllFiles YES
