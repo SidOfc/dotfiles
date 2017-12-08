@@ -74,7 +74,7 @@
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
   set scrolloff=10                " show 10 lines of context around cursor
-  colorscheme base16-google-dark  " apply color scheme
+  colorscheme base16-3024         " apply color scheme
 
   " change cursor shape in various modes
   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
@@ -342,6 +342,7 @@
     au BufEnter,WinEnter,WinNew,VimResized *,*.*
           \ let &scrolloff=getwininfo(win_getid())[0]['height']/2      " keep cursor centered
     au FocusGained,VimEnter,WinEnter,BufWinEnter * setlocal cursorline " enable cursorline in focussed buffer
+    au FocusGained,VimEnter,WinEnter,BufWinEnter * :checktime          " reload file if it has changed on disk
     au WinLeave,FocusLost * setlocal nocursorline                      " disable cursorline when leaving buffer
     au VimResized * wincmd =                                           " auto resize splits on resize
   augroup END
