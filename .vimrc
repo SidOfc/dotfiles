@@ -30,21 +30,6 @@
   call plug#end()
 " }}}
 
-" Development {{{{
-  if $VIM_DEV
-    nnoremap <Leader>R :so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim<Cr>
-
-    let g:tmuxline_preset = {
-          \ 'a':    '⊞',
-          \ 'win':  '#I #W',
-          \ 'cwin': '#I #W',
-          \ 'y':    '%d·%m·%Y',
-          \ 'z':    '%R',
-          \ 'options': { 'status-justify': 'left' }
-          \ }
-  endif
-" }}}
-
 " General {{{
   let mapleader = ' '
 
@@ -202,6 +187,20 @@
   if executable('rg')
     set grepprg=rg\ --vimgrep\ --hidden\ --no-ignore-vcs
     set grepformat=%f:%l:%c:%m,%f:%l:%m
+  endif
+" }}}
+
+" Development {{{{
+  if $VIM_DEV
+    nmap <Leader>R :so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim<Cr>
+    let g:tmuxline_preset = {
+          \ 'a':    '⊞',
+          \ 'win':  '#I #W',
+          \ 'cwin': '#I #W',
+          \ 'y':    '%d·%m·%Y',
+          \ 'z':    '%R',
+          \ 'options': { 'status-justify': 'left' }
+          \ }
   endif
 " }}}
 
