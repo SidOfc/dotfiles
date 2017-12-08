@@ -32,6 +32,8 @@ reference to get started, comments can be found within dotfiles.
     $ defaults write com.apple.finder AppleShowAllFiles YES
     $ defaults write com.apple.dock autohide-delay -float 1000; killall Dock
     $ git clone https://github.com/sidofc/dotfiles ~/.dotfiles
+    $ git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
+    $ base16_google-dark
     $ cd ~/.dotfiles
     $ ./bin/dot ln! # forcefully symlink into ~
 
