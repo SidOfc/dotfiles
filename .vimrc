@@ -340,8 +340,10 @@
   augroup Windows
     au!
     au BufEnter,WinEnter,WinNew,VimResized *,*.*
-          \ let &scrolloff=getwininfo(win_getid())[0]['height']/2 " keep cursor centered
-    au VimResized * wincmd =                                      " auto resize splits on resize
+          \ let &scrolloff=getwininfo(win_getid())[0]['height']/2      " keep cursor centered
+    au FocusGained,VimEnter,WinEnter,BufWinEnter * setlocal cursorline " enable cursorline in focussed buffer
+    au WinLeave,FocusLost * setlocal nocursorline                      " disable cursorline when leaving buffer
+    au VimResized * wincmd =                                           " auto resize splits on resize
   augroup END
 
   augroup Files
