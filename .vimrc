@@ -1,3 +1,7 @@
+" Some things to remember {{{
+"   - In Visual-Block mode, pressing 'o' will move to the opposite end
+" }}}
+
 "' Init / Plugins {{{
   set nocompatible
 
@@ -114,7 +118,7 @@
   " not use the <C-w> mappings anyway
   noremap  <C-w> :bd<Cr>
 
-  " easier navigation in insert mode
+  " easier one-off navigation in insert mode
   inoremap <C-k> <Up>
   inoremap <C-j> <Down>
   inoremap <C-h> <Left>
@@ -132,13 +136,8 @@
   vnoremap <Tab>   >><Esc>gv
   vnoremap <S-Tab> <<<Esc>gv
 
-  " add i| and a| operator pending motions for pipe characters
-  onoremap i\| :<C-u>normal! f\|lvt\|<Cr>
-  onoremap a\| :<C-u>normal! f\|vf\|<Cr>
-
   " when pairing some braces or quotes, put cursor between them
   inoremap <>   <><Left>
-  inoremap \|\| \|\|<Left>
   inoremap ()   ()<Left>
   inoremap {}   {}<Left>
   inoremap []   []<Left>
@@ -151,6 +150,13 @@
     nnoremap <C-n> ]c
     nnoremap <C-p> [c
   endif
+
+  " some abbreviations
+  iabbrev treu true
+  iabbrev ture true
+  iabbrev fasle false
+  iabbrev flase false
+  iabbrev fucntion function
 
   " fix jsx highlighting of end xml tags
   hi link xmlEndTag xmlTag
