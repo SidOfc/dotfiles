@@ -74,7 +74,7 @@
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
   set scrolloff=10                " show 10 lines of context around cursor
-  colorscheme base16-3024         " apply color scheme
+  colorscheme base16-seti         " apply color scheme
 
   " change cursor shape in various modes
   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
