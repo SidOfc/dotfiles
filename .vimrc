@@ -30,7 +30,6 @@
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
-  if $VIM_DEV | Plug 'edkolev/tmuxline.vim' | endif
   call plug#end()
 " }}}
 
@@ -199,14 +198,6 @@
 " Development {{{{
   if $VIM_DEV
     nmap <Leader>R :so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim<Cr>
-    let g:tmuxline_preset = {
-          \ 'a':    '⊞',
-          \ 'win':  '#I #W',
-          \ 'cwin': '#I #W',
-          \ 'y':    '%d·%m·%Y',
-          \ 'z':    '%R',
-          \ 'options': { 'status-justify': 'left' }
-          \ }
   endif
 " }}}
 
