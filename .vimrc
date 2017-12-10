@@ -19,7 +19,6 @@
   Plug 'chriskempson/base16-vim'
   Plug 'itchyny/lightline.vim'
   Plug 'jreybert/vimagit'
-  Plug 'benmills/vimux'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
@@ -284,18 +283,6 @@
         \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
         \ }
         \ }
-" }}}
-
-" Vimux {{{
-  let g:VimuxPromptString = '% '         " change default vim prompt string
-  let g:VimuxResetSequence = 'q C-u C-l' " clear output before running a command
-
-  noremap <Leader>p  :VimuxRunCommand("git pull")<Cr>
-  noremap <Leader>P  :VimuxRunCommand("git push")<Cr>
-  noremap <Leader>rt :VimuxRunCommand("clear;" . &ft . " " . bufname("%"))<Cr>
-  noremap <Leader>rr :VimuxPromptCommand<Cr>
-  noremap <Leader>rl :VimuxRunLastCommand<Cr>
-  noremap <Leader>re :VimuxCloseRunner<Cr>
 " }}}
 
 " Splitjoin {{{
