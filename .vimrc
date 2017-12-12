@@ -212,7 +212,7 @@
   let g:ale_echo_msg_warning_str = 'W'                     " warning sign
   let g:ale_echo_msg_format = '[%linter%] %s [%severity%]' " status line format
   let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']   " error status format
-  let g:ale_lint_delay = 2000                              " relint max once per second
+  let g:ale_lint_delay = 2000                              " relint max once per [amount] milliseconds
   let g:ale_linters = {
         \ 'ruby': ['rubocop'],
         \ 'javascript': ['eslint']
