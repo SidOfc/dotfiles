@@ -21,7 +21,6 @@
   Plug 'jreybert/vimagit'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-endwise'
-  Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
