@@ -149,6 +149,10 @@
     nnoremap <C-p> [c
   endif
 
+  if has('nvim')
+    nnoremap <silent> <Leader>P :call jobstart('git push')<Cr>
+  endif
+
   " some abbreviations
   iabbrev treu true
   iabbrev ture true
