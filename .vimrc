@@ -21,6 +21,7 @@
   Plug 'jreybert/vimagit'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-endwise'
+  Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
@@ -221,7 +222,6 @@
 
 " Incsearch {{{
   let g:incsearch#auto_nohlsearch = 1                   " auto unhighlight after searching
-  let g:incsearch#magic = '\v'                          " sheer awesomeness
   let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
   let g:incsearch#consistent_n_direction = 1            " when searching backward, do not invert meaning of n and N
 
@@ -266,7 +266,7 @@
         \ 'subseparator':     { 'left': "\ue0b1", 'right': "\ue0b3" },
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'modified', 'fugitive', 'filename' ] ],
+        \             [ 'modified', 'fugitive', 'label' ] ],
         \   'right': [ [ 'lineinfo'],
         \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
         \ },
@@ -274,7 +274,8 @@
         \   'mode':     '%{lightline#mode()[0]}',
         \   'readonly': '%{&filetype=="help"?"":&readonly?"!":""}',
         \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
-        \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
+        \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}',
+        \   'label':    '%{substitute(expand("%"), "NetrwTreeListing \\d\\+", "netrw", "")}'
         \ },
         \ 'component_visible_condition': {
         \   'paste':    '(&paste!="nopaste")',
