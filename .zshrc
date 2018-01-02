@@ -75,6 +75,7 @@
   alias gdt="git difftool"
   alias gmt="git mergetool"
   alias gp="git push ${1} ${2}"
+  alias gco="git checkout ${1} ${2}"
   alias gpl="git pull ${1} ${2}"
   alias grb="git rebase ${1} ${2}"
   alias gs="git status"
@@ -283,8 +284,9 @@ gc     [alias]              git commit -m \${1}
 gd     [alias]              git diff
 gdt    [alias]              git difftool
 gmt    [alias]              git mergetool
-gp     [alias]              git push   \${1} \${2}
-gpl    [alias]              git pull   \${1} \${2}
+gp     [alias]              git push \${1} \${2}
+gco    [alias]              git checkout \${1} \${2}
+gpl    [alias]              git pull \${1} \${2}
 grb    [alias]              git rebase \${1} \${2}
 gs     [alias]              git status
 la     [alias]              ls -al

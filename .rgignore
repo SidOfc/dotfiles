@@ -35,3 +35,4 @@ fonts
 *.gif
 *.min*
 *history*
+vendor
