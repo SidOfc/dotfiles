@@ -117,8 +117,8 @@
   cani() {
     local feat=$(ciu | sort -rn | eval "fzf ${FZF_DEFAULT_OPTS} --ansi --header='[caniuse:features]'" | sed -e 's/^.*%\ *//g' | sed -e 's/   .*//g')
 
-    if hash caniuse &> /dev/null && [[ $feat ]] then
-      caniuse $feat
+    if which caniuse &> /dev/null; then
+      if [[ $feat ]] then; caniuse $feat; fi
     fi
   }
 
