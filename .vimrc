@@ -150,7 +150,17 @@
   endif
 
   if has('nvim')
-    nnoremap <silent> <Leader>P :call jobstart('git push')<Cr>
+    fun! s:GitJobHandler(job_id, data, event) dict
+      if a:event == 'stdout'
+        echom join(a:data)
+      elseif a:event == 'stderr'
+        echom join(a:data)
+      else
+        echom 'git push finished'
+      endif
+    endfun
+
+    nnoremap <silent> <Leader>P :call jobstart(['git', 'push'], { 'shell': 'git-push-sh', 'on_exit': function('<SID>GitJobHandler'), 'on_stdout': function('<SID>GitJobHandler'), 'on_stderr': function('<SID>GitJobHandler') })<Cr>
   endif
 
   " some abbreviations
