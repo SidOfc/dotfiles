@@ -151,13 +151,8 @@
 
   if has('nvim')
     fun! s:GitJobHandler(job_id, data, event) dict
-      if a:event == 'stdout'
-        echom join(a:data)
-      elseif a:event == 'stderr'
-        echom join(a:data)
-      else
-        echom 'git push finished'
-      endif
+      if (a:event == 'stdout' || a:event == 'stderr') | return | endif
+      echo 'git push finished'
     endfun
 
     nnoremap <silent> <Leader>P :call jobstart(['git', 'push'], { 'shell': 'git-push-sh', 'on_exit': function('<SID>GitJobHandler'), 'on_stdout': function('<SID>GitJobHandler'), 'on_stderr': function('<SID>GitJobHandler') })<Cr>
