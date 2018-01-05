@@ -151,19 +151,16 @@
 
   if has('nvim')
     fun! s:GitJobHandler(job_id, data, event) dict
-      if (a:event == 'stdout' || a:event == 'stderr') | return | endif
       echo 'git push finished'
     endfun
 
-    nnoremap <silent> <Leader>P :call jobstart(['git', 'push'], { 'shell': 'git-push-sh', 'on_exit': function('<SID>GitJobHandler'), 'on_stdout': function('<SID>GitJobHandler'), 'on_stderr': function('<SID>GitJobHandler') })<Cr>
-  endif
+    fun! s:GitPushAsync()
+      call jobstart('git push', { 'on_exit': function('<SID>GitJobHandler') })
+      echo 'git push'
+    endfun
 
-  " some abbreviations
-  iabbrev treu true
-  iabbrev ture true
-  iabbrev fasle false
-  iabbrev flase false
-  iabbrev fucntion function
+    nnoremap <silent> <Leader>P :call <SID>GitPushAsync()<Cr>
+  endif
 
   " fix jsx highlighting of end xml tags
   hi link xmlEndTag xmlTag
