@@ -165,6 +165,9 @@
   " fix jsx highlighting of end xml tags
   hi link xmlEndTag xmlTag
 
+  " override markdown quote syntax highlight
+  hi link mkdBlockquote rubyInterpolationDelimiter
+
   " delete existing notes in ~/notes
   if !exists('*s:DeleteNote')
     function! s:DeleteNote(paths)
@@ -202,7 +205,15 @@
 
 " Development {{{{
   if $VIM_DEV
+    function! <SID>SynStack()
+      if !exists("*synstack")
+        return
+      endif
+      echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+    endfunc
+
     nmap <Leader>R :so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim<Cr>
+    nmap <leader>sp :call <SID>SynStack()<CR>
   endif
 " }}}
 
