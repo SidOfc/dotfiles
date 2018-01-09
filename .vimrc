@@ -26,6 +26,7 @@
   Plug 'tpope/vim-surround'
   Plug 'haya14busa/incsearch.vim'
   Plug 'junegunn/vim-easy-align'
+  Plug 'junegunn/vader.vim'
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
@@ -224,6 +225,10 @@
   let g:netrw_altv      = 1
 " }}}
 
+" Mkdx {{{
+  let g:mkdx#settings = { 'highlight': { 'enable': 1 } }
+" }}}
+
 " Ale {{{
   let g:ale_echo_msg_error_str = 'E'                       " error sign
   let g:ale_echo_msg_warning_str = 'W'                     " warning sign
@@ -372,9 +377,14 @@
     au VimResized * wincmd =                                           " auto resize splits on resize
   augroup END
 
+  fun! s:StripWS()
+    if (&ft =~ 'vader') | return | endif
+    %s/\s\+$//e
+  endfun
+
   augroup Files
     au!
-    au BufWritePre *                %s/\s\+$//e          " remove trailing whitespace before saving buffer
+    au BufWritePre *                call s:StripWS()     " remove trailing whitespace before saving buffer
     au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indents for JS/JSX/JSON
     au FileType markdown,python     call s:IndentSize(4) " 4 space indents for markdown and python
     au FileType help                nmap <buffer> q :q<Cr>
