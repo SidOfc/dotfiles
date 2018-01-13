@@ -214,7 +214,7 @@
     endfunc
 
     nmap <Leader>R :so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim<Cr>
-    nmap <leader>sp :call <SID>SynStack()<CR>
+    nmap <leader>gp :call <SID>SynStack()<CR>
   endif
 " }}}
 

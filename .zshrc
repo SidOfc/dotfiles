@@ -1,4 +1,5 @@
 # Options {{{
+  setopt extended_glob
   setopt prompt_subst
   setopt auto_cd
 
