@@ -156,8 +156,13 @@
     endfun
 
     fun! s:GitPushAsync()
-      call jobstart('git push', { 'on_exit': function('<SID>GitJobHandler') })
-      echo 'git push'
+      call system('ssh-add -l')
+      if (v:shell_error == 0)
+        call jobstart('git push', { 'on_exit': function('<SID>GitJobHandler') })
+        echo 'git push'
+      else
+        exe '!ssh-add'
+      end
     endfun
 
     nnoremap <silent> <Leader>P :call <SID>GitPushAsync()<Cr>
