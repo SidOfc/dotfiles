@@ -29,6 +29,7 @@
   Plug 'junegunn/vader.vim'
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
+  Plug 'jiangmiao/auto-pairs'
   Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
   call plug#end()
 " }}}
@@ -135,15 +136,6 @@
   vnoremap <Tab>   >><Esc>gv
   vnoremap <S-Tab> <<<Esc>gv
 
-  " when pairing some braces or quotes, put cursor between them
-  inoremap <>   <><Left>
-  inoremap ()   ()<Left>
-  inoremap {}   {}<Left>
-  inoremap []   []<Left>
-  inoremap ""   ""<Left>
-  inoremap ''   ''<Left>
-  inoremap ``   ``<Left>
-
   if &diff
     " use familiar C-n and C-p binds to move between hunks
     nnoremap <C-n> ]c
@@ -228,6 +220,10 @@
   let g:netrw_winsize   = 20
   let g:netrw_liststyle = 3
   let g:netrw_altv      = 1
+" }}}
+
+" Auto-Pairs {{{
+  let g:AutoPairsFlyMode = 1
 " }}}
 
 " Mkdx {{{
