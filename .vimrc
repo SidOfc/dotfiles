@@ -273,7 +273,7 @@
   let s:p                 = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
   let s:p.normal.left     = [ [ s:blue, s:base03 ],    [ s:base03, s:blue ] ]
   let s:p.normal.middle   = [ [ s:base1, s:base03 ] ]
-  let s:p.normal.right    = [ [ s:base03, s:base0 ],   [ s:base00, s:base03 ] ]
+  let s:p.normal.right    = [ [ s:base03, s:blue ],   [ s:base00, s:base03 ] ]
   let s:p.normal.error    = [ [ s:red, s:base023 ] ]
   let s:p.normal.warning  = [ [ s:yellow, s:base02 ] ]
 
@@ -282,8 +282,11 @@
   let s:p.inactive.right  = [ [ s:base03,  s:base03 ],  [ s:base03, s:base03 ] ]
 
   let s:p.insert.left     = [ [ s:green, s:base03 ],   [ s:base03,  s:green ] ]
+  let s:p.insert.right    = [ [ s:base03, s:green ],    [ s:base00, s:base03 ] ]
   let s:p.replace.left    = [ [ s:orange, s:base03 ],  [ s:base03,  s:orange ] ]
+  let s:p.replace.right   = [ [ s:base03, s:orange ],    [ s:base00, s:base03 ] ]
   let s:p.visual.left     = [ [ s:magenta, s:base03 ], [ s:base03,  s:magenta ] ]
+  let s:p.visual.right    = [ [ s:base03, s:magenta ],    [ s:base00, s:base03 ] ]
 
   let g:lightline#colorscheme#base16_seti#palette = lightline#colorscheme#fill(s:p)
   let g:lightline = {
