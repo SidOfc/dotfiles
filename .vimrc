@@ -29,7 +29,6 @@
   Plug 'junegunn/vader.vim'
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
-  Plug 'jiangmiao/auto-pairs'
   Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
   call plug#end()
 " }}}
@@ -101,6 +100,35 @@
   map  }       <Nop>
   map <C-z>    <Nop>
 
+  " Sometimes I press q:, Q: or :Q instead of :q, I never want to open related functionality
+  " so just make them do what I want
+  map <silent> q: :q<Cr>
+  map <silent> Q: :q<Cr>
+  map <silent> :Q :q<Cr>
+
+  " I like things that wrap back to start after end, quickfix stops at last
+  " error but if I specify cn again, I want to definitely go to the next error
+  " (I can see line numbers in sidebar to track where I am anyway)
+  fun! s:qfnxt()
+    try
+      cnext
+    catch
+      crewind
+    endtry
+  endfun
+
+  fun! s:qfprv()
+    try
+      cprev
+    catch
+      clast
+    endtry
+  endfun
+
+  " shortcuts for quickfix list
+  nnoremap <C-n> :silent! call <SID>qfnxt()<Cr>
+  nnoremap <C-m> :silent! call <SID>qfprv()<Cr>
+
   " easier navigation in normal / visual / operator pending mode
   noremap K     {
   noremap J     }
@@ -129,18 +157,22 @@
 
   " use qq to record, q to stop, Q to play a macro
   nnoremap Q @q
+  vnoremap Q :normal @q
+
+  " when pairing some braces or quotes, put cursor between them
+  inoremap <>   <><Left>
+  inoremap ()   ()<Left>
+  inoremap {}   {}<Left>
+  inoremap []   []<Left>
+  inoremap ""   ""<Left>
+  inoremap ''   ''<Left>
+  inoremap ``   ``<Left>
 
   " use tab and shift tab to indent and de-indent code
   nnoremap <Tab>   >>
   nnoremap <S-Tab> <<
   vnoremap <Tab>   >><Esc>gv
   vnoremap <S-Tab> <<<Esc>gv
-
-  if &diff
-    " use familiar C-n and C-p binds to move between hunks
-    nnoremap <C-n> ]c
-    nnoremap <C-p> [c
-  endif
 
   if has('nvim')
     fun! s:GitJobHandler(job_id, data, event) dict
@@ -220,10 +252,6 @@
   let g:netrw_winsize   = 20
   let g:netrw_liststyle = 3
   let g:netrw_altv      = 1
-" }}}
-
-" Auto-Pairs {{{
-  let g:AutoPairsFlyMode = 1
 " }}}
 
 " Mkdx {{{
