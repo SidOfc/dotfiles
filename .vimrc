@@ -101,11 +101,10 @@
   map  }       <Nop>
   map <C-z>    <Nop>
 
-  " Sometimes I press q:, Q: or :Q instead of :q, I never want to open related functionality
+  " Sometimes I press q: or Q: instead of :q, I never want to open related functionality
   " so just make them do what I want
   map <silent> q: :q<Cr>
   map <silent> Q: :q<Cr>
-  map <silent> :Q :q<Cr>
 
   " I like things that wrap back to start after end, quickfix stops at last
   " error but if I specify cn again, I want to definitely go to the next error
