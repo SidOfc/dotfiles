@@ -69,7 +69,6 @@
   set noerrorbells                " do not show error bells
   set visualbell                  " do not use visual bell
   set t_vb=                       " do not flash screen with visualbell
-  set autochdir                   " easier file creation, think relative to current dir
   set timeoutlen=350              " mapping delay
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
