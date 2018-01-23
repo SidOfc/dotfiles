@@ -70,6 +70,7 @@
   set noerrorbells                " do not show error bells
   set visualbell                  " do not use visual bell
   set t_vb=                       " do not flash screen with visualbell
+  set signcolumn=yes
   set timeoutlen=350              " mapping delay
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
@@ -245,10 +246,6 @@
     nmap <Leader>R :so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim<Cr>
     nmap <leader>gp :call <SID>SynStack()<CR>
   endif
-" }}}
-
-" GitGutter {{{
-  let g:gitgutter_sign_column_always = 1
 " }}}
 
 " Netrw {{{
