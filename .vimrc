@@ -29,6 +29,7 @@
   Plug 'junegunn/vader.vim'
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
+  Plug 'airblade/vim-gitgutter'
   Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
   call plug#end()
 " }}}
@@ -244,6 +245,10 @@
     nmap <Leader>R :so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim<Cr>
     nmap <leader>gp :call <SID>SynStack()<CR>
   endif
+" }}}
+
+" GitGutter {{{
+  let g:gitgutter_sign_column_always = 1
 " }}}
 
 " Netrw {{{
