@@ -128,6 +128,7 @@
   # mnemonic [V]ersion [M]anager [I]nstall
   vmi() {
     local lang=${1}
+    asdf plugin-list-all &>/dev/null 2>&1
 
     if [[ -z $lang ]]; then
       lang=$(asdf plugin-list-all | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:install]'")
@@ -138,7 +139,7 @@
         if [[ -z $(asdf plugin-list | rg $lng) ]]; then
           asdf plugin-add $lng
         else
-          asdf plugin-update $lng >/dev/null 2>/dev/null &!
+          asdf plugin-update $lng
         fi
 
         for version in $(asdf list-all $lng | sort -nrk1,1 | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:${lng}:install]'")
@@ -160,7 +161,7 @@
     if [[ $lang ]]; then
       for lng in $(echo $lang); do
         for version in $(asdf list $lng | sort -nrk1,1 | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:${lng}:clean]'")
-        do asdf uninstall $lng $version >/dev/null 2>/dev/null &!
+        do asdf uninstall $lng $version
         done
       done
     fi
@@ -186,7 +187,7 @@
 
     if [[ $upd ]]; then
       for prog in $(echo $upd)
-      do brew upgrade $prog >/dev/null 2>/dev/null &!
+      do brew upgrade $prog
       done
     fi
 
@@ -200,7 +201,7 @@
 
     if [[ $uninst ]]; then
       for prog in $(echo $uninst)
-      do brew uninstall $prog >/dev/null 2>/dev/null &!
+      do brew uninstall $prog
       done
     fi
 
