@@ -11,16 +11,20 @@ spacer = '   '
 
 filtered = ARGF.read.split("\n").map do |line|
   username = line.match /\[username:\s*([^\]]+)\]/i
+  id       = line.match /\[id:\s*([^\]]+)\]/i
   folder, label = line.match(/[^\d:\-\s]+([^\s]+)/i)[0].to_s
                       .downcase.gsub(/[\(\)\\\,]/, '').split('/')
-  res = {username: username && username[1], folder: folder, label: label}
+  folder.gsub! /none|shared\-/i, ''
+  res = {id: id && id[1], username: username && username[1], folder: folder, label: label}
 
-  next if res.values.map { |v| v.to_s.strip.empty? }.any?
+  next if [:id, :username].map { |k| res[k].to_s.strip.empty? }.any?
 
+  idlen = res[:id].to_s.size
   cllen = res[:label].to_s.size
   culen = res[:username].to_s.size
   cflen = res[:folder].to_s.size
 
+  ilen = idlen if idlen > ilen
   ulen = culen if culen > ulen
   llen = cllen if cllen > llen
   flen = cflen if cflen > flen
@@ -30,7 +34,9 @@ end.compact
 
 filtered.each do |item|
   puts [
-    item[:label].to_s.ljust(llen),
+    item[:id].to_s.ljust(ilen).yellow,
+    item[:folder].to_s.ljust(flen).light_black,
+    item[:label].to_s.ljust(llen).light_black,
     item[:username].to_s.ljust(ulen).light_black,
   ].join(spacer).bold
 end

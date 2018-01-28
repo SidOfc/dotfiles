@@ -227,7 +227,7 @@
     fi
 
     if [ $? -eq 0 ]; then
-      local selected=$(lpass ls -l | lpfmt | eval "fzf ${FZF_DEFAULT_OPTS} --ansi --header='[lastpass:copy]'" | awk '{$1=$2=""}1')
+      local selected=$(lpass ls -l | lpfmt | eval "fzf ${FZF_DEFAULT_OPTS} --ansi --header='[lastpass:copy]'" | cut -d ' ' -f 1)
 
       if [[ $selected ]]; then
         lpass show -cp $(echo $selected)
