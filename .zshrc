@@ -15,14 +15,16 @@
   fi
 
   zplug "zplug/zplug"
+
   zplug "lib/history",                       from:"oh-my-zsh"
   zplug "plugins/shrink-path",               from:"oh-my-zsh"
   zplug "plugins/autojump",                  from:"oh-my-zsh"
+  zplug "zdharma/fast-syntax-highlighting"
+
   zplug "BurntSushi/ripgrep",                from:"gh-r", as:"command", use:"*darwin*", rename-to:"rg"
   zplug "junegunn/fzf-bin",                  from:"gh-r", as:"command", use:"*darwin*", rename-to:"fzf"
   zplug "asdf-vm/asdf",                      defer:2
   zplug "zsh-users/zsh-autosuggestions",     defer:2
-  zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
   if ! zplug check --verbose; then
       printf "Install? [y/N]: "
@@ -91,7 +93,6 @@
 # }}}
 
 # Keybindings {{{
-  bindkey -e
   bindkey '^e' autosuggest-accept
 
   # move cursor to end of line after history search completion
