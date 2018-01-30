@@ -15,12 +15,15 @@
   fi
 
   zplug "zplug/zplug"
-  zplug "themes/kphoen",                          from:"oh-my-zsh"
-  zplug "lib/history",                            from:"oh-my-zsh"
-  zplug "plugins/shrink-path",                    from:"oh-my-zsh"
-  zplug "plugins/autojump",                       from:"oh-my-zsh"
-  zplug "zsh-users/zsh-autosuggestions",          defer:2
-  zplug "zsh-users/zsh-syntax-highlighting",      defer:2
+  zplug "themes/kphoen",                     from:"oh-my-zsh"
+  zplug "lib/history",                       from:"oh-my-zsh"
+  zplug "plugins/shrink-path",               from:"oh-my-zsh"
+  zplug "plugins/autojump",                  from:"oh-my-zsh"
+  zplug "BurntSushi/ripgrep",                from:"gh-r", as:"command", use:"*darwin*", rename-to:"rg"
+  zplug "junegunn/fzf-bin",                  from:"gh-r", as:"command", use:"*darwin*", rename-to:"fzf"
+  zplug "asdf-vm/asdf",                      defer:2
+  zplug "zsh-users/zsh-autosuggestions",     defer:2
+  zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
   if ! zplug check --verbose; then
       printf "Install? [y/N]: "
@@ -44,16 +47,9 @@
   export EVENT_NOKQUEUE=1
   export PATH="$HOME/bin:$PATH"
   export VIM_DEV=0
-  export BASE16_SHELL=$HOME/.config/base16-shell/
-  [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 
   # every time we load .zshrc, ditch duplicate path entries
   typeset -U PATH
-# }}}
-
-# Sourcing {{{
-  source $HOME/.asdf/asdf.sh
-  source ~/.fzf.zsh
 # }}}
 
 # Colors {{{
@@ -104,7 +100,7 @@
   # search history using already written command string
   zle -N history-beginning-search-backward-end history-search-end
   bindkey "^[[A" history-beginning-search-backward-end
-  #
+
   zle -N history-beginning-search-forward-end history-search-end
   bindkey "^[[B" history-beginning-search-forward-end
 # }}}

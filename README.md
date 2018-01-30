@@ -15,21 +15,17 @@ reference to get started, comments can be found within dotfiles.
 **[Homebrew](https://brew.sh)**
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    $ brew install neovim tmux zsh gnupg wget ripgrep fzf reattach-to-user-namespace
+    $ brew install neovim tmux zsh gnupg wget reattach-to-user-namespace
     $ brew install lastpass-cli --with-pinentry
-    $ /usr/local/opt/fzf/install
 
-**[asdf](https://github.com/asdf-vm/asdf)**
+**Zsh**
 
-    $ git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+Open a terminal and zplug will install other shell plugins automatically
 
 ## Setup
 
     $ defaults write com.apple.finder AppleShowAllFiles YES
     $ defaults write com.apple.dock autohide-delay -float 1000; killall Dock
-    $ git clone https://github.com/sidofc/dotfiles ~/.dotfiles
-    $ git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
-    $ base16_google-dark
     $ cd ~/.dotfiles
     $ ./bin/dot ln! # forcefully symlink into ~
 
