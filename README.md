@@ -4,23 +4,17 @@ My collection of configuration options, plugins, and other stuff that make my da
 I like to keep my setup quite minimal and simple, this README is intended only as an installation
 reference to get started, comments can be found within dotfiles.
 
-## Tools
-
-**[ITerm3](https://www.iterm2.com/version3.html)**
+## [ITerm3](https://www.iterm2.com/version3.html)
 
 - [Install instructions](https://www.iterm2.com/version3.html)
 - [Color presets](https://github.com/mbadolato/iTerm2-Color-Schemes)
 - [Powerline fonts](https://github.com/powerline/fonts)
 
-**[Homebrew](https://brew.sh)**
+## [Homebrew](https://brew.sh)
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    $ brew install neovim tmux zsh gnupg wget reattach-to-user-namespace
+    $ brew install zsh tmux neovim gnupg wget reattach-to-user-namespace
     $ brew install lastpass-cli --with-pinentry
-
-**Zsh**
-
-Open a terminal and zplug will install other shell plugins automatically
 
 ## Setup
 
@@ -30,4 +24,4 @@ Open a terminal and zplug will install other shell plugins automatically
     $ ./bin/dot ln! # forcefully symlink into ~
 
 After completion, the `dot` command can be used anywhere on the command line run `dot help` for more information.
-**NOTE:** the `dot` command will **not** make a backup of your original dotfiles (they should be on github anyway, right? :P).
+NOTE: the `dot` command will **not** make a backup of your original dotfiles (they should be on github anyway, right? :P).
