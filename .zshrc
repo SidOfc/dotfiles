@@ -15,7 +15,6 @@
   fi
 
   zplug "zplug/zplug"
-  zplug "themes/kphoen",                     from:"oh-my-zsh"
   zplug "lib/history",                       from:"oh-my-zsh"
   zplug "plugins/shrink-path",               from:"oh-my-zsh"
   zplug "plugins/autojump",                  from:"oh-my-zsh"
@@ -42,7 +41,8 @@
   export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export LPS_DEFAULT_USERNAME="sidneyliebrand@gmail.com"
-  export PROMPT='%{$fg[blue]%}$(shrink_path -f)%{$fg[yellow]%}$(git_prompt_info)%{$fg[yellow]%} ❯ '
+  export PROMPT='%{$fg_bold[blue]%}$(shrink_path -f)%{$fg_bold[yellow]%} on%{$fg_bold[green]%} $(git_prompt_info)%{$fg_bold[yellow]%} ❯ '
+  export RPROMPT='%(?..%{$fg_bold[red]%}%? ↵%{$reset_color%})$(git_prompt_status)%{$reset_color%}'
   export EDITOR='vim'
   export EVENT_NOKQUEUE=1
   export PATH="$HOME/bin:$PATH"
