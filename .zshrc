@@ -39,8 +39,8 @@
 # }}}
 
 # Exports {{{
-  export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8,bold'
-  export FAST_HIGHLIGHT_STYLES[default]='fg=8,bold'
+  export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=black,bold'
+  export FAST_HIGHLIGHT_STYLES[default]='fg=white,bold'
   export FAST_HIGHLIGHT_STYLES[unknown-token]='fg=red,bold'
   export FAST_HIGHLIGHT_STYLES[reserved-word]='fg=yellow,bold'
   export FAST_HIGHLIGHT_STYLES[alias]='fg=green,bold'
