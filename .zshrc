@@ -39,43 +39,16 @@
 # }}}
 
 # Exports {{{
-  export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=black,bold'
-  export FAST_HIGHLIGHT_STYLES[default]='fg=white,bold'
-  export FAST_HIGHLIGHT_STYLES[unknown-token]='fg=red,bold'
-  export FAST_HIGHLIGHT_STYLES[reserved-word]='fg=yellow,bold'
-  export FAST_HIGHLIGHT_STYLES[alias]='fg=green,bold'
-  export FAST_HIGHLIGHT_STYLES[suffix-alias]='fg=green,bold'
-  export FAST_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
-  export FAST_HIGHLIGHT_STYLES[function]='fg=green,bold'
-  export FAST_HIGHLIGHT_STYLES[command]='fg=green,bold'
-  export FAST_HIGHLIGHT_STYLES[precommand]='fg=green,bold'
-  export FAST_HIGHLIGHT_STYLES[commandseparator]='fg=white,bold'
-  export FAST_HIGHLIGHT_STYLES[hashed-command]='fg=green,bold'
-  export FAST_HIGHLIGHT_STYLES[path]='fg=magenta,bold'
-  export FAST_HIGHLIGHT_STYLES[path_pathseparator]=
-  export FAST_HIGHLIGHT_STYLES[globbing]='fg=blue,bold'
-  export FAST_HIGHLIGHT_STYLES[history-expansion]='fg=blue,bold'
-  export FAST_HIGHLIGHT_STYLES[single-hyphen-option]='fg=cyan,bold'
-  export FAST_HIGHLIGHT_STYLES[double-hyphen-option]='fg=cyan,bold'
-  export FAST_HIGHLIGHT_STYLES[back-quoted-argument]='fg=white,bold'
-  export FAST_HIGHLIGHT_STYLES[single-quoted-argument]='fg=yellow,bold'
-  export FAST_HIGHLIGHT_STYLES[double-quoted-argument]='fg=yellow,bold'
-  export FAST_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=yellow,bold'
-  export FAST_HIGHLIGHT_STYLES[back-or-dollar-double-quoted-argument]='fg=cyan,bold'
-  export FAST_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=cyan,bold'
-  export FAST_HIGHLIGHT_STYLES[assign]='fg=white,bold'
-  export FAST_HIGHLIGHT_STYLES[redirection]='fg=white,bold'
-  export FAST_HIGHLIGHT_STYLES[comment]='fg=black,bold'
-  export FAST_HIGHLIGHT_STYLES[variable]='fg=white,bold'
-  export FAST_HIGHLIGHT_STYLES[mathvar]='fg=blue,bold'
-  export FAST_HIGHLIGHT_STYLES[mathnum]='fg=magenta,bold'
-  export FAST_HIGHLIGHT_STYLES[matherr]='fg=red,bold'
+  export ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[green]%}"
+  export ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+  export ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[magenta]%} ⚑"
+  export ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[green]%} ⚑"
   export FZF_DEFAULT_OPTS="--height=50% --min-height=15 --reverse"
   export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export LPS_DEFAULT_USERNAME="sidneyliebrand@gmail.com"
-  export PROMPT='%{$fg_bold[blue]%}$(shrink_path -f)%{$fg_bold[yellow]%} on%{$fg_bold[green]%} $(git_prompt_info)%{$fg_bold[yellow]%} ❯ '
-  export RPROMPT='%(?..%{$fg_bold[red]%}%? ↵%{$reset_color%})$(git_prompt_status)%{$reset_color%}'
+  export PROMPT='%{$fg_bold[blue]%}$(shrink_path -f)%{$fg_bold[yellow]%}$(git_prompt_info)%{$fg_bold[yellow]%} ❯ '
+  export RPROMPT='%(?..%{$fg_bold[red]%}%? ↵%{$reset_color%})'
   export EDITOR='vim'
   export EVENT_NOKQUEUE=1
   export PATH="$HOME/bin:$PATH"
