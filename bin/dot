@@ -11,8 +11,7 @@ module Dotfiles
 
   def self.run!
     send(*ARGV)
-  rescue Exception => e
-    puts e
+  rescue
     exit 1
   end
 
@@ -31,6 +30,8 @@ module Dotfiles
     puts ""
     puts "    backup                 create a copy of dotfiles and folders in {BACKUP} that would otherwise"
     puts "                           be overwritten by the command: dot ln!"
+    puts "    last_backup            prints the path of the last backup in {BACKUP} or exit 1"
+    puts "    unlink                 unlinks files matching {ROOT} filename in {HOME}"
     puts "    ln                     symlink {ROOT} to {HOME}"
     puts "    ln!                    same as ln, but use force"
     puts "    ls         [SRC]       list filename and symlink in {HOME} that matches a file in {ROOT}"
@@ -48,7 +49,7 @@ module Dotfiles
   end
 
   def self.last_backup
-    Dir.glob(File.join(BACKUP, '*'))&.last
+    Dir.glob(File.join(BACKUP, '*')).sort&.last || raise
   end
 
   def self.backup
@@ -64,17 +65,6 @@ module Dotfiles
     end
   end
 
-  def self.restore
-    contents = Dir.glob(File.join(last_backup, '{*,.*}'))
-    cml      = contents.map(&:size).max
-
-    contents.map do |backup_dot|
-      current_dot = File.join HOME, File.basename(backup_dot)
-      ::FileUtils.cp_r backup_dot, current_dot, remove_destination: true
-      "[cp] #{backup_dot.ljust(cml)} => #{current_dot}"
-    end
-  end
-
   def self.ls(path = nil)
     return send path if path && respond_to?(path)
 
@@ -83,7 +73,11 @@ module Dotfiles
   end
 
   def self.ln!
-    home.map(&File.method(:unlink)) && ln
+    backup && unlink && ln
+  end
+
+  def self.unlink
+    home.map(&File.method(:unlink))
   end
 
   def self.ln
