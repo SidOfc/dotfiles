@@ -70,8 +70,7 @@ module Dotfiles
 
     contents.map do |backup_dot|
       current_dot = File.join HOME, File.basename(backup_dot)
-      File.rm_r current_dot if File.exists? current_dot
-      ::FileUtils.cp_r backup_dot, current_dot
+      ::FileUtils.cp_r backup_dot, current_dot, remove_destination: true
       "[cp] #{backup_dot.ljust(cml)} => #{current_dot}"
     end
   end
@@ -84,7 +83,7 @@ module Dotfiles
   end
 
   def self.ln!
-    backup && home.map(&File.method(:unlink)) && ln
+    home.map(&File.method(:unlink)) && ln
   end
 
   def self.ln
