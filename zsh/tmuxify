@@ -1,0 +1,12 @@
+### TMUX
+# if installed:
+# if not connected to an existing session, attach to it.
+# if no session exists, create it and attach to it.
+
+if hash tmux &> /dev/null; then
+  case $- in *i*)
+    [ -z "$TMUX" ] && tmux new -A -s $(whoami)
+  esac
+else
+fi
+

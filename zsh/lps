@@ -1,0 +1,27 @@
+### LASTPASS + FZF
+# copy password from selected entry to clipboard
+
+local uname=$LPS_DEFAULT_USERNAME
+local loggedin=1
+
+if [[ $(lpass status | grep '^Not logged in') ]]; then
+  loggedin=""
+
+  if [[ -z $uname ]]; then
+    echo -n "Lastpass username: "
+    read uname
+  fi
+
+  if [[ -n $uname ]]; then
+    lpass login --trust $uname > /dev/null 2>/dev/null
+  fi
+fi
+
+if [ $? -eq 0 ]; then
+  local selected=$(lpass ls -l | lpfmt | eval "fzf ${FZF_DEFAULT_OPTS} --ansi --header='[lastpass:copy]'" | cut -d ' ' -f 1)
+
+  if [[ $selected ]]; then
+    lpass show -cp $(echo $selected)
+  fi
+fi
+
