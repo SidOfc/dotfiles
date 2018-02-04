@@ -1,0 +1,6 @@
+### TREE
+# list files using tree if available
+
+if hash tree &>/dev/null; then
+  tree -ahpCI '*git' --dirsfirst
+fi

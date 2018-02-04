@@ -1,38 +1,79 @@
 #!/usr/bin/env ruby
 
+require 'fileutils'
+
 # Dotfiles
 module Dotfiles
-  IGNORE     = /.*(?:\.\.?|README\.md|\.git|\.DS_Store|ssion\.vim)$/
-  HOME       = Dir.home.freeze
-  REPOSITORY = "#{HOME}/.dotfiles".freeze
+  IGNORE = /.*(?:\.\.?|README\.md|\.git|\.DS_Store|ssion\.vim|backup)$/
+  HOME   = Dir.home.freeze
+  ROOT   = File.expand_path('.').freeze
+  BACKUP = File.join(ROOT, 'backup').freeze
 
   def self.run!
     send(*ARGV)
-  rescue
+  rescue Exception => e
+    puts e
     exit 1
   end
 
   # rubocop:disable Style/StringLiterals
   # rubocop:disable Metrics/LineLength
   def self.help
-    puts "Usage: dot COMMAND [ARGS]"
+    puts "USAGE:  dot COMMAND [ARGS]"
+    puts ""
+    puts "STATUS:"
+    puts "    ROOT:        #{ROOT}"
+    puts "    HOME:        #{HOME}"
+    puts "    BACKUP:      #{ROOT}/backup"
+    puts "    LAST BACKUP: #{last_backup}"
     puts ""
     puts "COMMAND        ARGS        DESC"
     puts ""
-    puts "    ln                     symlink ~/.dotfiles to ~"
+    puts "    backup                 create a copy of dotfiles and folders in {BACKUP} that would otherwise"
+    puts "                           be overwritten by the command: dot ln!"
+    puts "    ln                     symlink {ROOT} to {HOME}"
     puts "    ln!                    same as ln, but use force"
-    puts "    ls         [SRC]       list filename and symlink in ~ that matches a file in ~/.dotfiles"
-    puts "                           [SRC] can be one of 'src' or 'home' which will show matching"
-    puts "                           matching dotfiles in ~ for 'home' and ~/.dotfiles for 'src'"
+    puts "    ls         [SRC]       list filename and symlink in {HOME} that matches a file in {ROOT}"
+    puts "                           [SRC] can be one of 'root' or 'home'. When 'home' show matching"
+    puts "                           matching dotfiles in {HOME}, when 'root' show dotfiles in {ROOT}"
   end
   # rubocop:enable
 
-  def self.src
-    @src ||= Dir.glob("#{REPOSITORY}/{*,.*}").reject { |path| path.match IGNORE }
+  def self.root
+    @root ||= Dir.glob("#{ROOT}/{*,.*}").reject { |path| path.match IGNORE }
   end
 
   def self.home
-    @home ||= Dir.glob("#{HOME}/{#{src.map(&File.method(:basename)).join(',')}}")
+    @home ||= Dir.glob("#{HOME}/{#{root.map(&File.method(:basename)).join(',')}}")
+  end
+
+  def self.last_backup
+    Dir.glob(File.join(BACKUP, '*'))&.last
+  end
+
+  def self.backup
+    current_dir = File.join BACKUP, Time.now.to_i.to_s
+    ml          = home.map(&:size).max
+
+    Dir.mkdir BACKUP unless Dir.exists? BACKUP
+    Dir.mkdir current_dir
+
+    home.map do |original_dot|
+      ::FileUtils.cp_r original_dot, current_dir
+      "[cp] #{original_dot.ljust(ml)} => #{current_dir}"
+    end
+  end
+
+  def self.restore
+    contents = Dir.glob(File.join(last_backup, '{*,.*}'))
+    cml      = contents.map(&:size).max
+
+    contents.map do |backup_dot|
+      current_dot = File.join HOME, File.basename(backup_dot)
+      File.rm_r current_dot if File.exists? current_dot
+      ::FileUtils.cp_r backup_dot, current_dot
+      "[cp] #{backup_dot.ljust(cml)} => #{current_dot}"
+    end
   end
 
   def self.ls(path = nil)
@@ -43,13 +84,13 @@ module Dotfiles
   end
 
   def self.ln!
-    home.map(&File.method(:unlink)) && ln
+    backup && home.map(&File.method(:unlink)) && ln
   end
 
   def self.ln
-    maxlen = src.map(&:size).max
+    maxlen = root.map(&:size).max
 
-    src.map do |srcdot|
+    root.map do |srcdot|
       dst = "#{HOME}/#{File.basename(srcdot)}"
 
       File.symlink srcdot, dst if (link = !File.exist?(dst))
