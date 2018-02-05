@@ -61,7 +61,7 @@
   fpath=(~/zsh "${fpath[@]}")
 
   # move cursor to end of line after history search completion
-  autoload -U history-search-end cani vmc vmi lps kp fp cani bip bup bcp tmuxify utils ll
+  autoload -Uz history-search-end cani vmc vmi lps kp fp cani bip bup bcp tmuxify utils ll
 
   # every time we load .zshrc, ditch duplicate path entries
   typeset -U PATH fpath
