@@ -7,9 +7,10 @@ module Dotfiles
   IGNORE = /.*(?:\.\.?|README\.md|\.git|\.DS_Store|ssion\.vim|backup)$/
   SHELL  = ENV.fetch('SHELL', nil).freeze
   HOME   = Dir.home.freeze
-  ROOT   = File.expand_path('../').freeze
+  ROOT   = File.expand_path(File.join(__dir__, '../')).freeze
   BACKUP = File.join(ROOT, 'backup').freeze
   ZCOMP  = File.join(ROOT, 'zsh').freeze
+  BIN    = File.join(ROOT, 'bin').freeze
 
   def self.run!
     send(*ARGV)
@@ -26,6 +27,8 @@ module Dotfiles
     puts "    ROOT:        #{ROOT}"
     puts "    HOME:        #{HOME}"
     puts ""
+    puts "    BIN:         #{BIN}"
+    puts ""
     puts "    SHELL:       #{SHELL}"
     puts "    ZCOMPILE:    #{ZCOMP}"
     puts ""
@@ -33,7 +36,7 @@ module Dotfiles
     puts "    LAST BACKUP: #{last_backup}"
     puts ""
     puts "COMMAND        ARGS        DESC"
-    puts ""
+    puts "    zcompile               compile all files in {ZCOMPILE}"
     puts "    backup                 create a copy of dotfiles and folders in {BACKUP} that would otherwise"
     puts "                           be overwritten by the command: dot ln!"
     puts "    last_backup            prints the path of the last backup in {BACKUP} or exit 1"
@@ -55,7 +58,7 @@ module Dotfiles
   end
 
   def self.last_backup
-    Dir.glob(File.join(BACKUP, '*')).sort&.last || raise
+    Dir.glob(File.join(BACKUP, '*')).sort&.last
   end
 
   def self.backup
