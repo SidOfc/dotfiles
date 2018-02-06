@@ -1,0 +1,3 @@
+if hash exa &>/dev/null; then
+  exa -aBhg --long --group-directories-first --time-style=long-iso
+fi

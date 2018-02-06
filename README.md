@@ -22,7 +22,7 @@ reference to get started, comments can be found within dotfiles.
     $ defaults write com.apple.dock autohide-delay -float 1000; killall Dock
     $ git clone https://github.com/sidofc/dotfiles
     $ cd ~/dotfiles
-    $ ./bin/dot ln! # forcefully symlink into ~
+    $ ./bin/dot ln! # forcefully symlink into ~ (a backup will be created)
 
 After completion, the `dot` command can be used anywhere on the command line run `dot help` for more information.
 The `dot` command will create a backup of your dotfiles inside `clone-dir/backup/[TIMESTAMP]` before destructively unlinking using `dot ln!`.
