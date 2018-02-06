@@ -1,3 +1,19 @@
 if hash exa &>/dev/null; then
-  exa -aBhg --long --group-directories-first --time-style=long-iso
+  if [[ "x$1" != "x" ]]
+  then
+    local is_first="1"
+    for i
+    do
+      if [[ "$is_first" = "1" ]]
+      then
+        is_first="0"
+      else
+        print "\n"
+      fi
+      echo $i
+      exa -aBhg --long --group-directories-first --time-style=long-iso $i
+    done
+  else
+    exa -aBhg --long --group-directories-first --time-style=long-iso
+  fi
 fi
