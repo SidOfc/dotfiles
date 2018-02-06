@@ -1,4 +1,9 @@
+# Profiling
+# `use zprof | less` after the shell has loaded to analyze calls
+# zmodload zsh/zprof
+
 # Options {{{
+  setopt SHARE_HISTORY
   setopt extended_glob
   setopt prompt_subst
   setopt auto_cd
@@ -13,8 +18,6 @@
   else
     source ~/.zplug/init.zsh
   fi
-
-  zplug "zplug/zplug",                       lazy:1
 
   zplug "plugins/shrink-path",               from:"oh-my-zsh"
   zplug "plugins/autojump",                  from:"oh-my-zsh"
@@ -47,6 +50,7 @@
   export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export LPS_DEFAULT_USERNAME="sidneyliebrand@gmail.com"
+  export HISTSIZE=5000
   export PROMPT='%{$fg_bold[blue]%}$(shrink_path -f)%{$fg_bold[yellow]%}$(git_prompt_info)%{$fg_bold[yellow]%} ❯ %{$reset_color%}'
   export RPROMPT='%(?..%{$fg_bold[red]%}%? ↵%{$reset_color%})'
   export EDITOR='vim'
