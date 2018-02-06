@@ -5,9 +5,11 @@ require 'fileutils'
 # Dotfiles
 module Dotfiles
   IGNORE = /.*(?:\.\.?|README\.md|\.git|\.DS_Store|ssion\.vim|backup)$/
+  SHELL  = ENV.fetch('SHELL', nil).freeze
   HOME   = Dir.home.freeze
-  ROOT   = File.expand_path('.').freeze
+  ROOT   = File.expand_path('../').freeze
   BACKUP = File.join(ROOT, 'backup').freeze
+  ZCOMP  = File.join(ROOT, 'zsh').freeze
 
   def self.run!
     send(*ARGV)
@@ -23,6 +25,10 @@ module Dotfiles
     puts "STATUS:"
     puts "    ROOT:        #{ROOT}"
     puts "    HOME:        #{HOME}"
+    puts ""
+    puts "    SHELL:       #{SHELL}"
+    puts "    ZCOMPILE:    #{ZCOMP}"
+    puts ""
     puts "    BACKUP:      #{ROOT}/backup"
     puts "    LAST BACKUP: #{last_backup}"
     puts ""
@@ -65,6 +71,16 @@ module Dotfiles
     end
   end
 
+  def self.zcompile
+    Dir.glob(File.join(ZCOMP, '*.zwc')).map(&File.method(:unlink))
+    targets = Dir.glob(File.join(ZCOMP, '*'))
+    tml     = targets.map(&:size).max
+    targets.map do |target|
+      compiled = system "zsh -c 'zcompile -Uz #{target}'"
+      "[#{compiled ? '++' : '--'}] #{target.ljust(tml)} => #{target}.zwc"
+    end
+  end
+
   def self.ls(path = nil)
     return send path if path && respond_to?(path)
 
@@ -76,10 +92,6 @@ module Dotfiles
     backup && unlink && ln
   end
 
-  def self.unlink
-    home.map(&File.method(:unlink))
-  end
-
   def self.ln
     maxlen = root.map(&:size).max
 
@@ -89,6 +101,10 @@ module Dotfiles
       File.symlink srcdot, dst if (link = !File.exist?(dst))
       "[#{link ? '++' : '--'}] #{srcdot.ljust(maxlen)} ~> #{dst}"
     end
+  end
+
+  def self.unlink
+    home.map(&File.method(:unlink))
   end
 end
 
