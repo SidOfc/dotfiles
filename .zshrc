@@ -107,6 +107,7 @@
 
 # Keybindings {{{
   bindkey '^e' autosuggest-accept
+  bindkey '^x' autosuggest-execute
 
   # search history using already written command string
   zle -N history-beginning-search-backward-end history-search-end
