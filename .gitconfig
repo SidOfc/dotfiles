@@ -8,7 +8,7 @@
 [difftool]
 	prompt = false
 [push]
-	default = matching
+	default = current
 [color]
 	branch = auto
 	status = auto
