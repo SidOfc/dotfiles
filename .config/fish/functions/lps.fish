@@ -7,15 +7,17 @@ function lps
       read --prompt-str 'lpass username: ' username
     end
 
-    lpass login --trust $username >/dev/null 2>&1
+    lpass status >/dev/null 2>&1
+
+    if not test $status -eq 0
+      lpass login --trust $username >/dev/null 2>&1
+    end
 
     if test $status -eq 0
       set -l pass (lpass ls -l | lpfmt | eval "fzf $FZF_DEFAULT_OPTS --ansi --header='[lastpass:copy]'" | cut -d ' ' -f 1)
 
       if not test -z $pass
-        echo $pass
-      else
-        echo "no pass selected"
+        lpass show -cp $pass
       end
     end
   else

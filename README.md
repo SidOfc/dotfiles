@@ -13,7 +13,7 @@ reference to get started, comments can be found within dotfiles.
 ## [Homebrew](https://brew.sh)
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    $ brew install zsh tmux neovim gnupg wget reattach-to-user-namespace
+    $ brew install fish fzf autojump tmux neovim wget reattach-to-user-namespace
     $ brew install lastpass-cli --with-pinentry
 
 ## Setup
@@ -21,8 +21,4 @@ reference to get started, comments can be found within dotfiles.
     $ defaults write com.apple.finder AppleShowAllFiles YES
     $ defaults write com.apple.dock autohide-delay -float 1000; killall Dock
     $ git clone https://github.com/sidofc/dotfiles
-    $ cd ~/dotfiles
-    $ ./bin/dot ln! # forcefully symlink into ~ (a backup will be created)
-
-After completion, the `dot` command can be used anywhere on the command line run `dot help` for more information.
-The `dot` command will create a backup of your dotfiles inside `clone-dir/backup/[TIMESTAMP]` before destructively unlinking using `dot ln!`.
+    $ ./dotfiles/bin/setup
