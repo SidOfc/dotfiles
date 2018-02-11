@@ -26,7 +26,6 @@ fonts
 .v8flags*
 *cache*
 .oh-my-zsh
-.config
 .vim/bundle
 .rustup
 *.jpg
