@@ -1,0 +1,11 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/Users/sidofc/Dev/sidney/viml/mkdx'
+let g:netrw_dirhist_2='/Users/sidofc/Dev/sidney/viml'
+let g:netrw_dirhist_3='/Users/sidofc/Dev/sidney/viml/mkdx'
+let g:netrw_dirhist_4='/Users/sidofc/.dotfiles'
+let g:netrw_dirhist_5='/Users/sidofc/Dev/sidney/viml/mkdx'
+let g:netrw_dirhist_6='/Users/sidofc/.dotfiles'
+let g:netrw_dirhist_7='/Users/sidofc/Dev/sidney/viml/mkdx'
+let g:netrw_dirhist_8='/Users/sidofc/.dotfiles'
+let g:netrw_dirhist_9='/Users/sidofc/Dev/sidney/viml/mkdx'
