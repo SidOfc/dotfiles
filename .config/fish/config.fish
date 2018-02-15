@@ -26,7 +26,8 @@ if not set -q __initialized
   abbr tt  "$EDITOR ~/.tmux.conf"
   abbr zz  "$EDITOR ~/.config/fish/config.fish"
   abbr ff  "$EDITOR ~/.config/fish/config.fish"
-  abbr zx  "source ~/.config/fish/config.fish"
+  abbr zx  "reload -f"
+  abbr zxx "reload"
 
   # crystal
   abbr cr  'crystal'
