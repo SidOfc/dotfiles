@@ -1,4 +1,4 @@
-set    fish_greeting
+set fish_greeting
 
 if not test -d ~/.asdf
   set -U fish_user_paths ~/bin
