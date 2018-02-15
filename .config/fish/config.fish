@@ -1,32 +1,32 @@
 set fish_greeting
 
-if not test -d ~/.asdf
-  set -U fish_user_paths ~/bin
-else
+if test -d ~/.asdf
   set -U fish_user_paths ~/bin ~/.asdf/bin ~/.asdf/shims
+else
+  set -U fish_user_paths ~/bin
 end
 
-export FZF_DEFAULT_OPTS='--height=50% --min-height=15 --reverse'
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
-export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
-export LPS_DEFAULT_USERNAME='sidneyliebrand@gmail.com'
-export EVENT_NOKQUEUE=1
+set -gx FZF_DEFAULT_OPTS     '--height=50% --min-height=15 --reverse'
+set -gx FZF_DEFAULT_COMMAND  'rg --files --no-ignore-vcs --hidden'
+set -gx FZF_CTRL_T_COMMAND   $FZF_DEFAULT_COMMAND
+set -gx LPS_DEFAULT_USERNAME 'sidneyliebrand@gmail.com'
+set -gx EVENT_NOKQUEUE       1
 
 if command -s nvim >/dev/null
-  export EDITOR='nvim'
+  set -gx EDITOR nvim
 else
-  export EDITOR='vim'
+  set -gx EDITOR vim
 end
 
 if not set -q __initialized
   set -U __initialized
 
   # config files
-  abbr vv  "$EDITOR ~/.vimrc"
+  abbr vv  "$EDITOR ~/.config/nvim/init.vim"
   abbr tt  "$EDITOR ~/.tmux.conf"
   abbr zz  "$EDITOR ~/.config/fish/config.fish"
-  abbr zx  "source ~/.config/fish/config.fish"
   abbr ff  "$EDITOR ~/.config/fish/config.fish"
+  abbr zx  "source ~/.config/fish/config.fish"
 
   # crystal
   abbr cr  'crystal'
@@ -41,17 +41,19 @@ if not set -q __initialized
   abbr gb  'git branch'
   abbr gbl 'git blame'
   abbr gc  'git commit -m'
-  abbr go  'git checkout'
+  abbr gco 'git checkout'
   abbr gcp 'git cherry-pick'
   abbr gd  'git diff'
   abbr gf  'git fetch'
   abbr gl  'git log'
+  abbr glg 'git log --graph --oneline'
   abbr gm  'git merge'
   abbr gp  'git push'
   abbr gpl 'git pull'
   abbr gr  'git remote'
-  abbr gs  'git status'
-  abbr gst 'git stash'
+  abbr gg  'git status'
+  abbr gs  'git stash'
+  abbr gsp 'git stash pop'
 
   # vim
   abbr v   "$EDITOR"
