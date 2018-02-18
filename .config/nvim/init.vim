@@ -318,8 +318,8 @@
   let g:lightline#colorscheme#base16_seti#palette = lightline#colorscheme#fill(s:p)
   let g:lightline = {
         \ 'colorscheme':      'base16_seti',
-        \ 'separator':        { 'left': "\ue0b0", 'right': "\ue0b2" },
-        \ 'subseparator':     { 'left': "\ue0b1", 'right': "\ue0b3" },
+        \ 'separator':        { 'left': "", 'right': "" },
+        \ 'subseparator':     { 'left': "│", 'right': "│" },
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ],
         \             [ 'modified', 'fugitive', 'label' ] ],
