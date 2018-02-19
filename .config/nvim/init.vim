@@ -198,6 +198,9 @@
   " fix jsx highlighting of end xml tags
   hi link xmlEndTag xmlTag
 
+  " let nvim use terminal background
+  hi Normal ctermbg=NONE guibg=NONE
+
   " override markdown quote syntax highlight
   hi link mkdBlockquote rubyInterpolationDelimiter
 
