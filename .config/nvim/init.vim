@@ -79,11 +79,6 @@
   set scrolloff=10                " show 10 lines of context around cursor
   colorscheme base16-seti         " apply color scheme
 
-  " change cursor shape in various modes
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-
   " remap bad habits to do nothing
   imap <Up>    <Nop>
   imap <Down>  <Nop>
@@ -446,6 +441,7 @@
     au BufWritePre *                call s:StripWS()     " remove trailing whitespace before saving buffer
     au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indents for JS/JSX/JSON
     au FileType markdown,python     call s:IndentSize(4) " 4 space indents for markdown and python
+    au BufRead,BufNewFile *.rip     setf stylus
     au FileType help                nmap <buffer> q :q<Cr>
   augroup END
 " }}}
