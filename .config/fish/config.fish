@@ -30,6 +30,10 @@ if not set -q __initialized
   abbr zx  "reload -f"
   abbr zxx "reload"
 
+  # python
+  abbr py  'python'
+  abbr pt  'ptpython'
+
   # crystal
   abbr cr  'crystal'
   abbr csh 'shards'

@@ -405,6 +405,10 @@
   endif
 " }}}
 
+" Polyglot {{{
+  let g:polyglot_disabled = ['markdown']
+" }}}
+
 " Vimagit {{{
   noremap  <Leader>m :MagitO<Cr>
 " }}}

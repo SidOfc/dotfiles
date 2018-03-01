@@ -16,6 +16,20 @@ reference to get started, comments can be found within dotfiles.
     $ brew install fish fzf autojump tmux neovim wget reattach-to-user-namespace
     $ brew install lastpass-cli --with-pinentry
 
+## [asdf]
+
+    $ git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+    $ asdf plugin-add python
+    $ asdf plugin-add ruby
+    $ asdf plugin-add crystal
+    $ asdf install python 3.6.2
+    $ asdf install ruby 3.5.0
+    $ asdf install crystal 0.24.0
+    $ gem install bundler pry
+    $ pip install ptpython
+    $ asdf reshim python
+    $ asdf reshim ruby
+
 ## Setup
 
     $ defaults write com.apple.finder AppleShowAllFiles YES
