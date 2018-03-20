@@ -28,6 +28,7 @@
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   Plug 'haya14busa/incsearch.vim'
+  Plug 'haya14busa/incsearch-fuzzy.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'junegunn/vader.vim'
   Plug '/usr/local/opt/fzf'
@@ -284,8 +285,8 @@
   let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
   let g:incsearch#consistent_n_direction = 1            " when searching backward, do not invert meaning of n and N
 
-  map / <Plug>(incsearch-forward)
-  map ? <Plug>(incsearch-backward)
+  map / <Plug>(incsearch-fuzzy-/)
+  map ? <Plug>(incsearch-fuzzy-?)
 " }}}
 
 " Lightline {{{
