@@ -14,6 +14,7 @@
   endif
 
   call plug#begin('~/.vim/plugged')
+  Plug 'easymotion/vim-easymotion'
   Plug 'w0rp/ale'
   Plug 'sheerun/vim-polyglot'
   Plug 'christoomey/vim-tmux-navigator'
@@ -232,6 +233,13 @@
     set grepprg=rg\ --vimgrep\ --hidden\ --no-ignore-vcs
     set grepformat=%f:%l:%c:%m,%f:%l:%m
   endif
+" }}}
+
+" {{{ EasyMotion
+  let g:EasyMotion_do_mapping = 0
+  let g:EasyMotion_verbose = 0
+  let g:EasyMotion_off_screen_search = 0
+  map <Leader>w <Plug>(easymotion-bd-f2)
 " }}}
 
 " Development {{{{
