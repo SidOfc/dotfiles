@@ -130,10 +130,16 @@
   nnoremap <C-m> :silent! call <SID>qfprv()<Cr>
 
   " easier navigation in normal / visual / operator pending mode
-  noremap K     {
-  noremap J     }
-  noremap H     ^
-  noremap L     $
+  noremap K    {
+  noremap J    }
+  noremap H    ^
+  noremap L    $
+
+  " make n and N silent so they don't flash their search pattern before
+  " finishing the search for the next occurence
+  map <silent> n n
+  map <silent> N N
+
 
   " save using <C-s> in every mode
   " when in operator-pending or insert, takes you to normal mode
@@ -285,8 +291,8 @@
   let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
   let g:incsearch#consistent_n_direction = 1            " when searching backward, do not invert meaning of n and N
 
-  map / <Plug>(incsearch-fuzzy-/)
-  map ? <Plug>(incsearch-fuzzy-?)
+  map <silent> / <Plug>(incsearch-fuzzy-/)
+  map <silent> ? <Plug>(incsearch-fuzzy-?)
 " }}}
 
 " Lightline {{{
