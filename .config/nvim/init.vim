@@ -190,7 +190,7 @@
         call jobstart('git push', { 'on_exit': function('<SID>GitJobHandler') })
         echo 'git push'
       else
-        exe '!ssh-add'
+        echo 'run [ssh-add] first!'
       end
     endfun
 
@@ -263,7 +263,7 @@
 " }}}
 
 " Mkdx {{{
-  let g:mkdx#settings = { 'highlight': { 'enable': 1 } }
+  let g:mkdx#settings = { 'highlight': { 'enable': 1 }, 'tokens': { 'fence': '`' } }
 " }}}
 
 " Ale {{{
@@ -283,8 +283,8 @@
   let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
   let g:incsearch#consistent_n_direction = 1            " when searching backward, do not invert meaning of n and N
 
-  map <silent> / <Plug>(incsearch-fuzzy-/)
-  map <silent> ? <Plug>(incsearch-fuzzy-?)
+  map <silent> ? <Plug>(incsearch-fuzzy-/)
+  map <silent> / <Plug>(incsearch-forward)
 " }}}
 
 " Lightline {{{
