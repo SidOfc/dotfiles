@@ -15,8 +15,8 @@
 
   call plug#begin('~/.vim/plugged')
   Plug 'w0rp/ale',           { 'for': ['javascript', 'jsx', 'css', 'scss', 'sass', 'html', 'ruby', 'vim'] }
-  Plug 'jreybert/vimagit',   { 'on': ['Magit', 'MagitO'] }
-  Plug 'Junegunn/vader.vim', { 'on': ['Vader'] }
+  Plug 'jreybert/vimagit',   { 'on':  ['Magit', 'MagitO'] }
+  Plug 'Junegunn/vader.vim', { 'on':  ['Vader'] }
   Plug 'sheerun/vim-polyglot'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'chriskempson/base16-vim'
@@ -199,9 +199,6 @@
 
   " let nvim use terminal background
   hi Normal ctermbg=NONE guibg=NONE
-
-  " override markdown quote syntax highlight
-  hi link mkdBlockquote rubyInterpolationDelimiter
 
   " delete existing notes in ~/notes
   if !exists('*s:DeleteNote')
