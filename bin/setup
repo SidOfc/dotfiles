@@ -4,12 +4,13 @@ require 'fileutils'
 require 'colorize'
 
 # directories
-SOURCE = File.expand_path File.join(__dir__, '../')
-HOME   = File.expand_path '~'
-CONFIG = File.join HOME, '.config'
-BIN    = File.join HOME, 'bin'
-FISH   = File.join CONFIG, 'fish'
-NVIM   = File.join CONFIG, 'nvim'
+SOURCE    = File.expand_path File.join(__dir__, '../')
+HOME      = File.expand_path '~'
+CONFIG    = File.join HOME, '.config'
+BIN       = File.join HOME, 'bin'
+FISH      = File.join CONFIG, 'fish'
+NVIM      = File.join CONFIG, 'nvim'
+ALACRITTY = File.join CONFIG, 'alacritty'
 
 # files
 GITIGNORE      = File.join SOURCE, '.gitignore'
@@ -20,20 +21,23 @@ DEFAULT_GEMS   = File.join SOURCE, '.default-gems'
 FISH_CONFIG    = File.join SOURCE, '.config', 'fish', 'config.fish'
 FISH_FUNCTIONS = File.join SOURCE, '.config', 'fish', 'functions'
 NVIM_CONFIG    = File.join SOURCE, '.config', 'nvim', 'init.vim'
+ALACRITTY_YML  = File.join SOURCE, '.config', 'alacritty', 'alacritty.yml'
 BIN_CIU        = File.expand_path File.join(__dir__, 'ciu')
 BIN_LPFMT      = File.expand_path File.join(__dir__, 'lpfmt')
 
 MAP = {
-  HOME => [GITIGNORE, RGIGNORE, TMUX_CONF, ASDFRC, DEFAULT_GEMS],
-  BIN  => [BIN_CIU, BIN_LPFMT],
-  FISH => [FISH_CONFIG, FISH_FUNCTIONS],
-  NVIM => [NVIM_CONFIG]
+  HOME      => [GITIGNORE, RGIGNORE, TMUX_CONF, ASDFRC, DEFAULT_GEMS],
+  BIN       => [BIN_CIU, BIN_LPFMT],
+  FISH      => [FISH_CONFIG, FISH_FUNCTIONS],
+  NVIM      => [NVIM_CONFIG],
+  ALACRITTY => [ALACRITTY_YML]
 }.freeze
 
 # initialize ~/.config directories
 FileUtils.mkdir_p BIN
 FileUtils.mkdir_p FISH
 FileUtils.mkdir_p NVIM
+FileUtils.mkdir_p ALACRITTY
 
 MAP.each do |(destination, targets)|
   targets.each do |source|
