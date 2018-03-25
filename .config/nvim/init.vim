@@ -17,7 +17,6 @@
   Plug 'w0rp/ale'
   Plug 'sheerun/vim-polyglot'
   Plug 'christoomey/vim-tmux-navigator'
-  Plug 'AndrewRadev/splitjoin.vim'
   Plug 'chriskempson/base16-vim'
   Plug 'itchyny/lightline.vim'
   Plug 'jreybert/vimagit'
@@ -347,14 +346,6 @@
         \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
         \ }
         \ }
-" }}}
-
-" Splitjoin {{{
-  let g:splitjoin_split_mapping = '' " reset splitjoin mappings
-  let g:splitjoin_join_mapping = ''  " reset splitjoin mappings
-
-  noremap <Leader>j :SplitjoinJoin<Cr>
-  noremap <Leader>J :SplitjoinSplit<Cr>
 " }}}
 
 " Fzf {{{
