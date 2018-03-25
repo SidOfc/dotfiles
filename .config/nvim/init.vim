@@ -14,12 +14,13 @@
   endif
 
   call plug#begin('~/.vim/plugged')
-  Plug 'w0rp/ale'
+  Plug 'w0rp/ale',           { 'for': ['javascript', 'jsx', 'css', 'scss', 'sass', 'html', 'ruby', 'vim'] }
+  Plug 'jreybert/vimagit',   { 'on': ['Magit', 'MagitO'] }
+  Plug 'Junegunn/vader.vim', { 'on': ['Vader'] }
   Plug 'sheerun/vim-polyglot'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'chriskempson/base16-vim'
   Plug 'itchyny/lightline.vim'
-  Plug 'jreybert/vimagit'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
@@ -30,12 +31,7 @@
   Plug 'junegunn/vim-easy-align'
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
-  if $VIM_DEV
-    Plug 'Junegunn/vader.vim'
-    Plug '~/Dev/sidney/viml/mkdx'
-  else
-    Plug 'SidOfc/mkdx'
-  endif
+  Plug $VIM_DEV ?  '~/Dev/sidney/viml/mkdx' :  'SidOfc/mkdx'
   call plug#end()
 " }}}
 
