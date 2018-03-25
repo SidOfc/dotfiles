@@ -29,11 +29,14 @@
   Plug 'haya14busa/incsearch.vim'
   Plug 'haya14busa/incsearch-fuzzy.vim'
   Plug 'junegunn/vim-easy-align'
-  Plug 'junegunn/vader.vim'
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
-  Plug 'airblade/vim-gitgutter'
-  Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
+  if $VIM_DEV
+    Plug 'Junegunn/vader.vim'
+    Plug '~/Dev/sidney/viml/mkdx'
+  else
+    Plug 'SidOfc/mkdx'
+  endif
   call plug#end()
 " }}}
 
@@ -73,7 +76,6 @@
   set noerrorbells                " do not show error bells
   set visualbell                  " do not use visual bell
   set t_vb=                       " do not flash screen with visualbell
-  set signcolumn=yes
   set timeoutlen=350              " mapping delay
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
