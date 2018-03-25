@@ -4,19 +4,20 @@ My collection of configuration options, plugins, and other stuff that make my da
 I like to keep my setup quite minimal and simple, this README is intended only as an installation
 reference to get started, comments can be found within dotfiles.
 
-## [ITerm3](https://www.iterm2.com/version3.html)
-
-- [Install instructions](https://www.iterm2.com/version3.html)
-- [Color presets](https://github.com/mbadolato/iTerm2-Color-Schemes)
-- [Powerline fonts](https://github.com/powerline/fonts)
-
 ## [Homebrew](https://brew.sh)
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     $ brew install fish fzf autojump tmux neovim wget reattach-to-user-namespace
     $ brew install lastpass-cli --with-pinentry
 
-## [asdf]
+## [alacritty](https://github.com/jwilm/alacritty)
+
+    $ brew tap mscharley/homebrew
+    $ brew install alacritty --HEAD
+    $ ln -s /usr/local/opt/alacritty/Applications/Alacritty.app /Applications/
+
+
+## [asdf](https://github.com/asdf-vm/asdf)
 
     $ git clone https://github.com/asdf-vm/asdf.git ~/.asdf
     $ asdf plugin-add python
