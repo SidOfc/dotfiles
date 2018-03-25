@@ -14,7 +14,11 @@ reference to get started, comments can be found within dotfiles.
 
     $ brew tap mscharley/homebrew
     $ brew install alacritty --HEAD
-    $ ln -s /usr/local/opt/alacritty/Applications/Alacritty.app /Applications/
+
+To update:
+
+    $ brew reinstall alacritty
+    $ cp -R /usr/local/opt/alacritty/Applications/Alacritty.app /Applications/ 
 
 
 ## [asdf](https://github.com/asdf-vm/asdf)
