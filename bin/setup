@@ -3,8 +3,10 @@
 require 'fileutils'
 require 'colorize'
 
-# directories
+# source directory (this repo)
 SOURCE    = File.expand_path File.join(__dir__, '../')
+
+# destination directories
 HOME      = File.expand_path '~'
 CONFIG    = File.join HOME, '.config'
 BIN       = File.join HOME, 'bin'
@@ -12,7 +14,7 @@ FISH      = File.join CONFIG, 'fish'
 NVIM      = File.join CONFIG, 'nvim'
 ALACRITTY = File.join CONFIG, 'alacritty'
 
-# files
+# source files
 GITIGNORE      = File.join SOURCE, '.gitignore'
 RGIGNORE       = File.join SOURCE, '.rgignore'
 TMUX_CONF      = File.join SOURCE, '.tmux.conf'
@@ -25,6 +27,8 @@ ALACRITTY_YML  = File.join SOURCE, '.config', 'alacritty', 'alacritty.yml'
 BIN_CIU        = File.expand_path File.join(__dir__, 'ciu')
 BIN_LPFMT      = File.expand_path File.join(__dir__, 'lpfmt')
 
+# map source files to go into specific destination directories
+# paths of keys and each array entry are absolute.
 MAP = {
   HOME      => [GITIGNORE, RGIGNORE, TMUX_CONF, ASDFRC, DEFAULT_GEMS],
   BIN       => [BIN_CIU, BIN_LPFMT],
@@ -33,16 +37,21 @@ MAP = {
   ALACRITTY => [ALACRITTY_YML]
 }.freeze
 
-# initialize ~/.config directories
+# initialize destination ~/.config directories
 FileUtils.mkdir_p BIN
 FileUtils.mkdir_p FISH
 FileUtils.mkdir_p NVIM
 FileUtils.mkdir_p ALACRITTY
 
+# loop through destination paths and targets
 MAP.each do |(destination, targets)|
+  # loop through each source file for destination
   targets.each do |source|
+    # generate final destination
     target_dest = File.join destination, File.basename(source)
 
+    # if target is already a present or a symlink,
+    # or if the source doesn't exist, skip
     if File.symlink?(target_dest) ||
        File.exist?(target_dest) ||
        !File.exist?(source)
