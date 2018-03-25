@@ -1,5 +1,4 @@
 set fish_greeting
-fish_default_key_bindings
 
 if test -d ~/.asdf
   set -U fish_user_paths ~/bin ~/.asdf/bin ~/.asdf/shims
