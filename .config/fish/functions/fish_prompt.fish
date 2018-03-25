@@ -20,5 +20,5 @@ function fish_prompt --description 'Write out the prompt'
     set __git_cb (set_color yellow)" on "(set_color green)"$__gbr"(set_color normal)"$__git_dirty"
   end
 
-  echo -n (set_color $__stat_color)'⬤'(set_color blue) (prompt_pwd)"$__git_cb"(set_color yellow) '❯ '
+  echo -n (set_color $__stat_color)'•'(set_color blue) (prompt_pwd)"$__git_cb"(set_color yellow) '❯ '
 end
