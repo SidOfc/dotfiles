@@ -434,27 +434,27 @@
 " }}}
 
 " Autocommands {{{
-  augroup Windows
-    au!
-    au BufEnter,WinEnter,WinNew,VimResized *,*.*
-          \ let &scrolloff=getwininfo(win_getid())[0]['height']/2      " keep cursor centered
-    au FocusGained,VimEnter,WinEnter,BufWinEnter * setlocal cursorline " enable cursorline in focussed buffer
-    au FocusGained,VimEnter,WinEnter,BufWinEnter * :checktime          " reload file if it has changed on disk
-    au WinLeave,FocusLost * setlocal nocursorline                      " disable cursorline when leaving buffer
-    au VimResized * wincmd =                                           " auto resize splits on resize
-  augroup END
+  fun! s:WindowSetup()
+    setlocal cursorline
+    normal! :checktime
+  endfun
 
   fun! s:StripWS()
-    if (&ft =~ 'vader') | return | endif
+    if (&ft =~ 'vader' || &ft =~ 'markdown') | return | endif
     %s/\s\+$//e
   endfun
 
+  augroup Windows
+    au!
+    au FocusGained,VimEnter,WinEnter,BufWinEnter * call s:WindowSetup() " window setup
+    au WinLeave,FocusLost * setlocal nocursorline                       " disable cursorline when leaving buffer
+    au VimResized * wincmd =                                            " auto resize splits on resize
+  augroup END
+
   augroup Files
     au!
-    au BufWritePre *                call s:StripWS()     " remove trailing whitespace before saving buffer
-    au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indents for JS/JSX/JSON
-    au FileType markdown,python     call s:IndentSize(4) " 4 space indents for markdown and python
-    au BufRead,BufNewFile *.rip     setf stylus
-    au FileType help                nmap <buffer> q :q<Cr>
+    au BufWritePre *                                call s:StripWS()       " remove trailing whitespace before saving buffer
+    au FileType javascript,jsx,json,markdown,python call s:IndentSize(4)   " 4 space indents for JS/JSX/JSON
+    au FileType help                                nmap <buffer> q :q<Cr> " press q to close help buffer
   augroup END
 " }}}
