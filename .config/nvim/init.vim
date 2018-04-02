@@ -257,7 +257,10 @@
 " }}}
 
 " Mkdx {{{
-  let g:mkdx#settings = { 'highlight': { 'enable': 1 }, 'tokens': { 'fence': '`' } }
+  let g:mkdx#settings = { 'highlight': { 'enable': 1 },
+                        \ 'tokens': { 'fence': '`' },
+                        \ 'checkbox': { 'toggles': [' ', 'x'] },
+                        \ 'toc': { 'text': 'Table of Contents', 'details': { 'enable': 0 } } }
 " }}}
 
 " Ale {{{
