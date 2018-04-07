@@ -122,8 +122,8 @@
   endfun
 
   " shortcuts for quickfix list
-  nnoremap <C-n> :silent! call <SID>qfnxt()<Cr>
-  nnoremap <C-m> :silent! call <SID>qfprv()<Cr>
+  nnoremap <silent> <C-n> :call <SID>qfnxt()<Cr>
+  nnoremap <silent> <C-m> :call <SID>qfprv()<Cr>
 
   " easier navigation in normal / visual / operator pending mode
   noremap K    {
