@@ -110,7 +110,7 @@
   " I like things that wrap back to start after end, quickfix stops at last
   " error but if I specify cn again, I want to definitely go to the next error
   " (I can see line numbers in sidebar to track where I am anyway)
-  fun! s:qfnxt()
+  fun! s:__qfnxt()
     try
       cnext
     catch
@@ -118,7 +118,7 @@
     endtry
   endfun
 
-  fun! s:qfprv()
+  fun! s:__qfprv()
     try
       cprev
     catch
@@ -127,8 +127,8 @@
   endfun
 
   " shortcuts for quickfix list
-  nnoremap <C-n> :silent! call <SID>qfnxt()<Cr>
-  nnoremap <C-m> :silent! call <SID>qfprv()<Cr>
+  nnoremap <C-n> :call <SID>__qfnxt()<Cr>
+  nnoremap <C-b> :call <SID>__qfprv()<Cr>
 
   " easier navigation in normal / visual / operator pending mode
   noremap K     {
