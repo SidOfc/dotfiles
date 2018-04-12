@@ -10,6 +10,10 @@ reference to get started, comments can be found within dotfiles.
     $ brew install fish fzf autojump tmux neovim wget reattach-to-user-namespace
     $ brew install lastpass-cli --with-pinentry
 
+**vim-plug**
+
+The `neovim` setup uses [vim plug](https://github.com/junegunn/vim-plug#neovim), please see install instructions for respective OS.
+
 ## [alacritty](https://github.com/jwilm/alacritty)
 
     $ brew tap mscharley/homebrew
@@ -18,7 +22,7 @@ reference to get started, comments can be found within dotfiles.
 To update:
 
     $ brew reinstall alacritty
-    $ cp -R /usr/local/opt/alacritty/Applications/Alacritty.app /Applications/ 
+    $ cp -R /usr/local/opt/alacritty/Applications/Alacritty.app /Applications/
 
 
 ## [asdf](https://github.com/asdf-vm/asdf)
