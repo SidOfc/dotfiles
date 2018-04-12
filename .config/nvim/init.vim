@@ -3,8 +3,6 @@
 " }}}
 
 "' Init / Plugins {{{
-  set runtimepath^=~/.vim runtimepath+=~/.vim/after
-  let &packpath = &runtimepath
   set nocompatible
 
   if empty(glob('~/.vim/autoload/plug.vim'))
@@ -14,24 +12,25 @@
   endif
 
   call plug#begin('~/.vim/plugged')
-  Plug 'w0rp/ale',           { 'for': ['javascript', 'jsx', 'css', 'scss', 'sass', 'html', 'ruby', 'vim'] }
-  Plug 'jreybert/vimagit',   { 'on':  ['Magit', 'MagitO'] }
-  Plug 'Junegunn/vader.vim', { 'on':  ['Vader'] }
+  Plug 'w0rp/ale'
   Plug 'sheerun/vim-polyglot'
   Plug 'christoomey/vim-tmux-navigator'
+  Plug 'AndrewRadev/splitjoin.vim'
   Plug 'chriskempson/base16-vim'
   Plug 'itchyny/lightline.vim'
+  Plug 'jreybert/vimagit'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   Plug 'haya14busa/incsearch.vim'
-  Plug 'haya14busa/incsearch-fuzzy.vim'
   Plug 'junegunn/vim-easy-align'
+  Plug 'junegunn/vader.vim'
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
-  Plug $VIM_DEV ?  '~/Dev/sidney/viml/mkdx' :  'SidOfc/mkdx'
+  Plug 'airblade/vim-gitgutter'
+  Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
   call plug#end()
 " }}}
 
@@ -71,11 +70,17 @@
   set noerrorbells                " do not show error bells
   set visualbell                  " do not use visual bell
   set t_vb=                       " do not flash screen with visualbell
+  set signcolumn=yes
   set timeoutlen=350              " mapping delay
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
   set scrolloff=10                " show 10 lines of context around cursor
   colorscheme base16-seti         " apply color scheme
+
+  " change cursor shape in various modes
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
 
   " remap bad habits to do nothing
   imap <Up>    <Nop>
@@ -105,7 +110,7 @@
   " I like things that wrap back to start after end, quickfix stops at last
   " error but if I specify cn again, I want to definitely go to the next error
   " (I can see line numbers in sidebar to track where I am anyway)
-  fun! s:qfnxt()
+  fun! s:__qfnxt()
     try
       cnext
     catch
@@ -113,7 +118,7 @@
     endtry
   endfun
 
-  fun! s:qfprv()
+  fun! s:__qfprv()
     try
       cprev
     catch
@@ -122,20 +127,14 @@
   endfun
 
   " shortcuts for quickfix list
-  nnoremap <C-n> :silent! call <SID>qfnxt()<Cr>
-  nnoremap <C-m> :silent! call <SID>qfprv()<Cr>
+  nnoremap <C-n> :call <SID>__qfnxt()<Cr>
+  nnoremap <C-b> :call <SID>__qfprv()<Cr>
 
   " easier navigation in normal / visual / operator pending mode
-  noremap K    {
-  noremap J    }
-  noremap H    ^
-  noremap L    $
-
-  " make n and N silent so they don't flash their search pattern before
-  " finishing the search for the next occurence
-  map <silent> n n
-  map <silent> N N
-
+  noremap K     {
+  noremap J     }
+  noremap H     ^
+  noremap L     $
 
   " save using <C-s> in every mode
   " when in operator-pending or insert, takes you to normal mode
@@ -187,7 +186,7 @@
         call jobstart('git push', { 'on_exit': function('<SID>GitJobHandler') })
         echo 'git push'
       else
-        echo 'run [ssh-add] first!'
+        exe '!ssh-add'
       end
     endfun
 
@@ -197,8 +196,8 @@
   " fix jsx highlighting of end xml tags
   hi link xmlEndTag xmlTag
 
-  " let nvim use terminal background
-  hi Normal ctermbg=NONE guibg=NONE
+  " override markdown quote syntax highlight
+  hi link mkdBlockquote rubyInterpolationDelimiter
 
   " delete existing notes in ~/notes
   if !exists('*s:DeleteNote')
@@ -257,7 +256,10 @@
 " }}}
 
 " Mkdx {{{
-  let g:mkdx#settings = { 'highlight': { 'enable': 1 }, 'tokens': { 'fence': '`' } }
+  let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
+                            \ 'links': { 'external': { 'enable': 1 } },
+                            \ 'toc': { 'text': 'Table of Contents' } }
+  let g:polyglot_disabled = ['markdown']
 " }}}
 
 " Ale {{{
@@ -277,8 +279,8 @@
   let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
   let g:incsearch#consistent_n_direction = 1            " when searching backward, do not invert meaning of n and N
 
-  map <silent> ? <Plug>(incsearch-fuzzy-/)
-  map <silent> / <Plug>(incsearch-forward)
+  map / <Plug>(incsearch-forward)
+  map ? <Plug>(incsearch-backward)
 " }}}
 
 " Lightline {{{
@@ -297,28 +299,28 @@
   let s:magenta = '#a074c4'
 
   let s:p                 = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
-  let s:p.normal.left     = [ [ s:blue,   s:base03   ], [ s:base03, s:blue   ] ]
-  let s:p.normal.right    = [ [ s:base03, s:blue     ], [ s:base00, s:base03 ] ]
-  let s:p.normal.middle   = [ [ s:base1,  s:base03   ] ]
-  let s:p.normal.error    = [ [ s:red,    s:base023  ] ]
-  let s:p.normal.warning  = [ [ s:yellow, s:base02   ] ]
+  let s:p.normal.left     = [ [ s:blue, s:base03 ],    [ s:base03, s:blue ] ]
+  let s:p.normal.middle   = [ [ s:base1, s:base03 ] ]
+  let s:p.normal.right    = [ [ s:base03, s:blue ],   [ s:base00, s:base03 ] ]
+  let s:p.normal.error    = [ [ s:red, s:base023 ] ]
+  let s:p.normal.warning  = [ [ s:yellow, s:base02 ] ]
 
-  let s:p.inactive.left   = [ [ s:base1,   s:base03  ], [ s:base03, s:base03 ] ]
-  let s:p.inactive.right  = [ [ s:base03,  s:base03  ], [ s:base03, s:base03 ] ]
-  let s:p.inactive.middle = [ [ s:base03,  s:base03  ] ]
+  let s:p.inactive.left   = [ [ s:base1,   s:base03 ],  [ s:base03, s:base03 ] ]
+  let s:p.inactive.middle = [ [ s:base03, s:base03 ] ]
+  let s:p.inactive.right  = [ [ s:base03,  s:base03 ],  [ s:base03, s:base03 ] ]
 
-  let s:p.insert.left     = [ [ s:green,   s:base03  ], [ s:base03, s:green   ] ]
-  let s:p.insert.right    = [ [ s:base03,  s:green   ], [ s:base00, s:base03  ] ]
-  let s:p.replace.left    = [ [ s:orange,  s:base03  ], [ s:base03, s:orange  ] ]
-  let s:p.replace.right   = [ [ s:base03,  s:orange  ], [ s:base00, s:base03  ] ]
-  let s:p.visual.left     = [ [ s:magenta, s:base03  ], [ s:base03, s:magenta ] ]
-  let s:p.visual.right    = [ [ s:base03,  s:magenta ], [ s:base00, s:base03  ] ]
+  let s:p.insert.left     = [ [ s:green, s:base03 ],   [ s:base03,  s:green ] ]
+  let s:p.insert.right    = [ [ s:base03, s:green ],    [ s:base00, s:base03 ] ]
+  let s:p.replace.left    = [ [ s:orange, s:base03 ],  [ s:base03,  s:orange ] ]
+  let s:p.replace.right   = [ [ s:base03, s:orange ],    [ s:base00, s:base03 ] ]
+  let s:p.visual.left     = [ [ s:magenta, s:base03 ], [ s:base03,  s:magenta ] ]
+  let s:p.visual.right    = [ [ s:base03, s:magenta ],    [ s:base00, s:base03 ] ]
 
   let g:lightline#colorscheme#base16_seti#palette = lightline#colorscheme#fill(s:p)
   let g:lightline = {
         \ 'colorscheme':      'base16_seti',
-        \ 'separator':        { 'left': "", 'right': "" },
-        \ 'subseparator':     { 'left': "│", 'right': "│" },
+        \ 'separator':        { 'left': "\ue0b0", 'right': "\ue0b2" },
+        \ 'subseparator':     { 'left': "\ue0b1", 'right': "\ue0b3" },
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ],
         \             [ 'modified', 'fugitive', 'label' ] ],
@@ -339,6 +341,14 @@
         \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
         \ }
         \ }
+" }}}
+
+" Splitjoin {{{
+  let g:splitjoin_split_mapping = '' " reset splitjoin mappings
+  let g:splitjoin_join_mapping = ''  " reset splitjoin mappings
+
+  noremap <Leader>j :SplitjoinJoin<Cr>
+  noremap <Leader>J :SplitjoinSplit<Cr>
 " }}}
 
 " Fzf {{{
@@ -398,10 +408,6 @@
   endif
 " }}}
 
-" Polyglot {{{
-  let g:polyglot_disabled = ['markdown']
-" }}}
-
 " Vimagit {{{
   noremap  <Leader>m :MagitO<Cr>
 " }}}
@@ -418,27 +424,26 @@
 " }}}
 
 " Autocommands {{{
-  fun! s:WindowSetup()
-    setlocal cursorline
-    normal! :checktime
-  endfun
+  augroup Windows
+    au!
+    au BufEnter,WinEnter,WinNew,VimResized *,*.*
+          \ let &scrolloff=getwininfo(win_getid())[0]['height']/2      " keep cursor centered
+    au FocusGained,VimEnter,WinEnter,BufWinEnter * setlocal cursorline " enable cursorline in focussed buffer
+    au FocusGained,VimEnter,WinEnter,BufWinEnter * :checktime          " reload file if it has changed on disk
+    au WinLeave,FocusLost * setlocal nocursorline                      " disable cursorline when leaving buffer
+    au VimResized * wincmd =                                           " auto resize splits on resize
+  augroup END
 
   fun! s:StripWS()
-    if (&ft =~ 'vader' || &ft =~ 'markdown') | return | endif
+    if (&ft =~ 'vader') | return | endif
     %s/\s\+$//e
   endfun
 
-  augroup Windows
-    au!
-    au FocusGained,VimEnter,WinEnter,BufWinEnter * call s:WindowSetup() " window setup
-    au WinLeave,FocusLost * setlocal nocursorline                       " disable cursorline when leaving buffer
-    au VimResized * wincmd =                                            " auto resize splits on resize
-  augroup END
-
   augroup Files
     au!
-    au BufWritePre *                                call s:StripWS()       " remove trailing whitespace before saving buffer
-    au FileType javascript,jsx,json,markdown,python call s:IndentSize(4)   " 4 space indents for JS/JSX/JSON
-    au FileType help                                nmap <buffer> q :q<Cr> " press q to close help buffer
+    au BufWritePre *                call s:StripWS()     " remove trailing whitespace before saving buffer
+    au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indents for JS/JSX/JSON
+    au FileType markdown,python     call s:IndentSize(4) " 4 space indents for markdown and python
+    au FileType help                nmap <buffer> q :q<Cr>
   augroup END
 " }}}

@@ -51,8 +51,8 @@ if not set -q __initialized
   abbr gcp 'git cherry-pick'
   abbr gd  'git diff'
   abbr gf  'git fetch'
-  abbr gl  'git log'
-  abbr glg 'git log --graph --oneline'
+  abbr gl  'git log --graph --oneline'
+  abbr glg 'git log'
   abbr gm  'git merge'
   abbr gp  'git push'
   abbr gpl 'git pull'
@@ -63,7 +63,9 @@ if not set -q __initialized
 
   # vim
   abbr v   "$EDITOR"
+  abbr vd  "set -x VIM_DEV 1; and $EDITOR; and set -e VIM_DEV"
   abbr v.  "$EDITOR ."
+  abbr vd. "set -x VIM_DEV 1; and $EDITOR .; and set -e VIM_DEV"
   abbr vip "$EDITOR +PlugInstall +qall"
   abbr vup "$EDITOR +PlugUpdate"
   abbr vcp "$EDITOR +PlugClean +qall"
