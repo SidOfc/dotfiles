@@ -15,7 +15,6 @@
   Plug 'w0rp/ale'
   Plug 'sheerun/vim-polyglot'
   Plug 'christoomey/vim-tmux-navigator'
-  Plug 'AndrewRadev/splitjoin.vim'
   Plug 'chriskempson/base16-vim'
   Plug 'itchyny/lightline.vim'
   Plug 'jreybert/vimagit'
@@ -29,7 +28,6 @@
   Plug 'junegunn/vader.vim'
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
-  Plug 'airblade/vim-gitgutter'
   Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
   call plug#end()
 " }}}
@@ -40,6 +38,7 @@
   set path+=**                    " add cwd and 1 level of nesting to path
   set hidden                      " allow switching from unsaved buffer without '!'
   set ignorecase                  " ignore case in search
+  set inccommand=nosplit          " substitute with preview
   set nohlsearch                  " do not highlight searches, incsearch plugin does this
   set smartcase                   " use case-sensitive if a capital letter is included
   set noshowmode                  " statusline makes -- INSERT -- info irrelevant
@@ -70,17 +69,11 @@
   set noerrorbells                " do not show error bells
   set visualbell                  " do not use visual bell
   set t_vb=                       " do not flash screen with visualbell
-  set signcolumn=yes
   set timeoutlen=350              " mapping delay
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
-  set scrolloff=10                " show 10 lines of context around cursor
+  set scrolloff=10                " 10 lines of context
   colorscheme base16-seti         " apply color scheme
-
-  " change cursor shape in various modes
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
 
   " remap bad habits to do nothing
   imap <Up>    <Nop>
@@ -253,6 +246,7 @@
   let g:netrw_winsize   = 20
   let g:netrw_liststyle = 3
   let g:netrw_altv      = 1
+  let g:netrw_cursor    = 1
 " }}}
 
 " Mkdx {{{
@@ -341,14 +335,6 @@
         \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
         \ }
         \ }
-" }}}
-
-" Splitjoin {{{
-  let g:splitjoin_split_mapping = '' " reset splitjoin mappings
-  let g:splitjoin_join_mapping = ''  " reset splitjoin mappings
-
-  noremap <Leader>j :SplitjoinJoin<Cr>
-  noremap <Leader>J :SplitjoinSplit<Cr>
 " }}}
 
 " Fzf {{{
