@@ -264,7 +264,8 @@
   let g:ale_lint_delay = 2000                              " relint max once per [amount] milliseconds
   let g:ale_linters = {
         \ 'ruby': ['rubocop'],
-        \ 'javascript': ['eslint']
+        \ 'javascript': ['eslint'],
+        \ 'fish': []
         \ }
 " }}}
 
