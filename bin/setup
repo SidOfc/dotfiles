@@ -16,6 +16,7 @@ ALACRITTY = File.join CONFIG, 'alacritty'
 
 # source files
 GITIGNORE      = File.join SOURCE, '.gitignore'
+GITCONFIG      = File.join SOURCE, '.gitconfig'
 RGIGNORE       = File.join SOURCE, '.rgignore'
 TMUX_CONF      = File.join SOURCE, '.tmux.conf'
 ASDFRC         = File.join SOURCE, '.asdfrc'
@@ -30,7 +31,8 @@ BIN_LPFMT      = File.expand_path File.join(__dir__, 'lpfmt')
 # map source files to go into specific destination directories
 # paths of keys and each array entry are absolute.
 MAP = {
-  HOME      => [GITIGNORE, RGIGNORE, TMUX_CONF, ASDFRC, DEFAULT_GEMS],
+  HOME      => [GITIGNORE, GITCONFIG, RGIGNORE,
+                TMUX_CONF, ASDFRC, DEFAULT_GEMS],
   BIN       => [BIN_CIU, BIN_LPFMT],
   FISH      => [FISH_CONFIG, FISH_FUNCTIONS],
   NVIM      => [NVIM_CONFIG],

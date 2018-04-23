@@ -1,0 +1,36 @@
+[user]
+	name = Sidney Liebrand
+	email = sidneyliebrand@gmail.com
+[core]
+	editor = nvim
+	pager = less -S
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
+[push]
+	default = current
+[color]
+	branch = auto
+	status = auto
+	diff = auto
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+[color "status"]
+	added = green
+	changed = yellow
+	untracked = blue
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+[mergetool "vimdiff"]
+	cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+	prompt = false
+	keepBackup = false

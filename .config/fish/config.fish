@@ -51,7 +51,7 @@ if not set -q __initialized
   abbr gcp 'git cherry-pick'
   abbr gd  'git diff'
   abbr gf  'git fetch'
-  abbr glg 'git log --graph --oneline'
+  abbr glg 'git log --pretty="format:%Cred%h%Creset - %s %Cgreen(%cr)%Creset %C(blue)<%aN>%C(yellow)%d%Creset" --graph'
   abbr gl  'git log'
   abbr gm  'git merge'
   abbr gp  'git push'
