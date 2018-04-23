@@ -1,23 +1,14 @@
-set fish_greeting
-
-if test -d ~/.asdf
-  set -U fish_user_paths ~/bin ~/.asdf/bin ~/.asdf/shims
-else
-  set -U fish_user_paths ~/bin
-end
-
+set     fish_greeting
+set -U  fish_user_paths ~/bin ~/.asdf/bin ~/.asdf/shims
 set -gx TERM                 'screen-256color'
 set -gx FZF_DEFAULT_OPTS     '--height=50% --min-height=15 --reverse'
 set -gx FZF_DEFAULT_COMMAND  'rg --files --no-ignore-vcs --hidden'
 set -gx FZF_CTRL_T_COMMAND   $FZF_DEFAULT_COMMAND
 set -gx LPS_DEFAULT_USERNAME 'sidneyliebrand@gmail.com'
 set -gx EVENT_NOKQUEUE       1
+set -gx EDITOR               nvim
 
-if command -s nvim >/dev/null
-  set -gx EDITOR nvim
-else
-  set -gx EDITOR vim
-end
+bind \cq beginning-of-line
 
 if not set -q __initialized
   set -U __initialized
