@@ -45,6 +45,7 @@ if not set -q __initialized
   abbr glg 'git log --pretty="format:%Cred%h%Creset - %s %Cgreen(%cr)%Creset %C(blue)<%aN>%C(yellow)%d%Creset" --graph'
   abbr gl  'git log'
   abbr gm  'git merge'
+  abbr gmt 'git mergetool'
   abbr gp  'git push'
   abbr gpl 'git pull'
   abbr gr  'git remote'

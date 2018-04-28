@@ -28,6 +28,7 @@
   Plug 'junegunn/vader.vim'
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
+  Plug 'machakann/vim-highlightedyank'
   Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
   call plug#end()
 " }}}
@@ -239,6 +240,10 @@
     nmap <Leader>R :so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim<Cr>
     nmap <leader>gp :call <SID>SynStack()<CR>
   endif
+" }}}
+
+" Highlighted yank {{{
+  let g:highlightedyank_highlight_duration = 300
 " }}}
 
 " Netrw {{{
