@@ -36,6 +36,10 @@
 " General {{{
   let mapleader = ' '
 
+  " attempt to go numberless
+  " set relativenumber
+  " set number
+
   set path+=**                    " add cwd and 1 level of nesting to path
   set hidden                      " allow switching from unsaved buffer without '!'
   set ignorecase                  " ignore case in search
@@ -43,8 +47,6 @@
   set nohlsearch                  " do not highlight searches, incsearch plugin does this
   set smartcase                   " use case-sensitive if a capital letter is included
   set noshowmode                  " statusline makes -- INSERT -- info irrelevant
-  set number                      " show line numbers
-  set relativenumber              " show relative number
   set cursorline                  " highlight cursor line
   set splitbelow                  " split below instead of above
   set splitright                  " split after instead of before
