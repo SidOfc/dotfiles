@@ -239,8 +239,15 @@
       echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
     endfunc
 
-    nmap <Leader>R :so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim<Cr>
-    nmap <leader>gp :call <SID>SynStack()<CR>
+    function! <SID>DevRefresh()
+      so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
+      so ~/Dev/sidney/viml/mkdx/ftplugin/markdown/mkdx.vim
+      so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim
+      mess clear
+    endfunction
+
+    nmap <Leader>R :call <SID>DevRefresh()<Cr>
+    nmap <leader>gp :call <SID>SynStack()<Cr>
   endif
 " }}}
 
