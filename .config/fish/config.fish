@@ -14,44 +14,47 @@ if not set -q __initialized
   set -U __initialized
 
   # config files
-  abbr vv  "$EDITOR ~/.config/nvim/init.vim"
-  abbr tt  "$EDITOR ~/.tmux.conf"
-  abbr zz  "$EDITOR ~/.config/fish/config.fish"
-  abbr ff  "$EDITOR ~/.config/fish/config.fish"
-  abbr zx  "reload -f"
-  abbr zxx "reload"
+  abbr vv   "$EDITOR ~/.config/nvim/init.vim"
+  abbr tt   "$EDITOR ~/.tmux.conf"
+  abbr zz   "$EDITOR ~/.config/fish/config.fish"
+  abbr ff   "$EDITOR ~/.config/fish/config.fish"
+  abbr zx   "reload -f"
+  abbr zxx  "reload"
 
   # python
-  abbr py  'python'
-  abbr pt  'ptpython'
+  abbr py   'python'
+  abbr pt   'ptpython'
 
   # crystal
-  abbr cr  'crystal'
-  abbr csh 'shards'
-  abbr cpl 'crystal play'
-  abbr csp 'crystal spec'
+  abbr cr   'crystal'
+  abbr csh  'shards'
+  abbr cpl  'crystal play'
+  abbr csp  'crystal spec'
 
   # git
-  abbr g   'git'
-  abbr ga  'git add'
-  abbr g.  'git add .'
-  abbr gb  'git branch'
-  abbr gbl 'git blame'
-  abbr gc  'git commit -m'
-  abbr gco 'git checkout'
-  abbr gcp 'git cherry-pick'
-  abbr gd  'git diff'
-  abbr gf  'git fetch'
-  abbr glg 'git log --pretty="format:%Cred%h%Creset - %s %Cgreen(%cr)%Creset %C(blue)<%aN>%C(yellow)%d%Creset" --graph'
-  abbr gl  'git log'
-  abbr gm  'git merge'
-  abbr gmt 'git mergetool'
-  abbr gp  'git push'
-  abbr gpl 'git pull'
-  abbr gr  'git remote'
-  abbr gg  'git status'
-  abbr gs  'git stash'
-  abbr gsp 'git stash pop'
+  abbr g    'git'
+  abbr ga   'git add'
+  abbr g.   'git add .'
+  abbr gb   'git branch'
+  abbr gbl  'git blame'
+  abbr gc   'git commit -m'
+  abbr gco  'git checkout'
+  abbr gcp  'git cherry-pick'
+  abbr gd   'git diff'
+  abbr gf   'git fetch'
+  abbr glg  'git log --pretty="format:%Cred%h%Creset - %s %Cgreen(%cr)%Creset %C(blue)<%aN>%C(yellow)%d%Creset" --graph'
+  abbr gl   'git log'
+  abbr gm   'git merge'
+  abbr gmt  'git mergetool'
+  abbr grb  'git rebase'
+  abbr gp   'git push'
+  abbr gpu  'git push upstream'
+  abbr gpl  'git pull'
+  abbr gplu 'git pull upstream'
+  abbr gr   'git remote'
+  abbr gg   'git status'
+  abbr gs   'git stash'
+  abbr gsp  'git stash pop'
 
   # vim
   abbr v   "$EDITOR"
