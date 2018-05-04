@@ -40,10 +40,13 @@
   " set relativenumber
   " set number
 
+  if has('nvim')
+    set inccommand=nosplit          " substitute with preview
+  endif
+
   set path+=**                    " add cwd and 1 level of nesting to path
   set hidden                      " allow switching from unsaved buffer without '!'
   set ignorecase                  " ignore case in search
-  set inccommand=nosplit          " substitute with preview
   set nohlsearch                  " do not highlight searches, incsearch plugin does this
   set smartcase                   " use case-sensitive if a capital letter is included
   set noshowmode                  " statusline makes -- INSERT -- info irrelevant

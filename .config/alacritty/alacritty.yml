@@ -11,7 +11,7 @@ env:
   # Note that some xterm terminfo databases don't declare support for italics.
   # You can verify this by checking for the presence of `smso` and `sitm` in
   # `infocmp xterm-256color`.
-  TERM: screen-256color
+  # TERM: tmux-256color
 
 window:
   # Window dimensions in character columns and lines
