@@ -23,6 +23,7 @@
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-abolish'
   Plug 'haya14busa/incsearch.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'junegunn/vader.vim'
@@ -35,10 +36,6 @@
 
 " General {{{
   let mapleader = ' '
-
-  " attempt to go numberless
-  " set relativenumber
-  " set number
 
   if has('nvim')
     set inccommand=nosplit          " substitute with preview
@@ -80,6 +77,8 @@
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
   set scrolloff=10                " 10 lines of context
   colorscheme base16-seti         " apply color scheme
+  set termguicolors
+  set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
   " remap bad habits to do nothing
   imap <Up>    <Nop>
@@ -126,8 +125,8 @@
   endfun
 
   " shortcuts for quickfix list
-  nnoremap <C-n> :call <SID>__qfnxt()<Cr>
-  nnoremap <C-b> :call <SID>__qfprv()<Cr>
+  nnoremap <silent> <C-n> :call <SID>__qfnxt()<Cr>
+  nnoremap <silent> <C-b> :call <SID>__qfprv()<Cr>
 
   " easier navigation in normal / visual / operator pending mode
   noremap K     {
@@ -244,13 +243,12 @@
 
     function! <SID>DevRefresh()
       so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
-      so ~/Dev/sidney/viml/mkdx/ftplugin/markdown/mkdx.vim
       so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim
       mess clear
     endfunction
 
-    nmap <Leader>R :call <SID>DevRefresh()<Cr>
-    nmap <leader>gp :call <SID>SynStack()<Cr>
+    nmap <silent> <Leader>R :call <SID>DevRefresh()<Cr>
+    nmap <silent> <leader>gp :call <SID>SynStack()<Cr>
   endif
 " }}}
 
@@ -268,8 +266,10 @@
 
 " Mkdx {{{
   let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
+                            \ 'enter': { 'shift': 1 },
                             \ 'links': { 'external': { 'enable': 1 } },
-                            \ 'toc': { 'text': 'Table of Contents' } }
+                            \ 'toc': { 'text': 'Table of Contents' },
+                            \ 'fold': { 'enable': 1 } }
   let g:polyglot_disabled = ['markdown']
 " }}}
 
@@ -396,7 +396,9 @@
           \ ))
   endfun
 
-  nnoremap <silent> <Leader>I :call <SID>MkdxFzfQuickfixHeaders()<Cr>
+  if (!$VIM_DEV)
+    nnoremap <silent> <Leader>I :call <SID>MkdxFzfQuickfixHeaders()<Cr>
+  endif
 
   command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
