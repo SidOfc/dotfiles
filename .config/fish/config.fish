@@ -12,6 +12,9 @@ bind \cq beginning-of-line
 if not set -q __initialized
   set -U __initialized
 
+  # gpg-agent
+  abbr gpg-add "echo | gpg -s >/dev/null ^&1"
+
   # config files
   abbr vv  "$EDITOR ~/.config/nvim/init.vim"
   abbr tt  "$EDITOR ~/.tmux.conf"
