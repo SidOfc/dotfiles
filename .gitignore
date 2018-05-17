@@ -2,3 +2,7 @@
 backup
 *.zwc
 fishd*
+tags
+*.orig
+*.swp
+*.un*

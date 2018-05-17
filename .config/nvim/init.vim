@@ -23,7 +23,6 @@
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-abolish'
   Plug 'haya14busa/incsearch.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'junegunn/vader.vim'
@@ -38,7 +37,19 @@
   let mapleader = ' '
 
   if has('nvim')
-    set inccommand=nosplit          " substitute with preview
+    set inccommand=nosplit " substitute with preview
+  endif
+
+  " can't believe I didn't do this before
+  if has('persistent_undo')
+    let target_path = expand('~/.config/vim-persisted-undo/')
+
+    if !isdirectory(target_path)
+      call system('mkdir -p ' . target_path)
+    endif
+
+    let &undodir = target_path
+    set undofile
   endif
 
   set path+=**                    " add cwd and 1 level of nesting to path
@@ -274,11 +285,12 @@
 " }}}
 
 " Ale {{{
+  let g:ale_set_highlights = 0                             " only show errors in sign column
   let g:ale_echo_msg_error_str = 'E'                       " error sign
   let g:ale_echo_msg_warning_str = 'W'                     " warning sign
   let g:ale_echo_msg_format = '[%linter%] %s [%severity%]' " status line format
   let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']   " error status format
-  let g:ale_lint_delay = 2000                              " relint max once per [amount] milliseconds
+  let g:ale_lint_delay = 500                               " relint max once per [amount] milliseconds
   let g:ale_linters = {
         \ 'ruby': ['rubocop'],
         \ 'javascript': ['eslint'],
@@ -402,9 +414,9 @@
 
   command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+  \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
   \   <bang>0)
 
   " only use FZF shortcuts in non diff-mode

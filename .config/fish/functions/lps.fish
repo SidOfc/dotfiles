@@ -1,6 +1,7 @@
 function lps
   set -l username $LPS_DEFAULT_USERNAME
   set -l signedin 1
+  set -l errormsg ''
 
   if command -s lpass >/dev/null
     while test -z $username
@@ -10,10 +11,13 @@ function lps
     lpass status >/dev/null 2>&1
 
     if not test $status -eq 0
-      lpass login --trust $username >/dev/null 2>&1
+      set errormsg (lpass login --trust $username 2>&1)
     end
 
-    if test $status -eq 0
+    if not test $status -eq 0
+      echo $errormsg >&2
+      return 1
+    else
       set -l pass (lpass ls -l | lpfmt | eval "fzf $FZF_DEFAULT_OPTS --ansi --header='[lastpass:copy]'" | cut -d ' ' -f 1)
 
       if not test -z $pass
