@@ -143,7 +143,7 @@
 
   " close pane using <C-w> since I know it from Chrome / Atom (cmd+w) and do
   " not use the <C-w> mappings anyway
-  noremap  <C-w> :bd<Cr>
+  noremap  <C-w> ZZ<Cr>
 
   " easier one-off navigation in insert mode
   inoremap <C-k> <Up>
