@@ -8,7 +8,7 @@ reference to get started, comments can be found within dotfiles.
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     $ brew install fish fzf autojump tmux neovim wget reattach-to-user-namespace
-    $ brew install lastpass-cli --with-pinentry
+    $ brew install lastpass-cli --with-pinentry gnupg pinentry-mac
 
 **vim-plug**
 
@@ -24,6 +24,11 @@ To update:
     $ brew reinstall alacritty
     $ cp -R /usr/local/opt/alacritty/Applications/Alacritty.app /Applications/
 
+## GPG
+
+Add the following to `~/.gnupg/gpg-agent.conf`:
+
+    pinentry-program /usr/local/bin/pinentry-mac
 
 ## [asdf](https://github.com/asdf-vm/asdf)
 
@@ -34,9 +39,8 @@ To update:
     $ asdf install python 3.6.2
     $ asdf install ruby 2.6.0
     $ asdf install crystal 0.24.1
-    $ asdf reshim ruby
+    $ asdf install rust 1.26.2
     $ pip install ptpython
-    $ asdf reshim python
 
 ## Setup
 
