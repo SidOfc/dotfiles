@@ -2,14 +2,8 @@
 "   - In Visual-Block mode, pressing 'o' will move to the opposite end
 " }}}
 
-"' Init / Plugins {{{
+" Init / Plugins {{{
   set nocompatible
-
-  if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-  endif
 
   call plug#begin('~/.vim/plugged')
   Plug 'w0rp/ale'
@@ -154,7 +148,7 @@
 
   " close pane using <C-w> since I know it from Chrome / Atom (cmd+w) and do
   " not use the <C-w> mappings anyway
-  noremap  <C-w> :bd<Cr>
+  noremap  <C-w> ZZ<Cr>
 
   " easier one-off navigation in insert mode
   inoremap <C-k> <Up>

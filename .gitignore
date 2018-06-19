@@ -6,3 +6,4 @@ tags
 *.orig
 *.swp
 *.un*
+*.env*
