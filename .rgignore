@@ -35,3 +35,4 @@ fonts
 *.min*
 *history*
 vendor
+*debug*
