@@ -7,12 +7,14 @@ reference to get started, comments can be found within dotfiles.
 ## [Homebrew](https://brew.sh)
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    $ brew install fish fzf autojump tmux neovim wget reattach-to-user-namespace
+    $ brew install fish rg fzf autojump tmux neovim wget reattach-to-user-namespace
     $ brew install lastpass-cli --with-pinentry gnupg pinentry-mac
 
 **vim-plug**
 
-The `neovim` setup uses [vim plug](https://github.com/junegunn/vim-plug#neovim), please see install instructions for respective OS.
+To install vim plug, use the following CURL command:
+
+    $ curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 ## [alacritty](https://github.com/jwilm/alacritty)
 
