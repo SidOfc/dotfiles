@@ -342,8 +342,8 @@
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ],
         \             [ 'modified', 'fugitive', 'label' ] ],
-        \   'right': [ [ 'lineinfo'],
-        \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
+        \   'right': [ [ 'lineinfo' ],
+        \              [ 'filetype' ] ]
         \ },
         \ 'component': {
         \   'mode':     '%{lightline#mode()[0]}',
