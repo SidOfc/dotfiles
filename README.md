@@ -49,7 +49,7 @@ Add the following to `~/.gnupg/gpg-agent.conf`:
     $ defaults write com.apple.finder AppleShowAllFiles YES
     $ defaults write com.apple.dock autohide-delay -float 1000; killall Dock
     $ defaulte write -g KeyRepeat -int 1
-    $ defaults write -g InitialKeyRepeat -int 3
+    $ defaults write -g InitialKeyRepeat -int 10
     
 Log out and back in again for changes to take effect
     
