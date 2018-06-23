@@ -146,9 +146,15 @@
   inoremap <C-s> <Esc>:write<Cr>
   onoremap <C-s> <Esc>:write<Cr>
 
+  fun! s:__bclose()
+    if (len(getbufinfo({'buflisted': 1})) > 1)
+      bdelete
+    endif
+  endfun
+
   " close pane using <C-w> since I know it from Chrome / Atom (cmd+w) and do
   " not use the <C-w> mappings anyway
-  noremap  <C-w> ZZ<Cr>
+  noremap <silent> <C-w> :call <SID>__bclose()<Cr>
 
   " easier one-off navigation in insert mode
   inoremap <C-k> <Up>
