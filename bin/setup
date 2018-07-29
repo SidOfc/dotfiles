@@ -25,7 +25,6 @@ FISH_CONFIG    = File.join SOURCE, '.config', 'fish', 'config.fish'
 FISH_FUNCTIONS = File.join SOURCE, '.config', 'fish', 'functions'
 NVIM_CONFIG    = File.join SOURCE, '.config', 'nvim', 'init.vim'
 ALACRITTY_YML  = File.join SOURCE, '.config', 'alacritty', 'alacritty.yml'
-BIN_CIU        = File.expand_path File.join(__dir__, 'ciu')
 BIN_LPFMT      = File.expand_path File.join(__dir__, 'lpfmt')
 
 # map source files to go into specific destination directories
@@ -33,7 +32,7 @@ BIN_LPFMT      = File.expand_path File.join(__dir__, 'lpfmt')
 MAP = {
   HOME      => [GITIGNORE, GITCONFIG, RGIGNORE,
                 TMUX_CONF, ASDFRC, DEFAULT_GEMS],
-  BIN       => [BIN_CIU, BIN_LPFMT],
+  BIN       => [BIN_LPFMT],
   FISH      => [FISH_CONFIG, FISH_FUNCTIONS],
   NVIM      => [NVIM_CONFIG],
   ALACRITTY => [ALACRITTY_YML]
