@@ -43,18 +43,17 @@ Add the following to `~/.gnupg/gpg-agent.conf`:
     $ asdf install crystal 0.24.1
     $ asdf install rust 1.26.2
     $ pip install ptpython
+    $ gem install cani
 
 ## Crapple defaults
 
     $ defaults write com.apple.finder AppleShowAllFiles YES
     $ defaults write com.apple.dock autohide-delay -float 1000; killall Dock
-    $ defaulte write -g KeyRepeat -int 1
-    $ defaults write -g InitialKeyRepeat -int 10
-    
+
 Log out and back in again for changes to take effect
-    
+
 ## Link dotfiles
-    
+
     $ git clone https://github.com/sidofc/dotfiles
     $ ./dotfiles/bin/setup
 
