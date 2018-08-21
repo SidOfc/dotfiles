@@ -23,6 +23,7 @@
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   Plug 'machakann/vim-highlightedyank'
+  Plug 'metakirby5/codi.vim'
   Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
   call plug#end()
 " }}}
@@ -82,7 +83,6 @@
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
   set scrolloff=10                " 10 lines of context
   colorscheme base16-seti         " apply color scheme
-  set termguicolors
   set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
   " remap bad habits to do nothing
@@ -263,6 +263,39 @@
   endif
 " }}}
 
+" Codi wrapper {{{
+  fun! s:FullscreenScratch()
+    " store filetype and bufnr of current buffer
+    " for later reference
+    let current_buf_ft  = &ft
+    let current_buf_num = bufnr('%')
+
+    " create a new empty tab and set it up
+    tabe | setlocal buftype=nofile noswapfile modifiable buflisted
+
+    " set filetype to that of original source file
+    " e.g. ruby / python / w/e Codi supports
+    let &filetype = current_buf_ft
+
+    " since it is fullscreen, I'd like a 50/50 split
+    let g:codi#width = winwidth(winnr()) / 2
+
+    " create a buffer local mapping that overrides the
+    " outer one to delete the current scratch buffer instead
+    " when the buffer is destroyed, this mapping will be
+    " destroyed with it and the next <Leader><Leader>
+    " will spawn a new fullscreen scratch window again
+    nmap <silent><buffer> <Leader><Leader> :q!<Cr>
+
+    " everything is setup, filetype is set
+    " let Codi do the rest :)
+    Codi
+  endfun
+
+  " create a mapping to call the fullscreen scratch wrapper
+  nmap <silent> <Leader><Leader> :call <SID>FullscreenScratch()<Cr>
+" }}}
+
 " Highlighted yank {{{
   let g:highlightedyank_highlight_duration = 300
 " }}}
@@ -279,7 +312,7 @@
   let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
                             \ 'enter': { 'shift': 1 },
                             \ 'links': { 'external': { 'enable': 1 } },
-                            \ 'toc': { 'text': 'Table of Contents' },
+                            \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1 },
                             \ 'fold': { 'enable': 1 } }
   let g:polyglot_disabled = ['markdown']
 " }}}
