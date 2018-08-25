@@ -23,8 +23,9 @@
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   Plug 'machakann/vim-highlightedyank'
-  Plug 'metakirby5/codi.vim'
-  Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx' : 'SidOfc/mkdx'
+
+  Plug $VIM_DEV ? '~/Dev/sidney/viml/codi.vim' : 'metakirby5/codi.vim'
+  Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx'     : 'SidOfc/mkdx'
   call plug#end()
 " }}}
 
@@ -253,8 +254,13 @@
     endfunc
 
     function! <SID>DevRefresh()
-      so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
-      so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim
+      so ~/Dev/sidney/viml/codi.vim/autoload/codi.vim
+
+      if (&ft == 'markdown')
+        so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
+        so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim
+      endif
+
       mess clear
     endfunction
 
@@ -264,6 +270,7 @@
 " }}}
 
 " Codi wrapper {{{
+  let g:codi#width = 50.0
   fun! s:FullscreenScratch()
     " store filetype and bufnr of current buffer
     " for later reference
@@ -276,9 +283,6 @@
     " set filetype to that of original source file
     " e.g. ruby / python / w/e Codi supports
     let &filetype = current_buf_ft
-
-    " since it is fullscreen, I'd like a 50/50 split
-    let g:codi#width = winwidth(winnr()) / 2
 
     " create a buffer local mapping that overrides the
     " outer one to delete the current scratch buffer instead
@@ -318,13 +322,13 @@
 " }}}
 
 " Ale {{{
-  let g:ale_set_highlights = 0                             " only show errors in sign column
-  let g:ale_echo_msg_error_str = 'E'                       " error sign
-  let g:ale_echo_msg_warning_str = 'W'                     " warning sign
-  let g:ale_echo_msg_format = '[%linter%] %s [%severity%]' " status line format
-  let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']   " error status format
-  let g:ale_lint_delay = 500                               " relint max once per [amount] milliseconds
-  let g:ale_linters = {
+  let g:ale_set_highlights       = 0                            " only show errors in sign column
+  let g:ale_echo_msg_error_str   = 'E'                          " error sign
+  let g:ale_echo_msg_warning_str = 'W'                          " warning sign
+  let g:ale_echo_msg_format      = '[%linter%] %s [%severity%]' " status line format
+  let g:ale_statusline_format    = ['⨉ %d', '⚠ %d', '⬥ ok']     " error status format
+  let g:ale_lint_delay           = 500                          " relint max once per [amount] milliseconds
+  let g:ale_linters              = {
         \ 'ruby': ['rubocop'],
         \ 'javascript': ['eslint'],
         \ 'fish': []
@@ -332,9 +336,9 @@
 " }}}
 
 " Incsearch {{{
-  let g:incsearch#auto_nohlsearch = 1                   " auto unhighlight after searching
+  let g:incsearch#auto_nohlsearch                   = 1 " auto unhighlight after searching
   let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
-  let g:incsearch#consistent_n_direction = 1            " when searching backward, do not invert meaning of n and N
+  let g:incsearch#consistent_n_direction            = 1 " when searching backward, do not invert meaning of n and N
 
   map / <Plug>(incsearch-forward)
   map ? <Plug>(incsearch-backward)
@@ -355,23 +359,23 @@
   let s:blue    = '#55b5db'
   let s:magenta = '#a074c4'
 
-  let s:p                 = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
-  let s:p.normal.left     = [ [ s:blue, s:base03 ],    [ s:base03, s:blue ] ]
-  let s:p.normal.middle   = [ [ s:base1, s:base03 ] ]
-  let s:p.normal.right    = [ [ s:base03, s:blue ],   [ s:base00, s:base03 ] ]
-  let s:p.normal.error    = [ [ s:red, s:base023 ] ]
-  let s:p.normal.warning  = [ [ s:yellow, s:base02 ] ]
+  let s:p                = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
+  let s:p.normal.left    = [ [ s:blue,   s:base03  ], [ s:base03, s:blue   ] ]
+  let s:p.normal.middle  = [ [ s:base1,  s:base03  ]  ]
+  let s:p.normal.right   = [ [ s:base03, s:blue    ], [ s:base00, s:base03 ] ]
+  let s:p.normal.error   = [ [ s:red,    s:base023 ]  ]
+  let s:p.normal.warning = [ [ s:yellow, s:base02  ]  ]
 
-  let s:p.inactive.left   = [ [ s:base1,   s:base03 ],  [ s:base03, s:base03 ] ]
-  let s:p.inactive.middle = [ [ s:base03, s:base03 ] ]
-  let s:p.inactive.right  = [ [ s:base03,  s:base03 ],  [ s:base03, s:base03 ] ]
+  let s:p.inactive.left   = [ [ s:base1,   s:base03  ], [ s:base03, s:base03  ] ]
+  let s:p.inactive.middle = [ [ s:base03,  s:base03  ]  ]
+  let s:p.inactive.right  = [ [ s:base03,  s:base03  ], [ s:base03, s:base03  ] ]
 
-  let s:p.insert.left     = [ [ s:green, s:base03 ],   [ s:base03,  s:green ] ]
-  let s:p.insert.right    = [ [ s:base03, s:green ],    [ s:base00, s:base03 ] ]
-  let s:p.replace.left    = [ [ s:orange, s:base03 ],  [ s:base03,  s:orange ] ]
-  let s:p.replace.right   = [ [ s:base03, s:orange ],    [ s:base00, s:base03 ] ]
-  let s:p.visual.left     = [ [ s:magenta, s:base03 ], [ s:base03,  s:magenta ] ]
-  let s:p.visual.right    = [ [ s:base03, s:magenta ],    [ s:base00, s:base03 ] ]
+  let s:p.insert.left     = [ [ s:green,   s:base03  ], [ s:base03, s:green   ] ]
+  let s:p.insert.right    = [ [ s:base03,  s:green   ], [ s:base00, s:base03  ] ]
+  let s:p.replace.left    = [ [ s:orange,  s:base03  ], [ s:base03, s:orange  ] ]
+  let s:p.replace.right   = [ [ s:base03,  s:orange  ], [ s:base00, s:base03  ] ]
+  let s:p.visual.left     = [ [ s:magenta, s:base03  ], [ s:base03, s:magenta ] ]
+  let s:p.visual.right    = [ [ s:base03,  s:magenta ], [ s:base00, s:base03  ] ]
 
   let g:lightline#colorscheme#base16_seti#palette = lightline#colorscheme#fill(s:p)
   let g:lightline = {
