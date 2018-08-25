@@ -23,6 +23,7 @@
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   Plug 'machakann/vim-highlightedyank'
+  Plug 'google/vim-searchindex'
 
   Plug $VIM_DEV ? '~/Dev/sidney/viml/codi.vim' : 'metakirby5/codi.vim'
   Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx'     : 'SidOfc/mkdx'
