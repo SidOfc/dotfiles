@@ -271,26 +271,48 @@
 " }}}
 
 " Codi wrapper {{{
-  let g:codi#width = 50.0
+  let g:codi#width         = 50.0
+  let s:codi_filetype_tabs = {}
+
   fun! s:FullscreenScratch()
     " store filetype and bufnr of current buffer
     " for later reference
     let current_buf_ft  = &ft
     let current_buf_num = bufnr('%')
 
-    " create a new empty tab and set it up
-    tabe | setlocal buftype=nofile noswapfile modifiable buflisted
+    " check if a scratch buffer for this filetype already exists
+    let saved_scratch = get(s:codi_filetype_tabs, current_buf_ft, -1)
+
+    " if a tabpage exists for current_buf_ft, go to it instead of
+    " creating a new scratch buffer
+    if saved_scratch != -1
+      if index(map(gettabinfo(), 'v:val.tabnr'), saved_scratch) == -1
+        unlet s:codi_filetype_tabs[current_buf_ft]
+      else
+        exe 'tabn' saved_scratch
+        return
+      endif
+    endif
+
+    " create a new empty tab, set scratch options and give it a name
+    tabe
+    setlocal buftype=nofile noswapfile modifiable buflisted bufhidden=hide
+    exe ':file scratch::' . current_buf_ft
 
     " set filetype to that of original source file
     " e.g. ruby / python / w/e Codi supports
     let &filetype = current_buf_ft
+
+    " store the tabpagenr per filetype so we can return
+    " to it later when re-opening from the same filetype
+    let s:codi_filetype_tabs[&filetype] = tabpagenr()
 
     " create a buffer local mapping that overrides the
     " outer one to delete the current scratch buffer instead
     " when the buffer is destroyed, this mapping will be
     " destroyed with it and the next <Leader><Leader>
     " will spawn a new fullscreen scratch window again
-    nmap <silent><buffer> <Leader><Leader> :q!<Cr>
+    nmap <silent><buffer> <Leader><Leader> :tabprevious<Cr>
 
     " everything is setup, filetype is set
     " let Codi do the rest :)
