@@ -238,6 +238,13 @@
     endfunction
   endif
 
+  if !exists('*s:StripWS')
+    fun! s:StripWS()
+      if (&ft =~ 'vader') | return | endif
+      %s/\s\+$//e
+    endfun
+  endif
+
   " use ripgrep as grepprg
   if executable('rg')
     set grepprg=rg\ --vimgrep\ --hidden\ --no-ignore-vcs
@@ -511,11 +518,6 @@
     au WinLeave,FocusLost * setlocal nocursorline                      " disable cursorline when leaving buffer
     au VimResized * wincmd =                                           " auto resize splits on resize
   augroup END
-
-  fun! s:StripWS()
-    if (&ft =~ 'vader') | return | endif
-    %s/\s\+$//e
-  endfun
 
   augroup Files
     au!
