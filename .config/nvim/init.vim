@@ -64,7 +64,7 @@
   set background=dark             " set bg dark
   set nobackup                    " do not keep backups
   set noswapfile                  " no more swapfiles
-  set clipboard=unnamed           " copy into osx clipboard by default
+  set clipboard=unnamedplus       " copy into osx clipboard by default
   set encoding=utf-8              " utf-8 files
   set fileencoding=utf-8          " utf-8 files
   set fileformat=unix             " use unix line endings
@@ -511,8 +511,6 @@
 " Autocommands {{{
   augroup Windows
     au!
-    au BufEnter,WinEnter,WinNew,VimResized *,*.*
-          \ let &scrolloff=getwininfo(win_getid())[0]['height']/2      " keep cursor centered
     au FocusGained,VimEnter,WinEnter,BufWinEnter * setlocal cursorline " enable cursorline in focussed buffer
     au FocusGained,VimEnter,WinEnter,BufWinEnter * :checktime          " reload file if it has changed on disk
     au WinLeave,FocusLost * setlocal nocursorline                      " disable cursorline when leaving buffer

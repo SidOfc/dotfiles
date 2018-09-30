@@ -4,7 +4,6 @@
 	signingkey = 32E59628A8DBA32F
 [core]
 	editor = nvim
-	pager = less -S
 	excludesfile = ~/.gitignore
 [diff]
 	tool = vimdiff

@@ -7,8 +7,8 @@ reference to get started, comments can be found within dotfiles.
 ## [Homebrew](https://brew.sh)
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    $ brew install fish rg fzf autojump tmux neovim wget reattach-to-user-namespace
-    $ brew install lastpass-cli --with-pinentry gnupg pinentry-mac
+    $ brew install fish rg fzf autojump tmux neovim wget gnupg
+    $ brew install lastpass-cli --with-pinentry pinentry-mac
 
 **vim-plug**
 
