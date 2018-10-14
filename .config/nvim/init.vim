@@ -83,7 +83,6 @@
   set timeoutlen=350              " mapping delay
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
-  set scrolloff=10                " 10 lines of context
   colorscheme base16-seti         " apply color scheme
   set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
