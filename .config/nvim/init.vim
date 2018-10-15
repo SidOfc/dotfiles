@@ -49,6 +49,7 @@
     set undofile
   endif
 
+  set lazyredraw                  " maybe make drawing faster?
   set path+=**                    " add cwd and 1 level of nesting to path
   set hidden                      " allow switching from unsaved buffer without '!'
   set ignorecase                  " ignore case in search
