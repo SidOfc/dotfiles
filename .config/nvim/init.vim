@@ -209,6 +209,10 @@
   " override markdown quote syntax highlight
   hi link mkdBlockquote rubyInterpolationDelimiter
 
+  " transparent terminal background
+  " never move above `colorscheme` option
+  hi Normal guibg=NONE ctermbg=NONE
+
   " delete existing notes in ~/notes
   if !exists('*s:DeleteNote')
     function! s:DeleteNote(paths)
