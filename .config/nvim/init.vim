@@ -132,7 +132,9 @@
 
   " shortcuts for quickfix list
   nnoremap <silent> <C-n> :call <SID>__qfnxt()<Cr>
-  nnoremap <silent> <C-b> :call <SID>__qfprv()<Cr>
+  " this one is replaced by s:CtrlPMapping which can be found
+  " in FZF configuration section
+  " nnoremap <silent> <C-b> :call <SID>__qfprv()<Cr>
 
   " easier navigation in normal / visual / operator pending mode
   noremap K     {
@@ -482,16 +484,19 @@
     nnoremap <silent> <Leader>I :call <SID>MkdxFzfQuickfixHeaders()<Cr>
   endif
 
-  command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
-  \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
-  \   <bang>0)
-
   " only use FZF shortcuts in non diff-mode
   if !&diff
-    nnoremap <C-p> :Files<Cr>
+    fun! s:CtrlPMapping()
+      let qf_winnrs = filter(range(1, winnr('$')), 'getwinvar(v:val, "&ft") == "qf"')
+
+      if !empty(qf_winnrs)
+        call <SID>__qfprv()
+      else
+        Files
+      endif
+    endfun
+
+    nnoremap <silent> <C-p> :call <SID>CtrlPMapping()<Cr>
     nnoremap <C-g> :Rg<Cr>
   endif
 " }}}
