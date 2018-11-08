@@ -16,6 +16,7 @@
   Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-eunuch'
   Plug 'tpope/vim-surround'
   Plug 'haya14busa/incsearch.vim'
   Plug 'junegunn/vim-easy-align'
@@ -353,12 +354,14 @@
 " }}}
 
 " Ale {{{
-  let g:ale_set_highlights       = 0                            " only show errors in sign column
-  let g:ale_echo_msg_error_str   = 'E'                          " error sign
-  let g:ale_echo_msg_warning_str = 'W'                          " warning sign
-  let g:ale_echo_msg_format      = '[%linter%] %s [%severity%]' " status line format
-  let g:ale_statusline_format    = ['⨉ %d', '⚠ %d', '⬥ ok']     " error status format
-  let g:ale_lint_delay           = 500                          " relint max once per [amount] milliseconds
+  let g:ale_set_highlights       = 0                              " only show errors in sign column
+  let g:ale_echo_msg_error_str   = 'E'                            " error sign
+  let g:ale_echo_msg_warning_str = 'W'                            " warning sign
+  let g:ale_echo_msg_format      = '[%linter%] %s [%severity%]'   " status line format
+  let g:ale_statusline_format    = ['⨉ %d', '⚠ %d', '⬥ ok']       " error status format
+  let g:ale_lint_delay           = 500                            " relint max once per [amount] milliseconds
+  let g:ale_fixers               = { 'javascript': ['prettier'] } " fix JS using prettier
+  let g:ale_fix_on_save          = 1
   let g:ale_linters              = {
         \ 'ruby': ['rubocop'],
         \ 'javascript': ['eslint'],
@@ -520,9 +523,8 @@
 
   augroup Files
     au!
-    au BufWritePre *                call s:StripWS()     " remove trailing whitespace before saving buffer
-    au FileType javascript,jsx,json call s:IndentSize(4) " 4 space indents for JS/JSX/JSON
-    au FileType markdown,python     call s:IndentSize(4) " 4 space indents for markdown and python
-    au FileType help                nmap <buffer> q :q<Cr>
+    au BufWritePre *                 call s:StripWS()     " remove trailing whitespace before saving buffer
+    au FileType markdown,python,json call s:IndentSize(4) " 4 space indents for markdown, python and JSON
+    au FileType help                 nmap <buffer> q :q<Cr>
   augroup END
 " }}}
