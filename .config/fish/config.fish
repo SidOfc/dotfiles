@@ -25,7 +25,6 @@ if not set -q __initialized
 
   # python
   abbr py   'python'
-  abbr pt   'ptpython'
 
   # crystal
   abbr cr   'crystal'

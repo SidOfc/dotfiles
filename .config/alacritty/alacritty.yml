@@ -19,8 +19,8 @@ window:
   # Specified in number of columns/lines, not pixels.
   # If both are `0`, this setting is ignored.
   dimensions:
-    columns: 240
-    lines: 80
+    columns: 0
+    lines: 0
 
   # Window padding (changes require restart)
   #
@@ -64,20 +64,16 @@ scrolling:
   # to allow mouse scrolling for applications like `man`.
   #
   # Specifying `0` will disable faux scrolling.
-  faux_multiplier: 3
+  faux_multiplier: 0
 
   # Scroll to the bottom when new text is written to the terminal.
   auto_scroll: false
 
 # Display tabs using this many cells (changes require restart)
-tabspaces: 4
-
-#
-# This setting defines the width of a tab in cells.
-#
 # Some applications, like Emacs, rely on knowing about the width of a tab.
 # To prevent unexpected behavior in these applications, it's also required to
 # change the `it` value in terminfo when altering this setting.
+tabspaces: 4
 
 # Font configuration (changes require restart)
 font:
@@ -267,7 +263,7 @@ selection:
   # When set to `true`, selected text will be copied to the primary clipboard.
   save_to_clipboard: false
 
-dynamic_title: true
+dynamic_title: false
 
 hide_cursor_when_typing: false
 
