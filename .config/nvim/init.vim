@@ -422,7 +422,7 @@
         \ 'separator':        { 'left': "", 'right': "" },
         \ 'subseparator':     { 'left': "│", 'right': "│" },
         \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ],
+        \   'left': [ [ 'paste' ],
         \             [ 'modified', 'fugitive', 'label' ] ],
         \   'right': [ [ 'lineinfo' ],
         \              [ 'filetype' ] ]
@@ -488,6 +488,13 @@
     nnoremap <silent> <Leader>I :call <SID>MkdxFzfQuickfixHeaders()<Cr>
   endif
 
+  command! -bang -nargs=* Rg
+   \ call fzf#vim#grep(
+   \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
+   \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+   \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
+   \   <bang>0)
+
   " only use FZF shortcuts in non diff-mode
   if !&diff
     fun! s:CtrlPMapping()
@@ -531,8 +538,8 @@
 
   augroup Files
     au!
-    au BufWritePre *                 call s:StripWS()     " remove trailing whitespace before saving buffer
-    au FileType markdown,python,json call s:IndentSize(4) " 4 space indents for markdown, python and JSON
-    au FileType help                 nmap <buffer> q :q<Cr>
+    au BufWritePre *                                call s:StripWS()     " remove trailing whitespace before saving buffer
+    au FileType markdown,python,json,javascript,jsx call s:IndentSize(4) " 4 space indents for markdown, python and JSON
+    au FileType help                                nmap <buffer> q :q<Cr>
   augroup END
 " }}}
