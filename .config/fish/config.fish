@@ -1,5 +1,5 @@
 set fish_greeting
-set -U  fish_user_paths            ~/bin ~/.asdf/bin ~/.asdf/shims
+set -U  fish_user_paths            ~/bin
 set -gx FZF_DEFAULT_OPTS           '--height=50% --min-height=15 --reverse'
 set -gx FZF_DEFAULT_COMMAND        'rg --files --no-ignore-vcs --hidden'
 set -gx FZF_CTRL_T_COMMAND         $FZF_DEFAULT_COMMAND
@@ -72,6 +72,8 @@ end
 
 gpg-agent --daemon --no-grab >/dev/null ^&1
 set -g -x GPG_TTY (tty)
+
+source /usr/local/opt/asdf/asdf.fish
 
 if status --is-interactive
 and command -s tmux >/dev/null

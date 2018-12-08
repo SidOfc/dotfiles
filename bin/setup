@@ -2,6 +2,7 @@
 
 require 'fileutils'
 require 'colorize'
+require 'json'
 
 # source directory (this repo)
 SOURCE    = File.expand_path File.join(__dir__, '../')
@@ -9,6 +10,7 @@ SOURCE    = File.expand_path File.join(__dir__, '../')
 # destination directories
 HOME      = File.expand_path '~'
 CONFIG    = File.join HOME, '.config'
+GNUPG     = File.join HOME, '.gnupg'
 BIN       = File.join HOME, 'bin'
 FISH      = File.join CONFIG, 'fish'
 NVIM      = File.join CONFIG, 'nvim'
@@ -25,6 +27,7 @@ FISH_CONFIG    = File.join SOURCE, '.config', 'fish', 'config.fish'
 FISH_FUNCTIONS = File.join SOURCE, '.config', 'fish', 'functions'
 NVIM_CONFIG    = File.join SOURCE, '.config', 'nvim', 'init.vim'
 ALACRITTY_YML  = File.join SOURCE, '.config', 'alacritty', 'alacritty.yml'
+GPG_AGENT      = File.join SOURCE, '.gnupg', 'gpg-agent.conf'
 BIN_LPFMT      = File.expand_path File.join(__dir__, 'lpfmt')
 
 # map source files to go into specific destination directories
@@ -32,6 +35,7 @@ BIN_LPFMT      = File.expand_path File.join(__dir__, 'lpfmt')
 MAP = {
   HOME      => [GITIGNORE, GITCONFIG, RGIGNORE,
                 TMUX_CONF, ASDFRC, DEFAULT_GEMS],
+  GNUPG     => [GPG_AGENT],
   BIN       => [BIN_LPFMT],
   FISH      => [FISH_CONFIG, FISH_FUNCTIONS],
   NVIM      => [NVIM_CONFIG],
@@ -40,26 +44,142 @@ MAP = {
 
 # initialize destination ~/.config directories
 FileUtils.mkdir_p BIN
+FileUtils.mkdir_p GNUPG
 FileUtils.mkdir_p FISH
 FileUtils.mkdir_p NVIM
 FileUtils.mkdir_p ALACRITTY
 
-# loop through destination paths and targets
-MAP.each do |(destination, targets)|
-  # loop through each source file for destination
-  targets.each do |source|
-    # generate final destination
-    target_dest = File.join destination, File.basename(source)
+# homebrew variables listing required software to install, what is outdated etc...
+HOMEBREW_PACKAGES        = %w[asdf fish rg fzf autojump tmux neovim wget gnupg pinentry-mac lastpass-cli alacritty grip graphicsmagick imagemagick youtube-dl]
+HOMEBREW_OUTDATED        = JSON.parse(`brew outdated --json=v1`).select { |pkg| HOMEBREW_PACKAGES.include? pkg['name'].split('/').last }
+HOMEBREW_OUTDATED_NAMES  = HOMEBREW_OUTDATED.map { |pkg| pkg['name'].split('/').last }
+REINSTALL_ON_UPGRADE     = ['alacritty']
+HOMEBREW_INSTALL_OPTIONS = {
+  'lastpass-cli' => %w[--with-pinentry],
+  'alacritty'    => %w[--HEAD]
+}
 
-    # if target is already a present or a symlink,
-    # or if the source doesn't exist, skip
-    if File.symlink?(target_dest) ||
-       File.exist?(target_dest) ||
-       !File.exist?(source)
-      puts '==>'.red + ' [SKIP] '.yellow + target_dest.magenta
+# asdf variables containing programming languages and versions to install
+ASDF_PLUGINS = {
+  ruby: [:latest],
+  python: [:latest],
+  nodejs: [:latest],
+  crystal: [:latest],
+  rust: [:latest]
+}
+
+# install software
+
+unless ARGV.include? '--skip-homebrew'
+  # homebrew
+  unless system 'brew -v >/dev/null 2>&1'
+    # homebrew is not installed
+    puts '==> installing homebrew'.yellow
+    `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+    `/usr/local/bin/brew tap mscharley/homebrew` # alacritty formula
+    puts '==> successfully installed homebrew'.green
+  else
+    puts '==> homebrew is installed'.green
+  end
+
+  def brew_package_version package
+    `/usr/local/bin/brew info #{package}`.split("\n").first.match(/[\d.]+/).to_s
+  end
+
+  def latest_package_version package
+    info = HOMEBREW_OUTDATED.detect { |pkg| pkg['name'] =~ Regexp.new(package) }
+
+    return brew_package_version package unless info
+
+    info['current_version']
+  end
+
+  HOMEBREW_PACKAGES.map do |package|
+    cmd_opts = HOMEBREW_INSTALL_OPTIONS.fetch(package, [])
+
+    if system "/usr/local/bin/brew ls --versions #{package} >/dev/null 2>&1"
+      # package is installed
+      if HOMEBREW_OUTDATED_NAMES.include? package
+        puts " |> ".magenta + package.blue + ' version: '.magenta + brew_package_version(package).light_black + " is outdated".magenta
+        if REINSTALL_ON_UPGRADE.include? package
+          `/usr/local/bin/brew reinstall #{package} >/dev/null`
+          puts " |> ".magenta + package.blue + " reinstalled with version: ".magenta + latest_package_version(package).light_black
+        else
+          `/usr/local/bin/brew upgrade #{package} >/dev/null`
+          puts " |> ".magenta + package.blue + " updated to version: ".magenta + latest_package_version(package).light_black
+        end
+      else
+        puts " |> ".green + package.blue + " version: ".green + brew_package_version(package).light_black + " is up to date".green
+      end
     else
-      system "ln -Fs #{source} #{target_dest}"
-      puts '==>'.blue + ' [LINK] '.green + target_dest.magenta
+      # package is not installed
+      puts " |> installing: ".green + package.blue + (cmd_opts.any? ? " with options: ".yellow + cmd_opts.join(' ').blue : "")
+      `/usr/local/bin/brew install #{package} #{cmd_opts.join(' ')} >/dev/null`
+      puts " |> installed: ".green + package.blue + ' version: '.green + brew_package_version(package).light_black
     end
   end
 end
+
+unless ARGV.include? '--skip-asdf'
+  puts ''
+  puts '==> installing asdf plugins'.green
+  installed_plugins = `/usr/local/opt/asdf/bin/asdf plugin-list 2>/dev/null`.split("\n")
+
+  ASDF_PLUGINS.each do |name, versions|
+    unless installed_plugins.include? name.to_s
+      puts "installing: #{name} plugin".green
+      `/usr/local/opt/asdf/bin/asdf plugin-add #{name}`
+      puts "installing: #{name} plugin".green
+    end
+
+    installed_versions = `/usr/local/opt/asdf/bin/asdf list #{name} 2>/dev/null`.split("\n").map(&:strip)
+    if versions.delete :latest
+      versions << `/usr/local/opt/asdf/bin/asdf list-all #{name}`.split("\n").select { |s| s =~ /\A[\d.]+\z/ }.last
+    end
+
+    versions.uniq.each do |version|
+      next if installed_versions.include? version
+
+      puts "installing: #{name} version: #{version}".green
+      `/usr/local/opt/asdf/bin/asdf install #{name} #{version}`
+      puts "installed: #{name} version: #{version}".green
+    end
+  end
+end
+
+unless ARGV.include? '--skip-symlink'
+  puts ''
+  puts '==> symlinking .dotfiles'.green
+  # loop through destination paths and targets
+  MAP.each do |(destination, targets)|
+    # loop through each source file for destination
+    targets.each do |source|
+      # generate final destination
+      target_dest = File.join destination, File.basename(source)
+
+      # if target is already a present or a symlink,
+      # or if the source doesn't exist, skip
+      if File.symlink?(target_dest) ||
+         File.exist?(target_dest) ||
+         !File.exist?(source)
+        puts ' |>'.red + ' [SKIP] '.yellow + target_dest.magenta
+      else
+        system "ln -Fs #{source} #{target_dest}"
+        puts ' |>'.blue + ' [LINK] '.green + target_dest.magenta
+      end
+    end
+  end
+end
+
+unless ARGV.include? '--skip-defaults'
+  puts ''
+  puts '==> make finder show all files'.green
+  `defaults write com.apple.finder AppleShowAllFiles YES`
+
+  puts '==> hide dock'.green
+  `defaults write com.apple.dock autohide-delay -float 1000; killall Dock`
+end
+
+puts ''
+puts 'done!'
+puts 'please restart the shell.'
