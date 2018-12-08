@@ -3,7 +3,7 @@
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
 # set by alacritty itself.
-env:
+# env:
   # TERM variable
   #
   # This value is used to set the `$TERM` environment variable for
@@ -112,10 +112,6 @@ font:
     x: 0
     y: 0
 
-  # Scale the font size based on the monitor's DPI. This will lead to bigger text on HiDPI
-  # screens and make reading text a little easier.
-  scale_with_dpi: true
-
   # Thin stroke font rendering (OS X only)
   #
   # Thin strokes are suitable for retina displays, but for non-retina screens
@@ -124,11 +120,6 @@ font:
 
 # Display the time it takes to redraw each frame.
 render_timer: false
-
-# Use custom cursor colors. If `true`, the `colors.cursor.foreground` and
-# `colors.cursor.background` colors will be used to display the cursor.
-# Otherwise the cell colors are inverted for the cursor.
-custom_cursor_colors: false
 
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
@@ -155,6 +146,19 @@ colors:
   cursor:
     text: '0x000000'
     cursor: '0xffffff'
+
+    # Cursor style
+    #
+    # Values for 'cursor.style':
+    #   - Block
+    #   - Underline
+    #   - Beam
+    style: Block
+
+    # If this is `true`, the cursor will be rendered as a hollow box when the
+    # window is not focused.
+    unfocused_hollow: true
+
 
   # Normal colors
   normal:
@@ -257,6 +261,8 @@ mouse:
   # or triple click.
   double_click: { threshold: 300 }
   triple_click: { threshold: 300 }
+  hide_when_typing: false
+
 
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
@@ -265,20 +271,6 @@ selection:
   save_to_clipboard: false
 
 dynamic_title: false
-
-hide_cursor_when_typing: false
-
-# Cursor style
-#
-# Values for 'cursor_style':
-#   - Block
-#   - Underline
-#   - Beam
-cursor_style: Block
-
-# If this is `true`, the cursor will be rendered as a hollow box when the
-# window is not focused.
-unfocused_hollow_cursor: true
 
 # Live config reload (changes require restart)
 live_config_reload: true
