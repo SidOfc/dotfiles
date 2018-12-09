@@ -1,56 +1,15 @@
 # Dotfiles
 
 My collection of configuration options, plugins, and other stuff that make my daily life easier.
-I like to keep my setup quite minimal and simple, this README is intended only as an installation
-reference to get started, comments can be found within dotfiles.
+I like to keep my setup quite minimal and simple, there is a ~200 line ruby script called `setup` which will do the following:
 
-## [Homebrew](https://brew.sh)
+- Install homebrew plugins defined in the constant `HOMEBREW_PACKAGES` which can have install options through `HOMEBREW_INSTALL_OPTIONS`.
+- Install asdf plugins defined in `ASDF_PLUGINS`, versions can be supplied in the format of a `asdf list-all [language]` entry.
+- Run some `defaults write` commands that make finder show `.dotfiles` as well and to hide the dock unless it is hovered over for a very long time.
+- Symlink the actual dotfiles to their destinations, see the `MAP` constant for how this works.
+- Install vim-plug and also install and update vim plugins.
 
-    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    $ brew install fish rg fzf autojump tmux neovim wget gnupg
-    $ brew install lastpass-cli --with-pinentry pinentry-mac
-
-**vim-plug**
-
-To install vim plug, use the following CURL command:
-
-    $ curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-## [alacritty](https://github.com/jwilm/alacritty)
-
-    $ brew tap mscharley/homebrew
-    $ brew install alacritty --HEAD
-
-To update:
-
-    $ brew reinstall alacritty
-    $ cp -R /usr/local/opt/alacritty/Applications/Alacritty.app /Applications/
-
-## GPG
-
-Add the following to `~/.gnupg/gpg-agent.conf`:
-
-    pinentry-program /usr/local/bin/pinentry-mac
-
-## [asdf](https://github.com/asdf-vm/asdf)
-
-    $ git clone https://github.com/asdf-vm/asdf.git ~/.asdf
-    $ asdf plugin-add python
-    $ asdf plugin-add ruby
-    $ asdf plugin-add crystal
-    $ asdf install python 3.6.2
-    $ asdf install ruby 2.6.0
-    $ asdf install crystal 0.24.1
-    $ asdf install rust 1.26.2
-    $ pip install ptpython
-    $ gem install cani
-
-## Crapple defaults
-
-    $ defaults write com.apple.finder AppleShowAllFiles YES
-    $ defaults write com.apple.dock autohide-delay -float 1000; killall Dock
-
-Log out and back in again for changes to take effect
+This setup is not made to work on linux at the moment, I'm pretty sure it can be easily done though so I'll give it a try on a virtual machine sometime :)
 
 ## Link dotfiles
 

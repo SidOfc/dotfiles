@@ -147,6 +147,15 @@ unless ARGV.include? '--skip-asdf'
   end
 end
 
+unless ARGV.include? '--skip-defaults'
+  puts ''
+  puts '==> make finder show all files'.green
+  `defaults write com.apple.finder AppleShowAllFiles YES`
+
+  puts '==> hide dock'.green
+  `defaults write com.apple.dock autohide-delay -float 1000; killall Dock`
+end
+
 unless ARGV.include? '--skip-symlink'
   puts ''
   puts '==> symlinking .dotfiles'.green
@@ -184,15 +193,6 @@ unless ARGV.include? '--skip-vim-plug'
     `nvim +PlugUpdate +qall`
     puts ' |> installed and updated neovim plugins'.green
   end
-end
-
-unless ARGV.include? '--skip-defaults'
-  puts ''
-  puts '==> make finder show all files'.green
-  `defaults write com.apple.finder AppleShowAllFiles YES`
-
-  puts '==> hide dock'.green
-  `defaults write com.apple.dock autohide-delay -float 1000; killall Dock`
 end
 
 puts ''
