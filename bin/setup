@@ -75,7 +75,7 @@ unless ARGV.include? '--skip-homebrew'
   unless system 'brew -v >/dev/null 2>&1'
     # homebrew is not installed
     puts '==> installing homebrew'.yellow
-    `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+    `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install --silent)"`
     `/usr/local/bin/brew tap mscharley/homebrew` # alacritty formula
     puts '==> successfully installed homebrew'.green
   else
@@ -168,6 +168,21 @@ unless ARGV.include? '--skip-symlink'
         puts ' |>'.blue + ' [LINK] '.green + target_dest.magenta
       end
     end
+  end
+end
+
+unless ARGV.include? '--skip-vim-plug'
+  puts ''
+  puts '==> installing'.green + 'vim-plug'.blue
+  `curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim --silent`
+  puts '==> installed'.green + ' vim-plug'.blue
+
+  if system 'nvim -v >/dev/null'
+    puts ' |> installing neovim plugins'.green
+    `nvim +PlugInstall +qall`
+    puts ' |> updating neovim plugins'.green
+    `nvim +PlugUpdate +qall`
+    puts ' |> installed and updated neovim plugins'.green
   end
 end
 
