@@ -181,7 +181,7 @@ end
 
 unless ARGV.include? '--skip-vim-plug'
   puts ''
-  puts '==> installing'.green + 'vim-plug'.blue
+  puts '==> installing'.green + ' vim-plug'.blue
   `curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim --silent`
   puts '==> installed'.green + ' vim-plug'.blue
 
