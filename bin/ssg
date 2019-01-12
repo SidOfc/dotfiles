@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+REPO_DIR="$HOME/.config/ssg/repo/"
+REPO_URL="https://github.com/SidOfc/gulp-min.git"
+COMMAND="$1"
+TARGET="$2"
+
+if [ "$COMMAND" == "" ]; then
+  echo "Usage: ssg [command [options]]"
+  echo "Commands:"
+  echo "   init <path>          create a new project in directory <path>"
+  echo "   update               update repository used as base for 'init'"
+
+  exit 1
+fi
+
+if ! [ -d "$REPO_DIR" ]; then
+  git clone "$REPO_URL" "$REPO_DIR"
+fi
+
+case "$COMMAND" in
+  "update")
+    cd "$REPO_DIR" || exit 1
+    git pull
+    ;;
+  "init")
+      echo "Initializing in: $TARGET"
+      mkdir -p "$TARGET"
+      cp -r "$REPO_DIR" "$TARGET"
+      rm -rf .git package-lock.json
+      cd "$TARGET" || exit 1
+
+      echo "Installing npm packages"
+      npm i --silent >/dev/null 2>&1
+
+      echo "Creating initial commit"
+      git init >/dev/null
+      git add . >/dev/null
+      git commit -m "Initial commit" >/dev/null
+
+      echo "Done!"
+    ;;
+esac
