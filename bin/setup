@@ -50,7 +50,7 @@ FileUtils.mkdir_p NVIM
 FileUtils.mkdir_p ALACRITTY
 
 # homebrew variables listing required software to install, what is outdated etc...
-HOMEBREW_PACKAGES        = %w[asdf fish rg fzf autojump tmux neovim wget gnupg pinentry-mac alacritty grip graphicsmagick imagemagick youtube-dl]
+HOMEBREW_PACKAGES        = %w[asdf fish rg fzf autojump tmux neovim wget gnupg alacritty grip graphicsmagick imagemagick youtube-dl]
 HOMEBREW_OUTDATED        = JSON.parse(`brew outdated --json=v1`).select { |pkg| HOMEBREW_PACKAGES.include? pkg['name'].split('/').last }
 HOMEBREW_OUTDATED_NAMES  = HOMEBREW_OUTDATED.map { |pkg| pkg['name'].split('/').last }
 REINSTALL_ON_UPGRADE     = ['alacritty']
