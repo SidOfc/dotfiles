@@ -27,8 +27,8 @@ case "$COMMAND" in
       echo "Initializing in: $TARGET"
       mkdir -p "$TARGET"
       cp -r "$REPO_DIR" "$TARGET"
-      rm -rf .git package-lock.json
       cd "$TARGET" || exit 1
+      rm -rf .git package-lock.json
 
       echo "Installing npm packages"
       npm i --silent >/dev/null 2>&1
