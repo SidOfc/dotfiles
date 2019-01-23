@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 REPO_DIR="$HOME/.config/ssg/repo/"
-REPO_URL="https://github.com/SidOfc/gulp-min.git"
+REPO_URL="https://github.com/SidOfc/gulp-min"
 COMMAND="$1"
 TARGET="$2"
 AUTHOR="$(git config user.name)"
@@ -11,12 +11,15 @@ if [ "$COMMAND" == "" ]; then
   echo "Commands:"
   echo "   init <path>          create a new project in directory <path>"
   echo "   update               update repository used as base for 'init'"
+  echo ""
+  echo "For additional documentation about the project setup"
+  echo "visit the repository used as a base at: $REPO_URL"
 
   exit 1
 fi
 
 if ! [ -d "$REPO_DIR" ]; then
-  git clone "$REPO_URL" "$REPO_DIR"
+  git clone "$REPO_URL.git" "$REPO_DIR"
 fi
 
 case "$COMMAND" in
