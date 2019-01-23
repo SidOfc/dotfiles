@@ -4,6 +4,7 @@ REPO_DIR="$HOME/.config/ssg/repo/"
 REPO_URL="https://github.com/SidOfc/gulp-min.git"
 COMMAND="$1"
 TARGET="$2"
+AUTHOR="$(git config user.name)"
 
 if [ "$COMMAND" == "" ]; then
   echo "Usage: ssg [command [options]]"
@@ -32,6 +33,25 @@ case "$COMMAND" in
 
       echo "Installing npm packages"
       npm i --silent >/dev/null 2>&1
+
+      echo "configuring package.json"
+      npm config set name "$TARGET"
+
+      # heredoc syntax in bash requires
+      # TAB indents at start and end of heredoc
+      # definition, do not change to spaces!
+			ruby <<- RUBY
+        require 'json'
+        exit 1 unless File.exists? 'package.json'
+
+        package_json           = JSON.parse File.read('package.json')
+        package_json["name"]   = "$TARGET"
+        package_json["author"] = "$AUTHOR" unless "$AUTHOR".empty?
+
+        puts package_json["author"] unless "$AUTHOR".empty?
+
+        File.write 'package.json', JSON.pretty_generate(package_json)
+			RUBY
 
       echo "Creating initial commit"
       git init >/dev/null
