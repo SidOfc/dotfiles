@@ -51,8 +51,6 @@ case "$COMMAND" in
         package_json["name"]   = "$TARGET"
         package_json["author"] = "$AUTHOR" unless "$AUTHOR".empty?
 
-        puts package_json["author"] unless "$AUTHOR".empty?
-
         File.write 'package.json', JSON.pretty_generate(package_json)
 			RUBY
 
