@@ -7,3 +7,4 @@ tags
 *.swp
 *.un*
 *.env*
+.tool-versions
