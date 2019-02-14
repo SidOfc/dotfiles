@@ -136,7 +136,7 @@
   nnoremap <silent> <C-n> :call <SID>__qfnxt()<Cr>
   " this one is replaced by s:CtrlPMapping which can be found
   " in FZF configuration section
-  nnoremap <silent> <C-S-n> :call <SID>__qfprv()<Cr>
+  nnoremap <silent> <C-M-n> :call <SID>__qfprv()<Cr>
 
   " easier navigation in normal / visual / operator pending mode
   noremap K     {
