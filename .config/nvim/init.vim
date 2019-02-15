@@ -188,6 +188,7 @@
   nnoremap <S-Tab> <<
   vnoremap <Tab>   >><Esc>gv
   vnoremap <S-Tab> <<<Esc>gv
+  inoremap <S-Tab> <C-d>
 
   if has('nvim')
     fun! s:GitJobHandler(job_id, data, event) dict
