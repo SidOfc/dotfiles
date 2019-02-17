@@ -15,10 +15,3 @@ This setup is not made to work on linux at the moment, I'm pretty sure it can be
 
     $ git clone https://github.com/sidofc/dotfiles
     $ ./dotfiles/bin/setup
-
-**OSX**
-
-Your terminfo will definitely be outdated (time of writing: April, 2018). This will cause vim/nvim not to change cursor shapes in insert / replace / normal mode.
-Inside the `.config/fish/functions` folder a `update_terminfo` command downloads a terminfo file from the alacritty repository. See [this comment](https://github.com/jwilm/alacritty/issues/736#issuecomment-344439826) for more information.
-
-    $ update_terminfo

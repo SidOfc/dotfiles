@@ -23,11 +23,10 @@ RGIGNORE       = File.join SOURCE, '.rgignore'
 TMUX_CONF      = File.join SOURCE, '.tmux.conf'
 ASDFRC         = File.join SOURCE, '.asdfrc'
 DEFAULT_GEMS   = File.join SOURCE, '.default-gems'
-FISH_CONFIG    = File.join SOURCE, '.config', 'fish', 'config.fish'
-FISH_FUNCTIONS = File.join SOURCE, '.config', 'fish', 'functions'
-NVIM_CONFIG    = File.join SOURCE, '.config', 'nvim', 'init.vim'
-ALACRITTY_YML  = File.join SOURCE, '.config', 'alacritty', 'alacritty.yml'
-GPG_AGENT      = File.join SOURCE, '.gnupg', 'gpg-agent.conf'
+FISH_CONFIG    = File.join SOURCE, 'config.fish'
+NVIM_CONFIG    = File.join SOURCE, 'init.vim'
+ALACRITTY_YML  = File.join SOURCE, 'alacritty.yml'
+GPG_AGENT      = File.join SOURCE, 'gpg-agent.conf'
 BIN_SSG        = File.expand_path File.join(__dir__, 'ssg')
 
 # map source files to go into specific destination directories
@@ -37,7 +36,7 @@ MAP = {
                 TMUX_CONF, ASDFRC, DEFAULT_GEMS],
   GNUPG     => [GPG_AGENT],
   BIN       => [BIN_SSG],
-  FISH      => [FISH_CONFIG, FISH_FUNCTIONS],
+  FISH      => [FISH_CONFIG],
   NVIM      => [NVIM_CONFIG],
   ALACRITTY => [ALACRITTY_YML]
 }.freeze
@@ -67,9 +66,16 @@ ASDF_PLUGINS = {
   rust: [:latest]
 }
 
-# install software
+def execute_step step
+  if ARGV.any? { |flag| flag.include? 'only' }
+    ARGV.include?("--only-#{step}")
+  else
+    !ARGV.include?("--skip-#{step}")
+  end
+end
 
-unless ARGV.include? '--skip-homebrew'
+# install software
+if execute_step :homebrew
   # homebrew
   unless system 'brew -v >/dev/null 2>&1'
     # homebrew is not installed
@@ -119,7 +125,7 @@ unless ARGV.include? '--skip-homebrew'
   end
 end
 
-unless ARGV.include? '--skip-asdf'
+if execute_step :asdf
   puts ''
   puts '==> installing asdf plugins'.green
   installed_plugins = `/usr/local/opt/asdf/bin/asdf plugin-list 2>/dev/null`.split("\n")
@@ -146,7 +152,7 @@ unless ARGV.include? '--skip-asdf'
   end
 end
 
-unless ARGV.include? '--skip-defaults'
+if execute_step :defaults
   puts ''
   puts '==> make finder show all files'.green
   `defaults write com.apple.finder AppleShowAllFiles YES`
@@ -155,7 +161,7 @@ unless ARGV.include? '--skip-defaults'
   `defaults write com.apple.dock autohide-delay -float 1000; killall Dock`
 end
 
-unless ARGV.include? '--skip-symlink'
+if execute_step :symlink
   puts ''
   puts '==> symlinking .dotfiles'.green
   # loop through destination paths and targets
@@ -167,9 +173,10 @@ unless ARGV.include? '--skip-symlink'
 
       # if target is already a present or a symlink,
       # or if the source doesn't exist, skip
-      if File.symlink?(target_dest) ||
-         File.exist?(target_dest) ||
-         !File.exist?(source)
+      if !ARGV.include?('--force') &&
+         (File.symlink?(target_dest) ||
+          File.exist?(target_dest) ||
+          !File.exist?(source))
         puts ' |>'.red + ' [SKIP] '.yellow + target_dest.magenta
       else
         system "ln -Fs #{source} #{target_dest}"
@@ -179,7 +186,7 @@ unless ARGV.include? '--skip-symlink'
   end
 end
 
-unless ARGV.include? '--skip-vim-plug'
+if execute_step 'vim-plug'
   puts ''
   puts '==> installing'.green + ' vim-plug'.blue
   `curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim --silent`
