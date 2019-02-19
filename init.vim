@@ -457,8 +457,6 @@
   let g:VimuxPromptString = '% '         " change default vim prompt string
   let g:VimuxResetSequence = 'q C-u C-l' " clear output before running a command
 
-  noremap <Leader>p  :VimuxRunCommand("git pull")<Cr>
-  noremap <Leader>P  :VimuxRunCommand("git push")<Cr>
   noremap <Leader>rt :VimuxRunCommand("clear;" . &ft . " " . bufname("%"))<Cr>
   noremap <Leader>rr :VimuxPromptCommand<Cr>
   noremap <C-r>      :VimuxRunLastCommand<Cr>
