@@ -20,14 +20,20 @@
   Plug 'tpope/vim-surround'
   Plug 'haya14busa/incsearch.vim'
   Plug 'junegunn/vim-easy-align'
-  Plug 'junegunn/vader.vim'
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   Plug 'machakann/vim-highlightedyank'
-  Plug 'google/vim-searchindex'
+  Plug 'benmills/vimux'
 
-  Plug $VIM_DEV ? '~/Dev/sidney/viml/codi.vim' : 'metakirby5/codi.vim'
-  Plug $VIM_DEV ? '~/Dev/sidney/viml/mkdx'     : 'SidOfc/mkdx'
+  if $VIM_DEV
+    Plug 'junegunn/vader.vim'
+    Plug '~/Dev/sidney/viml/codi.vim'
+    Plug '~/Dev/sidney/viml/mkdx'
+  else
+    Plug 'metakirby5/codi.vim'
+    Plug 'SidOfc/mkdx'
+  endif
+
   call plug#end()
 " }}}
 
@@ -189,6 +195,11 @@
   vnoremap <Tab>   >><Esc>gv
   vnoremap <S-Tab> <<<Esc>gv
   inoremap <S-Tab> <C-d>
+
+  " use `u` to undo, use `U` to redo, mind = blown
+  " also frees up awesome <C-r> mapping for command
+  " running :D
+  nnoremap U <C-r>
 
   if has('nvim')
     fun! s:GitJobHandler(job_id, data, event) dict
@@ -425,24 +436,33 @@
         \ 'subseparator':     { 'left': "│", 'right': "│" },
         \ 'active': {
         \   'left': [ [ 'paste' ],
-        \             [ 'modified', 'fugitive', 'label' ] ],
-        \   'right': [ [ 'lineinfo' ],
-        \              [ 'filetype' ] ]
+        \             [ 'modified', 'label' ] ],
+        \   'right': [ [ 'lineinfo' ] ]
         \ },
         \ 'component': {
         \   'mode':     '%{lightline#mode()[0]}',
         \   'readonly': '%{&filetype=="help"?"":&readonly?"!":""}',
         \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
-        \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}',
         \   'label':    '%{substitute(expand("%"), "NetrwTreeListing \\d\\+", "netrw", "")}'
         \ },
         \ 'component_visible_condition': {
         \   'paste':    '(&paste!="nopaste")',
         \   'readonly': '(&filetype!="help"&& &readonly)',
         \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
-        \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
         \ }
-        \ }
+      \ }
+" }}}
+
+" Vimux {{{
+  let g:VimuxPromptString = '% '         " change default vim prompt string
+  let g:VimuxResetSequence = 'q C-u C-l' " clear output before running a command
+
+  noremap <Leader>p  :VimuxRunCommand("git pull")<Cr>
+  noremap <Leader>P  :VimuxRunCommand("git push")<Cr>
+  noremap <Leader>rt :VimuxRunCommand("clear;" . &ft . " " . bufname("%"))<Cr>
+  noremap <Leader>rr :VimuxPromptCommand<Cr>
+  noremap <C-r>      :VimuxRunLastCommand<Cr>
+  noremap <Leader>re :VimuxCloseRunner<Cr>
 " }}}
 
 " Fzf {{{
