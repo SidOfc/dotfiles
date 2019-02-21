@@ -24,6 +24,7 @@
   Plug 'junegunn/fzf.vim'
   Plug 'machakann/vim-highlightedyank'
   Plug 'benmills/vimux'
+  Plug 'pangloss/vim-javascript'
 
   if $VIM_DEV
     Plug 'junegunn/vader.vim'
@@ -349,8 +350,12 @@
   nmap <silent> <Leader><Leader> :call <SID>FullscreenScratch()<Cr>
 " }}}
 
+" vim-javascript settings {{{
+  let g:javascript_plugin_flow = 1
+" }}}
+
 " Highlighted yank {{{
-  let g:highlightedyank_highlight_duration = 300
+  let g:highlightedyank_highlight_duration = 150
 " }}}
 
 " Netrw {{{
