@@ -28,6 +28,7 @@ NVIM_CONFIG    = File.join SOURCE, 'init.vim'
 ALACRITTY_YML  = File.join SOURCE, 'alacritty.yml'
 GPG_AGENT      = File.join SOURCE, 'gpg-agent.conf'
 BIN_SSG        = File.expand_path File.join(__dir__, 'ssg')
+BIN_DOT        = File.expand_path File.join(__dir__, 'dot')
 
 # map source files to go into specific destination directories
 # paths of keys and each array entry are absolute.
@@ -35,7 +36,7 @@ MAP = {
   HOME      => [GITIGNORE, GITCONFIG, RGIGNORE,
                 TMUX_CONF, ASDFRC, DEFAULT_GEMS],
   GNUPG     => [GPG_AGENT],
-  BIN       => [BIN_SSG],
+  BIN       => [BIN_SSG, BIN_DOT],
   FISH      => [FISH_CONFIG],
   NVIM      => [NVIM_CONFIG],
   ALACRITTY => [ALACRITTY_YML]

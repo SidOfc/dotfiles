@@ -4,7 +4,6 @@ set -U  fish_user_paths            ~/bin "$HOME/.asdf/shims"
 set -gx FZF_DEFAULT_OPTS           '--height=50% --min-height=15 --reverse'
 set -gx FZF_DEFAULT_COMMAND        'rg --files --no-ignore-vcs --hidden'
 set -gx FZF_CTRL_T_COMMAND         $FZF_DEFAULT_COMMAND
-set -gx LPS_DEFAULT_USERNAME       'sidneyliebrand@gmail.com'
 set -gx EVENT_NOKQUEUE             1
 set -gx EDITOR                     nvim
 set -gx HOMEBREW_FORCE_VENDOR_RUBY 1
@@ -15,53 +14,38 @@ set -gx GPG_TTY                    (tty)
 abbr gpg-add "echo | gpg -s >/dev/null ^&1"
 
 # config files
-abbr vv   "$EDITOR ~/.config/nvim/init.vim"
-abbr tt   "$EDITOR ~/.tmux.conf"
-abbr zz   "$EDITOR ~/.config/fish/config.fish"
-abbr ff   "$EDITOR ~/.config/fish/config.fish"
-abbr zx   "reload -f"
-abbr zxx  "reload"
-abbr ks   "kp --tcp"
+abbr vv  "$EDITOR ~/.config/nvim/init.vim"
+abbr tt  "$EDITOR ~/.tmux.conf"
+abbr zz  "$EDITOR ~/.config/fish/config.fish"
+abbr ff  "$EDITOR ~/.config/fish/config.fish"
+abbr ks  "kp --tcp"
 
 # python
-abbr py   'python'
+abbr py  'python'
 
 # crystal
-abbr cr   'crystal'
-abbr csh  'shards'
-abbr cpl  'crystal play'
-abbr csp  'crystal spec'
+abbr cr  'crystal'
 
 # git
-abbr g    'git'
-abbr ga   'git add'
-abbr g.   'git add .'
-abbr gb   'git branch'
-abbr gbl  'git blame'
-abbr gc   'git commit -m'
-abbr gco  'git checkout'
-abbr gcp  'git cherry-pick'
-abbr gd   'git diff'
-abbr gf   'git fetch'
-abbr glg  'git log --pretty="format:%Cred%h%Creset - %s %Cgreen(%cr)%Creset %C(blue)<%aN>%C(yellow)%d%Creset" --graph'
-abbr gl   'git log'
-abbr gm   'git merge'
-abbr gmt  'git mergetool'
-abbr grb  'git rebase'
-abbr gp   'git push'
-abbr gpu  'git push upstream'
-abbr gpl  'git pull'
-abbr gplu 'git pull upstream'
-abbr gr   'git remote'
-abbr gg   'git status'
-abbr gs   'git stash'
-abbr gsp  'git stash pop'
+abbr g   'git'
+abbr ga  'git add'
+abbr g.  'git add .'
+abbr gc  'git commit -m'
+abbr gco 'git checkout'
+abbr gd  'git diff'
+abbr gf  'git fetch'
+abbr gl  'git log'
+abbr gmt 'git mergetool'
+abbr gdt 'git difftool'
+abbr gp  'git push'
+abbr gpl 'git pull'
+abbr gg  'git status'
+abbr gs  'git stash'
+abbr gsp 'git stash pop'
 
 # vim
-abbr v   "$EDITOR"
-abbr vd  "set -x VIM_DEV 1; and $EDITOR; and set -e VIM_DEV"
-abbr v.  "$EDITOR ."
-abbr vd. "set -x VIM_DEV 1; and $EDITOR .; and set -e VIM_DEV"
+abbr v   "$EDITOR ."
+abbr vd  "set -x VIM_DEV 1; and $EDITOR .; and set -e VIM_DEV"
 abbr vip "$EDITOR +PlugInstall +qall"
 abbr vup "$EDITOR +PlugUpdate"
 abbr vcp "$EDITOR +PlugClean +qall"
@@ -71,7 +55,7 @@ function reload --description "Reload fish shell"
   source ~/.config/fish/config.fish
 end
 
-function fp --description "Search your $PATH"
+function fp --description 'Search your $PATH'
   set -l loc (echo $PATH | tr ' ' '\n' | eval "fzf $FZF_DEFAULT_OPTS --header='[find:path]'")
 
   if test (count $loc) = 1
@@ -92,7 +76,6 @@ function kp --description "Kill processes"
   else
     set __kp__pid (ps -ef | sed 1d | eval "fzf $FZF_DEFAULT_OPTS -m --header='[kill:process]'" | awk '{print $2}')
   end
-  set -l __kp__kc $argv[1]
 
   if test "x$__kp__pid" != "x"
     if test "x$argv[1]" != "x"
@@ -125,7 +108,7 @@ function bup --description "Update brew plugins"
 end
 
 function bcp --description "Remove brew plugins"
-  set -l inst (brew leaves | eval "fzf $FZF_DEFAULT_OPTS -m --header='[brew:update]'")
+  set -l inst (brew leaves | eval "fzf $FZF_DEFAULT_OPTS -m --header='[brew:uninstall]'")
 
   if not test (count $inst) = 0
     for prog in $inst
