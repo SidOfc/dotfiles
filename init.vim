@@ -297,6 +297,11 @@
   endif
 " }}}
 
+" Repeat.vim {{{
+  " Do not overwrite already remapped <C-r>
+  map <Nop> <Plug>RepeatUndoLine
+" }}}
+
 " Codi wrapper {{{
   let g:codi#width         = 50.0
   let s:codi_filetype_tabs = {}
@@ -462,7 +467,6 @@
   let g:VimuxPromptString = '% '         " change default vim prompt string
   let g:VimuxResetSequence = 'q C-u C-l' " clear output before running a command
 
-  noremap <Leader>rt :VimuxRunCommand("clear;" . &ft . " " . bufname("%"))<Cr>
   noremap <Leader>rr :VimuxPromptCommand<Cr>
   noremap <C-r>      :VimuxRunLastCommand<Cr>
   noremap <Leader>re :VimuxCloseRunner<Cr>
