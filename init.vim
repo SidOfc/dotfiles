@@ -202,6 +202,9 @@
   " running :D
   nnoremap U <C-r>
 
+  " I always escape from this mode anyway, best never to enter it
+  nnoremap <S-r> <Nop>
+
   if has('nvim')
     fun! s:GitJobHandler(job_id, data, event) dict
       echo 'git push finished'
