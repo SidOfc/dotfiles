@@ -198,8 +198,6 @@
   inoremap <S-Tab> <C-d>
 
   " use `u` to undo, use `U` to redo, mind = blown
-  " also frees up awesome <C-r> mapping for command
-  " running :D
   nnoremap U <C-r>
 
   " I always escape from this mode anyway, best never to enter it
@@ -298,11 +296,6 @@
     nmap <silent> <Leader>R :call <SID>DevRefresh()<Cr>
     nmap <silent> <leader>gp :call <SID>SynStack()<Cr>
   endif
-" }}}
-
-" Repeat.vim {{{
-  " Do not overwrite already remapped <C-r>
-  map <Nop> <Plug>RepeatUndoLine
 " }}}
 
 " Codi wrapper {{{
@@ -471,7 +464,7 @@
   let g:VimuxResetSequence = 'q C-u C-l' " clear output before running a command
 
   noremap <Leader>rr :VimuxPromptCommand<Cr>
-  noremap <C-r>      :VimuxRunLastCommand<Cr>
+  noremap <C-x>      :VimuxRunLastCommand<Cr>
   noremap <Leader>re :VimuxCloseRunner<Cr>
 " }}}
 
