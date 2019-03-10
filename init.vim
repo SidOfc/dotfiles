@@ -443,7 +443,7 @@
         \ 'active': {
         \   'left': [ [ 'paste' ],
         \             [ 'modified', 'label' ] ],
-        \   'right': []
+        \   'right': [ [ 'lineinfo' ] ]
         \ },
         \ 'component': {
         \   'mode':     '%{lightline#mode()[0]}',
