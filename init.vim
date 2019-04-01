@@ -25,6 +25,7 @@
   Plug 'machakann/vim-highlightedyank'
   Plug 'benmills/vimux'
   Plug 'pangloss/vim-javascript'
+  Plug 'styled-components/vim-styled-components', {'branch': 'main'}
 
   if $VIM_DEV
     Plug 'junegunn/vader.vim'
