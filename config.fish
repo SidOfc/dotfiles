@@ -115,6 +115,7 @@ function fish_prompt --description 'Write out the prompt'
     case 127 ; set_color yellow
     case '*' ; set_color red
   end
+
   echo -n '• '
   set_color blue
   echo -n (prompt_pwd)
@@ -125,10 +126,8 @@ function fish_prompt --description 'Write out the prompt'
     set_color green
     echo -n (git status | head -1 | string split ' ')[-1]
 
-    if test -n (git status -s)
+    if test -n (echo (git status -s))
       set_color magenta
-    else
-      set_color green
     end
 
     echo -n ' ⚑'
