@@ -9,15 +9,18 @@ set -gx EDITOR                     nvim
 set -gx HOMEBREW_FORCE_VENDOR_RUBY 1
 set -gx GPG_TTY                    (tty)
 set -gx ASDF_DIR                   /usr/local/opt/asdf
+
 ## ABBREVIATIONS
 # gpg-agent
 abbr gpg-add "echo | gpg -s >/dev/null ^&1"
 
 # config files
+abbr aa  "$EDITOR ~/.config/alacritty/alacritty.yml"
 abbr vv  "$EDITOR ~/.config/nvim/init.vim"
 abbr tt  "$EDITOR ~/.tmux.conf"
 abbr zz  "$EDITOR ~/.config/fish/config.fish"
 abbr ff  "$EDITOR ~/.config/fish/config.fish"
+abbr zx  ". ~/.config/fish/config.fish"
 abbr ks  "kp --tcp"
 
 # python
@@ -27,8 +30,6 @@ abbr py  'python'
 abbr cr  'crystal'
 
 # git
-abbr g   'git'
-abbr ga  'git add'
 abbr g.  'git add .'
 abbr gc  'git commit -m'
 abbr gco 'git checkout'
@@ -36,7 +37,6 @@ abbr gd  'git diff'
 abbr gf  'git fetch'
 abbr gl  'git log'
 abbr gmt 'git mergetool'
-abbr gdt 'git difftool'
 abbr gp  'git push'
 abbr gpl 'git pull'
 abbr gg  'git status'
@@ -51,10 +51,6 @@ abbr vup "$EDITOR +PlugUpdate"
 abbr vcp "$EDITOR +PlugClean +qall"
 
 ## FUNCTIONS
-function reload --description "Reload fish shell"
-  source ~/.config/fish/config.fish
-end
-
 function fp --description 'Search your $PATH'
   set -l loc (echo $PATH | tr ' ' '\n' | eval "fzf $FZF_DEFAULT_OPTS --header='[find:path]'")
 
@@ -96,6 +92,7 @@ function bip --description "Install brew plugins"
     end
   end
 end
+
 function bcp --description "Remove brew plugins"
   set -l inst (brew leaves | eval "fzf $FZF_DEFAULT_OPTS -m --header='[brew:uninstall]'")
 
@@ -113,46 +110,46 @@ function pbclear --description "Provide functionality to clear from the pasteboa
 end
 
 function fish_prompt --description 'Write out the prompt'
-  set -l __stat $status
-
-  switch $__stat
-    case 0   ; set __stat_color 'green'
-    case 127 ; set __stat_color 'yellow'
-    case '*' ; set __stat_color 'red'
+  switch $status
+    case 0   ; set_color green
+    case 127 ; set_color yellow
+    case '*' ; set_color red
   end
+  echo -n '• '
+  set_color blue
+  echo -n (prompt_pwd)
 
   if test (git rev-parse --git-dir 2>/dev/null)
-    set __gst (git status -s)
-    set __gbr (git status | head -1 | string split ' ')[-1]
+    set_color yellow
+    echo -n " on "
+    set_color green
+    echo -n (git status | head -1 | string split ' ')[-1]
 
-    if test -n "$__gst"
-      set __git_dirty (set_color magenta) '⚑'
+    if test -n (git status -s)
+      set_color magenta
     else
-      set __git_dirty (set_color green) '⚑'
+      set_color green
     end
 
-    set __git_cb (set_color yellow)" on "(set_color green)"$__gbr"(set_color normal)"$__git_dirty"
+    echo -n ' ⚑'
   end
 
-  echo -n (set_color $__stat_color)'•'(set_color blue) (prompt_pwd)"$__git_cb"(set_color yellow) '❯ '
+  set_color yellow
+  echo ' ❯ '
 end
 
-function fish_mode_prompt --description 'Displays the current mode'
-  if test $__fish_active_key_bindings = 'fish_vi_key_bindings'
-    switch $fish_bind_mode
-      case default
-        set_color --background red white
-        echo ' '
-      case insert
-        set_color --background green white
-        echo ' '
-      case visual
-        set_color --background blue white
-        echo ' '
-    end
+function gcb --description "delete git branches"
+  set delete_mode '-d'
 
-    set_color normal
-    echo -n ' '
+  if contains -- '--force' $argv
+    set force_label ':force'
+    set delete_mode '-D'
+  end
+
+  set -l branches_to_delete (git branch | sed -E 's/^[* ] //g' | fzf -m --header="[git:branch:delete$force_label]")
+
+  if test -n "$branches_to_delete"
+    git branch $delete_mode $branches_to_delete
   end
 end
 
