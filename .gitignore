@@ -1,10 +1,2 @@
 .DS_Store
-backup
-*.zwc
-fishd*
-tags
-*.orig
-*.swp
-*.un*
-*.env*
 .tool-versions
