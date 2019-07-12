@@ -32,7 +32,7 @@ abbr cr  'crystal'
 # git
 abbr g.  'git add .'
 abbr gc  'git commit -m'
-abbr gco 'git checkout (git branch | grep -v "^*" | fzf)'
+abbr gco 'git checkout (git branch | grep -v "^*" | sed -E "s/^ +//" | fzf)'
 abbr gd  'git diff'
 abbr gf  'git fetch'
 abbr gl  'git log'
