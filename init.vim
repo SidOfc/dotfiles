@@ -94,6 +94,7 @@
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
   colorscheme base16-seti         " apply color scheme
+  syntax sync fromstart
   set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
   " remap bad habits to do nothing
