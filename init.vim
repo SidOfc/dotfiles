@@ -386,8 +386,12 @@
   let g:ale_echo_msg_format      = '[%linter%] %s [%severity%]'   " status line format
   let g:ale_statusline_format    = ['⨉ %d', '⚠ %d', '⬥ ok']       " error status format
   let g:ale_lint_delay           = 500                            " relint max once per [amount] milliseconds
-  let g:ale_fixers               = { 'javascript': ['prettier'] } " fix JS using prettier
   let g:ale_fix_on_save          = 1
+  let g:ale_fixers               = {
+        \ 'javascript': ['prettier'],
+        \ 'javascriptreact': ['prettier'],
+        \ 'jsx': ['prettier']
+        \ } " fix JS using prettier
   let g:ale_linters              = {
         \ 'ruby': ['rubocop'],
         \ 'javascript': ['eslint', 'flow'],
@@ -557,8 +561,10 @@
 
   augroup Files
     au!
+    autocmd BufEnter * :syntax sync fromstart
     au BufWritePre *                                call s:StripWS()     " remove trailing whitespace before saving buffer
-    au FileType markdown,python,json,javascript,jsx call s:IndentSize(4) " 4 space indents for markdown, python and JSON
+    au FileType markdown,python,json                call s:IndentSize(4)
+    au FileType javascript,javascriptreact,jsx      call s:IndentSize(4)
     au FileType help                                nmap <buffer> q :q<Cr>
   augroup END
 " }}}
