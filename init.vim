@@ -390,6 +390,7 @@
   let g:ale_fixers               = {
         \ 'javascript': ['prettier'],
         \ 'javascriptreact': ['prettier'],
+        \ 'json': ['prettier'],
         \ 'jsx': ['prettier']
         \ } " fix JS using prettier
   let g:ale_linters              = {
