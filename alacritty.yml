@@ -79,25 +79,25 @@ tabspaces: 4
 font:
   # The normal (roman) font face to use.
   normal:
-    family: Source Code Pro
+    family: JetBrains Mono
     # Style can be specified to pick a specific face.
     # style: Bold
 
   # The bold font face
   bold:
-    family: Source Code Pro
+    family: JetBrains Mono
     # Style can be specified to pick a specific face.
     style: Bold
 
   # The italic font face
   italic:
-    family: Source Code Pro
+    family: JetBrains Mono
     # Style can be specified to pick a specific face.
     # style: Bold Italic
     style: Italic
 
   # Point size of the font
-  size: 16.0
+  size: 18.0
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
