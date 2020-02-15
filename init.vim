@@ -26,6 +26,7 @@
   Plug 'benmills/vimux'
   Plug 'pangloss/vim-javascript'
   Plug 'styled-components/vim-styled-components', {'branch': 'main'}
+  Plug 'metakirby5/codi.vim'
 
   if $VIM_OSX
     Plug '/usr/local/opt/fzf'
@@ -37,10 +38,8 @@
 
   if $VIM_DEV
     Plug 'junegunn/vader.vim'
-    Plug '~/Dev/sidney/viml/codi.vim'
     Plug '~/Dev/sidney/viml/mkdx'
   else
-    Plug 'metakirby5/codi.vim'
     Plug 'SidOfc/mkdx'
   endif
 
@@ -293,8 +292,6 @@
     endfunc
 
     function! <SID>DevRefresh()
-      so ~/Dev/sidney/viml/codi.vim/autoload/codi.vim
-
       if (&ft == 'markdown')
         so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
         so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim
