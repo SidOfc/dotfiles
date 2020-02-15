@@ -3,11 +3,13 @@
 " }}}
 
 " Init / Plugins {{{
+  let $VIM_OSX = system('uname -a | grep -i darwin') != ''
   set nocompatible
 
   call plug#begin('~/.vim/plugged')
   Plug 'w0rp/ale'
   Plug 'sheerun/vim-polyglot'
+  Plug 'rust-lang/rust.vim'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'chriskempson/base16-vim'
   Plug 'itchyny/lightline.vim'
@@ -20,12 +22,18 @@
   Plug 'tpope/vim-surround'
   Plug 'haya14busa/incsearch.vim'
   Plug 'junegunn/vim-easy-align'
-  Plug '/usr/local/opt/fzf'
-  Plug 'junegunn/fzf.vim'
   Plug 'machakann/vim-highlightedyank'
   Plug 'benmills/vimux'
   Plug 'pangloss/vim-javascript'
   Plug 'styled-components/vim-styled-components', {'branch': 'main'}
+
+  if $VIM_OSX
+    Plug '/usr/local/opt/fzf'
+  else
+    Plug '~/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  endif
+
+  Plug 'junegunn/fzf.vim'
 
   if $VIM_DEV
     Plug 'junegunn/vader.vim'
@@ -74,7 +82,7 @@
   set background=dark             " set bg dark
   set nobackup                    " do not keep backups
   set noswapfile                  " no more swapfiles
-  set clipboard=unnamedplus       " copy into osx clipboard by default
+  set clipboard+=unnamedplus      " copy into osx clipboard by default
   set encoding=utf-8              " utf-8 files
   set fileencoding=utf-8          " utf-8 files
   set fileformat=unix             " use unix line endings
@@ -353,6 +361,10 @@
   nmap <silent> <Leader><Leader> :call <SID>FullscreenScratch()<Cr>
 " }}}
 
+" rust.vim settings {{{
+  let g:rustfmt_autosave = 1
+" }}}
+
 " vim-javascript settings {{{
   let g:javascript_plugin_flow = 1
 " }}}
@@ -380,20 +392,21 @@
 " }}}
 
 " Ale {{{
-  let g:ale_set_highlights       = 0                              " only show errors in sign column
-  let g:ale_echo_msg_error_str   = 'E'                            " error sign
-  let g:ale_echo_msg_warning_str = 'W'                            " warning sign
-  let g:ale_echo_msg_format      = '[%linter%] %s [%severity%]'   " status line format
-  let g:ale_statusline_format    = ['⨉ %d', '⚠ %d', '⬥ ok']       " error status format
-  let g:ale_lint_delay           = 500                            " relint max once per [amount] milliseconds
-  let g:ale_fix_on_save          = 1
-  let g:ale_fixers               = {
+  let g:ale_set_highlights        = 0                              " only show errors in sign column
+  let g:ale_echo_msg_error_str    = 'E'                            " error sign
+  let g:ale_echo_msg_warning_str  = 'W'                            " warning sign
+  let g:ale_echo_msg_format       = '[%linter%] %s [%severity%]'   " status line format
+  let g:ale_statusline_format     = ['⨉ %d', '⚠ %d', '⬥ ok']       " error status format
+  let g:ale_lint_delay            = 500                            " relint max once per [amount] milliseconds
+  let g:ale_fix_on_save           = 1
+  let g:ale_rust_cargo_use_clippy = executable('cargo-clippy')
+  let g:ale_fixers                = {
         \ 'javascript': ['prettier'],
         \ 'javascriptreact': ['prettier'],
         \ 'json': ['prettier'],
         \ 'jsx': ['prettier']
         \ } " fix JS using prettier
-  let g:ale_linters              = {
+  let g:ale_linters               = {
         \ 'ruby': ['rubocop'],
         \ 'javascript': ['eslint', 'flow'],
         \ 'fish': []
