@@ -7,26 +7,25 @@
   set nocompatible
 
   call plug#begin('~/.vim/plugged')
-  Plug 'w0rp/ale'
-  Plug 'sheerun/vim-polyglot'
-  Plug 'rust-lang/rust.vim'
-  Plug 'christoomey/vim-tmux-navigator'
+  Plug 'benmills/vimux'
   Plug 'chriskempson/base16-vim'
-  Plug 'itchyny/lightline.vim'
-  Plug 'jreybert/vimagit'
-  Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-endwise'
-  Plug 'tpope/vim-fugitive'
-  Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-eunuch'
-  Plug 'tpope/vim-surround'
+  Plug 'christoomey/vim-tmux-navigator'
   Plug 'haya14busa/incsearch.vim'
+  Plug 'jreybert/vimagit'
   Plug 'junegunn/vim-easy-align'
   Plug 'machakann/vim-highlightedyank'
-  Plug 'benmills/vimux'
-  Plug 'pangloss/vim-javascript'
-  Plug 'styled-components/vim-styled-components', {'branch': 'main'}
   Plug 'metakirby5/codi.vim'
+  Plug 'pangloss/vim-javascript'
+  Plug 'rust-lang/rust.vim'
+  Plug 'sheerun/vim-polyglot'
+  Plug 'styled-components/vim-styled-components', {'branch': 'main'}
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-endwise'
+  Plug 'tpope/vim-eunuch'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-surround'
+  Plug 'w0rp/ale'
 
   if $VIM_OSX
     Plug '/usr/local/opt/fzf'
@@ -38,7 +37,9 @@
 
   if $VIM_DEV
     Plug 'junegunn/vader.vim'
-    Plug '~/Dev/sidney/viml/mkdx'
+    if !$DISABLE_MKDX
+      Plug '~/Dev/mkdx'
+    endif
   else
     Plug 'SidOfc/mkdx'
   endif
@@ -101,7 +102,6 @@
   set ttimeoutlen=10              " keycode delay
   set wildignore+=.git,.DS_Store  " ignore files (netrw)
   colorscheme base16-seti         " apply color scheme
-  syntax sync fromstart
   set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
   " remap bad habits to do nothing
@@ -270,7 +270,7 @@
 
   if !exists('*s:StripWS')
     fun! s:StripWS()
-      if (&ft =~ 'vader') | return | endif
+      if (&ft =~ 'vader' || &ft =~ 'markdown' || &ft == '' || &ft == 'help') | return | endif
       %s/\s\+$//e
     endfun
   endif
@@ -283,25 +283,31 @@
 " }}}
 
 " Development {{{{
-  if $VIM_DEV
-    function! <SID>SynStack()
-      if !exists("*synstack")
-        return
-      endif
-      echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-    endfunc
+  function! <SID>SynStack()
+    if !exists("*synstack")
+      return
+    endif
+    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+  endfunc
 
+  nmap <silent> <leader>gp :call <SID>SynStack()<Cr>
+
+  if $VIM_DEV
     function! <SID>DevRefresh()
       if (&ft == 'markdown')
-        so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
-        so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim
+        if $VIM_OSX
+          so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
+          so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim
+        else
+          so ~/Dev/mkdx/after/syntax/markdown/mkdx.vim
+          so ~/Dev/mkdx/autoload/mkdx.vim
+        endif
       endif
 
       mess clear
     endfunction
 
     nmap <silent> <Leader>R :call <SID>DevRefresh()<Cr>
-    nmap <silent> <leader>gp :call <SID>SynStack()<Cr>
   endif
 " }}}
 
@@ -380,6 +386,7 @@
 
 " Mkdx {{{
   let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
+                            \ 'restore_visual': 1,
                             \ 'enter': { 'shift': 1 },
                             \ 'links': { 'external': { 'enable': 1 } },
                             \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1,
@@ -400,8 +407,8 @@
   let g:ale_fixers                = {
         \ 'javascript': ['prettier'],
         \ 'javascriptreact': ['prettier'],
-        \ 'json': ['prettier'],
-        \ 'jsx': ['prettier']
+        \ 'jsx': ['prettier'],
+        \ 'json': ['prettier']
         \ } " fix JS using prettier
   let g:ale_linters               = {
         \ 'ruby': ['rubocop'],
@@ -419,61 +426,61 @@
   map ? <Plug>(incsearch-backward)
 " }}}
 
-" Lightline {{{
-  let s:base1   = '#C8CACB'
-  let s:base0   = '#AEB0B1'
-  let s:base00  = '#949697'
-  let s:base02  = '#626465'
-  let s:base023 = '#484A4B'
-  let s:base03  = '#2F3132'
-  let s:red     = '#cd3f45'
-  let s:orange  = '#db7b55'
-  let s:yellow  = '#e6cd69'
-  let s:green   = '#9fca56'
-  let s:cyan    = '#55dbbe'
-  let s:blue    = '#55b5db'
-  let s:magenta = '#a074c4'
-
-  let s:p                = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
-  let s:p.normal.left    = [ [ s:blue,   s:base03  ], [ s:base03, s:blue   ] ]
-  let s:p.normal.middle  = [ [ s:base1,  s:base03  ]  ]
-  let s:p.normal.right   = [ [ s:base03, s:blue    ], [ s:base00, s:base03 ] ]
-  let s:p.normal.error   = [ [ s:red,    s:base023 ]  ]
-  let s:p.normal.warning = [ [ s:yellow, s:base02  ]  ]
-
-  let s:p.inactive.left   = [ [ s:base1,   s:base03  ], [ s:base03, s:base03  ] ]
-  let s:p.inactive.middle = [ [ s:base03,  s:base03  ]  ]
-  let s:p.inactive.right  = [ [ s:base03,  s:base03  ], [ s:base03, s:base03  ] ]
-
-  let s:p.insert.left     = [ [ s:green,   s:base03  ], [ s:base03, s:green   ] ]
-  let s:p.insert.right    = [ [ s:base03,  s:green   ], [ s:base00, s:base03  ] ]
-  let s:p.replace.left    = [ [ s:orange,  s:base03  ], [ s:base03, s:orange  ] ]
-  let s:p.replace.right   = [ [ s:base03,  s:orange  ], [ s:base00, s:base03  ] ]
-  let s:p.visual.left     = [ [ s:magenta, s:base03  ], [ s:base03, s:magenta ] ]
-  let s:p.visual.right    = [ [ s:base03,  s:magenta ], [ s:base00, s:base03  ] ]
-
-  let g:lightline#colorscheme#base16_seti#palette = lightline#colorscheme#fill(s:p)
-  let g:lightline = {
-        \ 'colorscheme':      'base16_seti',
-        \ 'separator':        { 'left': "", 'right': "" },
-        \ 'subseparator':     { 'left': "│", 'right': "│" },
-        \ 'active': {
-        \   'left': [ [ 'paste' ],
-        \             [ 'modified', 'label' ] ],
-        \   'right': [ [ 'lineinfo' ] ]
-        \ },
-        \ 'component': {
-        \   'mode':     '%{lightline#mode()[0]}',
-        \   'readonly': '%{&filetype=="help"?"":&readonly?"!":""}',
-        \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
-        \   'label':    '%{substitute(expand("%"), "NetrwTreeListing \\d\\+", "netrw", "")}'
-        \ },
-        \ 'component_visible_condition': {
-        \   'paste':    '(&paste!="nopaste")',
-        \   'readonly': '(&filetype!="help"&& &readonly)',
-        \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
-        \ }
+" {{{ Status bar
+let g:mode_colors = {
+      \ 'n': 'StatusBarSection',
+      \ 'v': 'StatusBarSectionV',
+      \ '': 'StatusBarSectionV',
+      \ 'i': 'StatusBarSectionI',
+      \ 'c': 'StatusBarSectionC',
+      \ 'r': 'StatusBarSectionR'
       \ }
+
+fun! s:StatusBarHighlights()
+  highlight default StatusBar         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
+  highlight default StatusBarSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
+  highlight default StatusBarSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
+  highlight default StatusBarSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
+  highlight default StatusBarSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
+  highlight default StatusBarSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
+endfun
+
+call s:StatusBarHighlights()
+
+fun! StatusBarFileName()
+  let file_path = substitute(expand('%'), '^netrwtreelisting\|^' . getcwd() . '/\?', '', 'i')
+
+  return (empty(file_path) || file_path =~# ';#FZF') ? '*' : file_path
+endfun
+
+fun! DefaultStatusBar()
+  return '%#StatusBar# %{StatusBarFileName()}%= %l:%c '
+endfun
+
+fun! ActiveStatusBar()
+  let section_hl = get(g:mode_colors, tolower(mode()), g:mode_colors.n)
+
+  return '%#' . section_hl . '#'
+        \ . (&modified ? ' + │' : '')
+        \ . ' %{StatusBarFileName()}'
+        \ . ' %#StatusBar#'
+        \ . '%='
+        \ . '%#' . section_hl . '#'
+        \ . ' %l:%c '
+endfun
+
+augroup StatusBarHighlightCmds
+  au!
+  au VimEnter,WinEnter,BufWinEnter *
+    \ setlocal statusline& |
+    \ let statusline=&statusline |
+    \ setlocal statusline=%!ActiveStatusBar()
+
+  au VimLeave,WinLeave,BufWinLeave * setlocal statusline&
+  au Colorscheme * call <SID>StatusBarHighlights()
+augroup END
+
+set statusline=%!DefaultStatusBar()
 " }}}
 
 " Vimux {{{
@@ -572,10 +579,9 @@
 
   augroup Files
     au!
-    autocmd BufEnter * :syntax sync fromstart
-    au BufWritePre *                                call s:StripWS()     " remove trailing whitespace before saving buffer
-    au FileType markdown,python,json                call s:IndentSize(4)
-    au FileType javascript,javascriptreact,jsx      call s:IndentSize(4)
-    au FileType help                                nmap <buffer> q :q<Cr>
+    au BufWritePre *                            call s:StripWS()     " remove trailing whitespace before saving buffer
+    au FileType markdown,python,json,javascript call s:IndentSize(4)
+    au FileType javascriptreact,jsx             call s:IndentSize(4)
+    au FileType help                            nmap <buffer> q :q<Cr>
   augroup END
 " }}}
