@@ -207,32 +207,10 @@
   " use `u` to undo, use `U` to redo, mind = blown
   nnoremap U <C-r>
 
-  " I always escape from this mode anyway, best never to enter it
+  " I always escape from this mode anyway,
+  " best never to enter it
   nnoremap <S-r> <Nop>
-
-  if has('nvim')
-    fun! s:GitJobHandler(job_id, data, event) dict
-      echo 'git push finished'
-    endfun
-
-    fun! s:GitPushAsync()
-      call system('ssh-add -l')
-      if (v:shell_error == 0)
-        call jobstart('git push', { 'on_exit': function('<SID>GitJobHandler') })
-        echo 'git push'
-      else
-        exe '!ssh-add'
-      end
-    endfun
-
-    nnoremap <silent> <Leader>P :call <SID>GitPushAsync()<Cr>
-  endif
-
-  " fix jsx highlighting of end xml tags
-  hi link xmlEndTag xmlTag
-
-  " override markdown quote syntax highlight
-  hi link mkdBlockquote rubyInterpolationDelimiter
+  inoremap <Ins> <Nop>
 
   " transparent terminal background
   " never move above `colorscheme` option
@@ -342,11 +320,8 @@
 
 " Ale {{{
   let g:ale_set_highlights        = 0                              " only show errors in sign column
-  let g:ale_echo_msg_error_str    = 'E'                            " error sign
-  let g:ale_echo_msg_warning_str  = 'W'                            " warning sign
   let g:ale_echo_msg_format       = '[%linter%] %s [%severity%]'   " status line format
-  let g:ale_statusline_format     = ['⨉ %d', '⚠ %d', '⬥ ok']       " error status format
-  let g:ale_lint_delay            = 500                            " relint max once per [amount] milliseconds
+  let g:ale_lint_delay            = 300                            " relint max once per [amount] milliseconds
   let g:ale_fix_on_save           = 1
   let g:ale_rust_cargo_use_clippy = executable('cargo-clippy')
   let g:ale_fixers                = {
@@ -354,7 +329,7 @@
         \ 'javascriptreact': ['prettier'],
         \ 'jsx': ['prettier'],
         \ 'json': ['prettier']
-        \ } " fix JS using prettier
+        \ }
   let g:ale_linters               = {
         \ 'ruby': ['rubocop'],
         \ 'javascript': ['eslint', 'flow'],
@@ -433,15 +408,14 @@ set statusline=%!DefaultStatusBar()
   let g:VimuxResetSequence = 'q C-u C-l' " clear output before running a command
 
   noremap <Leader>rr :VimuxPromptCommand<Cr>
-  noremap <C-x>      :VimuxRunLastCommand<Cr>
-  noremap <Leader>re :VimuxCloseRunner<Cr>
+  noremap <S-r>      :VimuxRunLastCommand<Cr>
 " }}}
 
 " Fzf {{{
   " use bottom positioned 20% height bottom split
   let g:fzf_layout = { 'down': '~20%' }
-  let g:fzf_colors =
-  \ { 'fg':      ['fg', 'Normal'],
+  let g:fzf_colors = {
+    \ 'fg':      ['fg', 'Normal'],
     \ 'bg':      ['bg', 'Clear'],
     \ 'hl':      ['fg', 'String'],
     \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
@@ -452,7 +426,8 @@ set statusline=%!DefaultStatusBar()
     \ 'pointer': ['fg', 'Exception'],
     \ 'marker':  ['fg', 'Keyword'],
     \ 'spinner': ['fg', 'Label'],
-    \ 'header':  ['fg', 'Comment'] }
+    \ 'header':  ['fg', 'Comment']
+    \ }
 
   " simple notes bindings using fzf wrapper
   nnoremap <silent> <Leader>n :call fzf#run(fzf#wrap({'source': 'rg --files ~/notes', 'options': '--header="[notes:search]" --preview="cat {}"'}))<Cr>
