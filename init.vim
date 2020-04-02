@@ -217,39 +217,31 @@
   hi Normal guibg=NONE ctermbg=NONE
 
   " delete existing notes in ~/notes
-  if !exists('*s:DeleteNote')
-    function! s:DeleteNote(paths)
-      call delete(a:paths)
-    endfunction
-  endif
+  fun! s:DeleteNote(paths)
+    call delete(a:paths)
+  endfun
 
   " create a new note in ~/notes
-  if !exists('*s:NewNote')
-    function! s:NewNote()
-      call inputsave()
-      let l:fname = input('Note name: ')
-      call inputrestore()
+  fun! s:NewNote()
+    call inputsave()
+    let l:fname = input('Note name: ')
+    call inputrestore()
 
-      if strlen(l:fname) > 0
-        let l:fpath = expand('~/notes/' . fnameescape(substitute(tolower(l:fname), ' ', '-', 'g')))
-        exe "tabe " . l:fpath . ".md"
-      endif
-    endfunction
-  endif
+    if strlen(l:fname) > 0
+      let l:fpath = expand('~/notes/' . fnameescape(substitute(tolower(l:fname), ' ', '-', 'g')))
+      exe "tabe " . l:fpath . ".md"
+    endif
+  endfun
 
   " convenience function for setting filetype specific spacing
-  if !exists('*s:IndentSize')
-    function! s:IndentSize(amount)
-      exe "setlocal expandtab ts=" . a:amount . " sts=" . a:amount . " sw=" . a:amount
-    endfunction
-  endif
+  fun! s:IndentSize(amount)
+    exe "setlocal expandtab ts=" . a:amount . " sts=" . a:amount . " sw=" . a:amount
+  endfun
 
-  if !exists('*s:StripWS')
-    fun! s:StripWS()
-      if (&ft =~ 'vader' || &ft =~ 'markdown' || &ft == '' || &ft == 'help') | return | endif
-      %s/\s\+$//e
-    endfun
-  endif
+  fun! s:StripWS()
+    if (&ft =~ 'vader' || &ft =~ 'markdown' || &ft == '' || &ft == 'help') | return | endif
+    %s/\s\+$//e
+  endfun
 
   " use ripgrep as grepprg
   if executable('rg')
@@ -259,17 +251,17 @@
 " }}}
 
 " Development {{{{
-  function! <SID>SynStack()
+  fun! <SID>SynStack()
     if !exists("*synstack")
       return
     endif
     echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-  endfunc
+  endfun
 
   nmap <silent> <leader>gp :call <SID>SynStack()<Cr>
 
   if $VIM_DEV
-    function! <SID>DevRefresh()
+    fun! <SID>DevRefresh()
       if (&ft == 'markdown')
         if $VIM_OSX
           so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
@@ -281,7 +273,7 @@
       endif
 
       mess clear
-    endfunction
+    endfun
 
     nmap <silent> <Leader>R :call <SID>DevRefresh()<Cr>
   endif
