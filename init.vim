@@ -373,20 +373,20 @@ fun! StatusBarFileName()
   return (empty(file_path) || file_path =~# ';#FZF') ? '*' : file_path
 endfun
 
-fun! DefaultStatusBar()
-  return '%#StatusBar# %{StatusBarFileName()}%= %l:%c '
-endfun
+fun! StatusBar(focussed)
+  if (a:focussed)
+    let section_hl = get(g:mode_colors, tolower(mode()), g:mode_colors.n)
 
-fun! ActiveStatusBar()
-  let section_hl = get(g:mode_colors, tolower(mode()), g:mode_colors.n)
-
-  return '%#' . section_hl . '#'
-        \ . (&modified ? ' + │' : '')
-        \ . ' %{StatusBarFileName()}'
-        \ . ' %#StatusBar#'
-        \ . '%='
-        \ . '%#' . section_hl . '#'
-        \ . ' %l:%c '
+    return '%#' . section_hl . '#'
+          \ . (&modified ? ' + │' : '')
+          \ . ' %{StatusBarFileName()}'
+          \ . ' %#StatusBar#'
+          \ . '%='
+          \ . '%#' . section_hl . '#'
+          \ . ' %l:%c '
+  else
+    return '%#StatusBar# %{StatusBarFileName()}%= %l:%c '
+  end
 endfun
 
 augroup StatusBarHighlightCmds
@@ -394,13 +394,13 @@ augroup StatusBarHighlightCmds
   au VimEnter,WinEnter,BufWinEnter *
     \ setlocal statusline& |
     \ let statusline=&statusline |
-    \ setlocal statusline=%!ActiveStatusBar()
+    \ setlocal statusline=%!StatusBar(1)
 
   au VimLeave,WinLeave,BufWinLeave * setlocal statusline&
   au Colorscheme * call <SID>StatusBarHighlights()
 augroup END
 
-set statusline=%!DefaultStatusBar()
+set statusline=%!StatusBar(0)
 " }}}
 
 " Vimux {{{
