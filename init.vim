@@ -339,60 +339,60 @@
 " }}}
 
 " {{{ Status bar
-let g:mode_colors = {
-      \ 'n': 'StatusBarSection',
-      \ 'v': 'StatusBarSectionV',
-      \ '': 'StatusBarSectionV',
-      \ 'i': 'StatusBarSectionI',
-      \ 'c': 'StatusBarSectionC',
-      \ 'r': 'StatusBarSectionR'
-      \ }
+  let g:mode_colors = {
+        \ 'n': 'StatusBarSection',
+        \ 'v': 'StatusBarSectionV',
+        \ '': 'StatusBarSectionV',
+        \ 'i': 'StatusBarSectionI',
+        \ 'c': 'StatusBarSectionC',
+        \ 'r': 'StatusBarSectionR'
+        \ }
 
-fun! s:StatusBarHighlights()
-  highlight default StatusBar         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
-  highlight default StatusBarSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
-  highlight default StatusBarSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
-  highlight default StatusBarSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
-  highlight default StatusBarSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
-  highlight default StatusBarSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
-endfun
+  fun! s:StatusBarHighlights()
+    highlight default StatusBar         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
+    highlight default StatusBarSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
+    highlight default StatusBarSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
+    highlight default StatusBarSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
+    highlight default StatusBarSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
+    highlight default StatusBarSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
+  endfun
 
-call s:StatusBarHighlights()
+  call s:StatusBarHighlights()
 
-fun! StatusBarFileName()
-  let file_path = substitute(expand('%'), '^netrwtreelisting\|^' . getcwd() . '/\?', '', 'i')
+  fun! StatusBarFileName()
+    let file_path = substitute(expand('%'), '^netrwtreelisting\|^' . getcwd() . '/\?', '', 'i')
 
-  return (empty(file_path) || file_path =~# ';#FZF') ? '*' : file_path
-endfun
+    return (empty(file_path) || file_path =~# ';#FZF') ? '*' : file_path
+  endfun
 
-fun! StatusBar(focussed)
-  if (a:focussed)
-    let section_hl = get(g:mode_colors, tolower(mode()), g:mode_colors.n)
+  fun! StatusBar(focussed)
+    if (a:focussed)
+      let section_hl = get(g:mode_colors, tolower(mode()), g:mode_colors.n)
 
-    return '%#' . section_hl . '#'
-          \ . (&modified ? ' + │' : '')
-          \ . ' %{StatusBarFileName()}'
-          \ . ' %#StatusBar#'
-          \ . '%='
-          \ . '%#' . section_hl . '#'
-          \ . ' %l:%c '
-  else
-    return '%#StatusBar# %{StatusBarFileName()}%= %l:%c '
-  end
-endfun
+      return '%#' . section_hl . '#'
+            \ . (&modified ? ' + │' : '')
+            \ . ' %{StatusBarFileName()}'
+            \ . ' %#StatusBar#'
+            \ . '%='
+            \ . '%#' . section_hl . '#'
+            \ . ' %l:%c '
+    else
+      return '%#StatusBar# %{StatusBarFileName()}%= %l:%c '
+    end
+  endfun
 
-augroup StatusBarHighlightCmds
-  au!
-  au VimEnter,WinEnter,BufWinEnter *
-    \ setlocal statusline& |
-    \ let statusline=&statusline |
-    \ setlocal statusline=%!StatusBar(1)
+  augroup StatusBarHighlightCmds
+    au!
+    au VimEnter,WinEnter,BufWinEnter *
+      \ setlocal statusline& |
+      \ let statusline=&statusline |
+      \ setlocal statusline=%!StatusBar(1)
 
-  au VimLeave,WinLeave,BufWinLeave * setlocal statusline&
-  au Colorscheme * call <SID>StatusBarHighlights()
-augroup END
+    au VimLeave,WinLeave,BufWinLeave * setlocal statusline&
+    au Colorscheme * call <SID>StatusBarHighlights()
+  augroup END
 
-set statusline=%!StatusBar(0)
+  set statusline=%!StatusBar(0)
 " }}}
 
 " Vimux {{{
