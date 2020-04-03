@@ -7,7 +7,6 @@
   set nocompatible
 
   call plug#begin('~/.vim/plugged')
-  Plug 'benmills/vimux'
   Plug 'chriskempson/base16-vim'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'haya14busa/incsearch.vim'
@@ -393,14 +392,6 @@
   augroup END
 
   set statusline=%!StatusBar(0)
-" }}}
-
-" Vimux {{{
-  let g:VimuxPromptString = '% '         " change default vim prompt string
-  let g:VimuxResetSequence = 'q C-u C-l' " clear output before running a command
-
-  noremap <Leader>rr :VimuxPromptCommand<Cr>
-  noremap <S-r>      :VimuxRunLastCommand<Cr>
 " }}}
 
 " Fzf {{{
