@@ -3,7 +3,6 @@
 " }}}
 
 " Init / Plugins {{{
-  let $VIM_OSX = system('uname -a | grep -i darwin') != ''
   set nocompatible
 
   call plug#begin('~/.vim/plugged')
@@ -26,7 +25,7 @@
   Plug 'tpope/vim-surround'
   Plug 'w0rp/ale'
 
-  if $VIM_OSX
+  if has('mac')
     Plug '/usr/local/opt/fzf'
   else
     Plug '~/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -234,7 +233,7 @@
     fun! VimrcDevRefresh()
       if $VIM_DEV
         if (&ft == 'markdown')
-          if $VIM_OSX
+          if has('mac')
             so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
             so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim
           else
