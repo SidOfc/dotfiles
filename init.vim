@@ -132,30 +132,12 @@
   nmap Q: :q<Cr>
   command! -bang -nargs=* Q q
 
-  " I like things that wrap back to start after end, quickfix stops at last
-  " error but if I specify cn again, I want to definitely go to the next error
-  " (I can see line numbers in sidebar to track where I am anyway)
-  fun! <SID>qfnxt()
-    try
-      cnext
-    catch
-      crewind
-    endtry
+  " shortcut for next item in quickfix list, but also wraps
+  " around back to the first item.
+  fun! <SID>QuickfixPreviousWrapped()
+    try | cnext | catch | crewind | endtry
   endfun
-
-  fun! <SID>qfprv()
-    try
-      cprev
-    catch
-      clast
-    endtry
-  endfun
-
-  " shortcut for next in quickfix list.
-  " <SID>qfprv() mapping is missing here, but is used in <SID>FilesOrQF()
-  " which toggles between quickfix <C+p> when qf is open
-  " and FZF :Files when qf is closed.
-  nnoremap <C-n> :call <SID>qfnxt()<Cr>
+  nnoremap <silent> <C-n> :call <SID>QuickfixPreviousWrapped()<Cr>
 
   " easier navigation in normal / visual / operator pending mode
   noremap K     {
@@ -213,7 +195,10 @@
 
   " transparent terminal background
   " never move above `colorscheme` option
-  hi Normal guibg=NONE ctermbg=NONE
+  highlight Normal guibg=NONE ctermbg=NONE
+
+  " hide ghost tilde characters after end of file
+  highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
 
   " convenience function for setting filetype specific spacing
   fun! <SID>IndentSize(amount)
@@ -329,19 +314,19 @@
   " use bottom positioned 20% height bottom split
   let g:fzf_layout = { 'down': '~20%' }
   let g:fzf_colors = {
-    \ 'fg':      ['fg', 'Normal'],
-    \ 'bg':      ['bg', 'Clear'],
-    \ 'hl':      ['fg', 'String'],
-    \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-    \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-    \ 'hl+':     ['fg', 'Statement'],
-    \ 'info':    ['fg', 'PreProc'],
-    \ 'prompt':  ['fg', 'Conditional'],
-    \ 'pointer': ['fg', 'Exception'],
-    \ 'marker':  ['fg', 'Keyword'],
-    \ 'spinner': ['fg', 'Label'],
-    \ 'header':  ['fg', 'Comment']
-    \ }
+        \ 'fg':      ['fg', 'Normal'],
+        \ 'bg':      ['bg', 'Clear'],
+        \ 'hl':      ['fg', 'String'],
+        \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+        \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+        \ 'hl+':     ['fg', 'Statement'],
+        \ 'info':    ['fg', 'PreProc'],
+        \ 'prompt':  ['fg', 'Conditional'],
+        \ 'pointer': ['fg', 'Exception'],
+        \ 'marker':  ['fg', 'Keyword'],
+        \ 'spinner': ['fg', 'Label'],
+        \ 'header':  ['fg', 'Comment']
+        \ }
 
   fun! <SID>MkdxGoToHeader(header)
     call cursor(str2nr(get(matchlist(a:header, ' *\([0-9]\+\)'), 1, '')), 1)
@@ -366,17 +351,19 @@
     nnoremap <silent> <Leader>I :call <SID>MkdxFzfQuickfixHeaders()<Cr>
   endif
 
-  " keeping Rg command since the built-in one does not skip checking filenames
-  " for an in-file search.
+  " do not use fzf built-in Rg command since it also searches within filenames.
   command! -bang -nargs=* Rg
         \ call fzf#vim#grep(
         \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
         \    fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '§'),
         \   0)
 
+  " when quickfix is open, jump to previous, wrapping back
+  " to end of list when at the first item. when quickfix
+  " is closed, spawns an fzf find-file-by-path popup
   fun! <SID>FilesOrQF()
     if len(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist'))
-      call <SID>qfprv()
+      try | cprev | catch | clast | endtry
     else
       Files
     endif
@@ -413,7 +400,7 @@
 
   fun! <SID>StatusLineHighlights()
     highlight StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
-    highlight StatusLineNC       ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
+    highlight StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
     highlight StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
     highlight StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
     highlight StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
@@ -422,7 +409,8 @@
   endfun
 
   fun! StatusLineFilename()
-    let file_path = substitute(expand('%'), '^netrwtreelisting\|^' . getcwd() . '/\?', '', 'i')
+    let pattern   = '^netrwtreelisting\|^' . getcwd() . '/\?'
+    let file_path = substitute(expand('%'), pattern, '', 'i')
 
     return (empty(file_path) || file_path =~# ';#FZF') ? '*' : file_path
   endfun
@@ -432,15 +420,14 @@
 
     return '%#' . section_hl . '#'
           \ . (&modified ? ' + │' : '')
-          \ . ' %{StatusLineFilename()}'
-          \ . ' %#StatusLine#'
-          \ . '%='
-          \ . '%#' . section_hl . '#'
-          \ . ' %l:%c '
+          \ . ' %{StatusLineFilename()} %#StatusLine#%='
+          \ . '%#' . section_hl . '# %l:%c '
   endfun
 
   call <SID>StatusLineHighlights()
-  let &statusline = ' %{StatusLineFilename()}%= %l:%c '
+  if has('vim_starting')
+    let &statusline = ' %{StatusLineFilename()}%= %l:%c '
+  endif
 " }}}
 
 " Autocommands {{{
@@ -469,7 +456,7 @@
 
     " hide status and ruler for cleaner fzf windows
     if has('nvim')
-      autocmd  FileType fzf
+      au FileType fzf
             \ set laststatus& laststatus=0 |
             \ autocmd BufLeave <buffer> set laststatus&
     endif
