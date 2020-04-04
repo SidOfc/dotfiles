@@ -251,16 +251,13 @@
 
 " Development {{{{
   fun! <SID>SynStack()
-    if !exists("*synstack")
-      return
+    if exists("*synstack")
+      echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
     endif
-    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
   endfun
 
-  nmap <silent> <leader>gp :call <SID>SynStack()<Cr>
-
-  if $VIM_DEV
-    fun! <SID>DevRefresh()
+  fun! <SID>DevRefresh()
+    if $VIM_DEV
       if (&ft == 'markdown')
         if $VIM_OSX
           so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
@@ -272,10 +269,11 @@
       endif
 
       mess clear
-    endfun
+    endif
+  endfun
 
-    nmap <silent> <Leader>R :call <SID>DevRefresh()<Cr>
-  endif
+  nmap <silent> <leader>gp :call <SID>SynStack()<Cr>
+  nmap <silent> <Leader>R :call <SID>DevRefresh()<Cr>
 " }}}
 
 " rust.vim settings {{{
@@ -364,20 +362,16 @@
     return (empty(file_path) || file_path =~# ';#FZF') ? '*' : file_path
   endfun
 
-  fun! StatusBar(focussed)
-    if (a:focussed)
-      let section_hl = get(g:mode_colors, tolower(mode()), g:mode_colors.n)
+  fun! StatusBar()
+    let section_hl = get(g:mode_colors, tolower(mode()), g:mode_colors.n)
 
-      return '%#' . section_hl . '#'
-            \ . (&modified ? ' + │' : '')
-            \ . ' %{StatusBarFileName()}'
-            \ . ' %#StatusBar#'
-            \ . '%='
-            \ . '%#' . section_hl . '#'
-            \ . ' %l:%c '
-    else
-      return '%#StatusBar# %{StatusBarFileName()}%= %l:%c '
-    end
+    return '%#' . section_hl . '#'
+          \ . (&modified ? ' + │' : '')
+          \ . ' %{StatusBarFileName()}'
+          \ . ' %#StatusBar#'
+          \ . '%='
+          \ . '%#' . section_hl . '#'
+          \ . ' %l:%c '
   endfun
 
   augroup StatusBarHighlightCmds
@@ -385,13 +379,13 @@
     au VimEnter,WinEnter,BufWinEnter *
       \ setlocal statusline& |
       \ let statusline=&statusline |
-      \ setlocal statusline=%!StatusBar(1)
+      \ setlocal statusline=%!StatusBar()
 
     au VimLeave,WinLeave,BufWinLeave * setlocal statusline&
     au Colorscheme * call <SID>StatusBarHighlights()
   augroup END
 
-  set statusline=%!StatusBar(0)
+  let &statusline = '%#StatusBar# %{StatusBarFileName()}%= %l:%c '
 " }}}
 
 " Fzf {{{
