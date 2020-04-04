@@ -1,5 +1,7 @@
 " Some things to remember {{{
 "   - In Visual-Block mode, pressing 'o' will move to the opposite end
+"   - This init.vim file depends on https://github.com/junegunn/vim-plug
+"     being installed!.
 " }}}
 
 " Init / Plugins {{{
@@ -93,9 +95,9 @@
   set clipboard+=unnamedplus      " copy into osx clipboard by default
   set encoding=utf-8              " utf-8 files
   set expandtab                   " softtabs, always (e.g. convert tabs to spaces)
-  set shiftwidth=2                " tabsize 2 spaces (by default)
-  set softtabstop=2               " tabsize 2 spaces (by default)
   set tabstop=2                   " tabsize 2 spaces (by default)
+  set shiftwidth=0                " use 'tabstop' value for 'shiftwidth'
+  set softtabstop=2               " tabsize 2 spaces (by default)
   set laststatus=2                " always show statusline
   set showtabline=0               " never show tab bar
   set backspace=2                 " restore backspace
@@ -267,7 +269,7 @@
 
 " Netrw {{{
   let g:netrw_banner    = 0
-  let g:netrw_winsize   = 70
+  let g:netrw_winsize   = 0
   let g:netrw_liststyle = 3
   let g:netrw_altv      = 1
   let g:netrw_alto      = 1
