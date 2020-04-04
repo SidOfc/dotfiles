@@ -13,6 +13,7 @@
   Plug 'haya14busa/incsearch-fuzzy.vim'
   Plug 'jreybert/vimagit'
   Plug 'junegunn/vim-easy-align'
+  Plug 'junegunn/vader.vim'
   Plug 'machakann/vim-highlightedyank'
   Plug 'pangloss/vim-javascript'
   Plug 'rust-lang/rust.vim'
@@ -34,7 +35,6 @@
   Plug 'junegunn/fzf.vim'
 
   if $VIM_DEV
-    Plug 'junegunn/vader.vim'
     if !$DISABLE_MKDX
       Plug '~/Dev/mkdx'
     endif
