@@ -63,6 +63,14 @@
     set undofile
   endif
 
+  " it is not 'safe' to set these
+  " while in
+  if &modifiable
+    set fileencoding=utf-8        " utf-8 files
+    set fileformat=unix           " use unix line endings
+    set fileformats=unix,dos      " try unix line endings before dos, use unix
+  endif
+
   set lazyredraw                  " maybe make drawing faster?
   set path+=**                    " add cwd and 1 level of nesting to path
   set hidden                      " allow switching from unsaved buffer without '!'
@@ -81,9 +89,6 @@
   set noswapfile                  " no more swapfiles
   set clipboard+=unnamedplus      " copy into osx clipboard by default
   set encoding=utf-8              " utf-8 files
-  set fileencoding=utf-8          " utf-8 files
-  set fileformat=unix             " use unix line endings
-  set fileformats=unix,dos        " try unix line endings before dos, use unix
   set expandtab                   " softtabs, always (e.g. convert tabs to spaces)
   set shiftwidth=2                " tabsize 2 spaces (by default)
   set softtabstop=2               " tabsize 2 spaces (by default)
@@ -122,14 +127,14 @@
   map <C-z>    <Nop>
 
   " Sometimes I press q:, Q: or :Q instead of :q, I never want to open related functionality
-  map <silent> q: :q<Cr>
-  map <silent> Q: :q<Cr>
-  map <silent> :Q :q<Cr>
+  nmap q: :q<Cr>
+  nmap Q: :q<Cr>
+  command! -bang -nargs=* Q q
 
   " I like things that wrap back to start after end, quickfix stops at last
   " error but if I specify cn again, I want to definitely go to the next error
   " (I can see line numbers in sidebar to track where I am anyway)
-  fun! s:__qfnxt()
+  fun! <SID>qfnxt()
     try
       cnext
     catch
@@ -137,7 +142,7 @@
     endtry
   endfun
 
-  fun! s:__qfprv()
+  fun! <SID>qfprv()
     try
       cprev
     catch
@@ -145,11 +150,11 @@
     endtry
   endfun
 
-  " shortcuts for quickfix list
-  nnoremap <silent> <C-n> :call <SID>__qfnxt()<Cr>
-  " this one is replaced by s:CtrlPMapping which can be found
-  " in FZF configuration section
-  nnoremap <silent> <C-M-n> :call <SID>__qfprv()<Cr>
+  " shortcut for next in quickfix list.
+  " <SID>qfprv() is missing here, but is used in <SID>FilesOrQF()
+  " which toggles between quickfix <C+p> when qf is open,
+  " and FZF :Files when qf is closed.
+  nnoremap <C-n> :call <SID>qfnxt()<Cr>
 
   " easier navigation in normal / visual / operator pending mode
   noremap K     {
@@ -164,15 +169,9 @@
   inoremap <C-s> <Esc>:write<Cr>
   onoremap <C-s> <Esc>:write<Cr>
 
-  fun! s:__bclose()
-    if (len(getbufinfo({'buflisted': 1})) > 1)
-      bdelete
-    endif
-  endfun
-
   " close pane using <C-w> since I know it from Chrome / Atom (cmd+w) and do
   " not use the <C-w> mappings anyway
-  noremap <silent> <C-w> :call <SID>__bclose()<Cr>
+  noremap <silent> <C-w> :bdelete<Cr>
 
   " easier one-off navigation in insert mode
   inoremap <C-k> <Up>
@@ -256,24 +255,31 @@
     endif
   endfun
 
-  fun! <SID>DevRefresh()
-    if $VIM_DEV
-      if (&ft == 'markdown')
-        if $VIM_OSX
-          so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
-          so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim
-        else
-          so ~/Dev/mkdx/after/syntax/markdown/mkdx.vim
-          so ~/Dev/mkdx/autoload/mkdx.vim
+  if !exists('*VimrcDevRefresh')
+    " this function must never be redefined because
+    " it reloads the file it is defined in,
+    " will cause an error otherwise.
+    fun! VimrcDevRefresh()
+      if $VIM_DEV
+        if (&ft == 'markdown')
+          if $VIM_OSX
+            so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
+            so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim
+          else
+            so ~/Dev/mkdx/after/syntax/markdown/mkdx.vim
+            so ~/Dev/mkdx/autoload/mkdx.vim
+          endif
         endif
-      endif
 
-      mess clear
-    endif
-  endfun
+        mess clear
+      else
+        so $MYVIMRC
+      endif
+    endfun
+  endif
 
   nmap <silent> <leader>gp :call <SID>SynStack()<Cr>
-  nmap <silent> <Leader>R :call <SID>DevRefresh()<Cr>
+  nmap <silent> <Leader>R :call VimrcDevRefresh()<Cr>
 " }}}
 
 " rust.vim settings {{{
@@ -431,23 +437,29 @@
   endfun
 
   if (!$VIM_DEV)
+    " when not developing mkdx, use fancier <leader>I which uses fzf
     nnoremap <silent> <Leader>I :call <SID>MkdxFzfQuickfixHeaders()<Cr>
   endif
 
   " keeping Rg command since the built-in one does not skip checking filenames
   " for an in-file search...
   command! -bang -nargs=* Rg
-   \ call fzf#vim#grep(
-   \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
-   \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
-   \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '§'),
-   \   <bang>0)
+        \ call fzf#vim#grep(
+        \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
+        \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+        \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '§'),
+        \   <bang>0)
 
-  " only use FZF shortcuts in non diff-mode
-  if !&diff
-    nnoremap <silent> <C-p> :Files<Cr>
-    nnoremap <C-g> :Rg<Cr>
-  endif
+  fun! <SID>FilesOrQF()
+    if len(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist'))
+      call <SID>qfprv()
+    else
+      Files
+    endif
+  endfun
+
+  nnoremap <C-p> :call <SID>FilesOrQF()<Cr>
+  nnoremap <C-g> :Rg<Cr>
 " }}}
 
 " Vimagit {{{
