@@ -431,12 +431,13 @@
   endfun
 
   fun! StatusLineRenderer()
-    let section_hl = get(g:mode_colors, tolower(mode()), g:mode_colors.n)
+    let section_hl = '%#' . get(g:mode_colors, tolower(mode()), g:mode_colors.n) . '#'
 
-    return '%#' . section_hl . '#'
+    return section_hl
           \ . (&modified ? ' + │' : '')
           \ . ' %{StatusLineFilename()} %#StatusLine#%='
-          \ . '%#' . section_hl . '# %l:%c '
+          \ . section_hl
+          \ . ' %l:%c '
   endfun
 
   call <SID>StatusLineHighlights()
