@@ -280,11 +280,6 @@
     nmap <buffer> <C-v> v
     nmap <buffer> <C-x> o
     nmap <buffer> <C-l> :wincmd l<Cr>
-
-    augroup VimrcNetrw
-      au!
-      au BufLeave <buffer> echo 'what?'
-    augroup END
   endfun
 " }}}
 
@@ -477,7 +472,8 @@
     if has('nvim')
       au FileType fzf
             \ set laststatus& laststatus=0 |
-            \ autocmd BufLeave <buffer> set laststatus&
+            \ au BufLeave <buffer> set laststatus&
+    augroup END
     endif
 
     " restore statusline highlights on colorscheme update
