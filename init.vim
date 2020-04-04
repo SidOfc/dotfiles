@@ -10,6 +10,7 @@
   Plug 'chriskempson/base16-vim'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'haya14busa/incsearch.vim'
+  Plug 'haya14busa/incsearch-fuzzy.vim'
   Plug 'jreybert/vimagit'
   Plug 'junegunn/vim-easy-align'
   Plug 'machakann/vim-highlightedyank'
@@ -45,10 +46,12 @@
 " }}}
 
 " General {{{
+  " my leader of choice is <space>
   let mapleader = ' '
 
+  " substitute with highlight preview
   if has('nvim')
-    set inccommand=nosplit " substitute with preview
+    set inccommand=nosplit
   endif
 
   " can't believe I didn't do this before
@@ -71,7 +74,7 @@
     set fileformats=unix,dos      " try unix line endings before dos, use unix
   endif
 
-  set lazyredraw                  " maybe make drawing faster?
+  set lazyredraw                  " less redrawing during macro execution etc
   set path+=**                    " add cwd and 1 level of nesting to path
   set hidden                      " allow switching from unsaved buffer without '!'
   set ignorecase                  " ignore case in search
@@ -294,7 +297,7 @@
         \ 'jsx': ['prettier'],
         \ 'json': ['prettier']
         \ }
-  let g:ale_linters               = {
+  let g:ale_linters = {
         \ 'ruby': ['rubocop'],
         \ 'javascript': ['eslint', 'flow'],
         \ 'fish': []
@@ -306,12 +309,12 @@
   let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
   let g:incsearch#consistent_n_direction            = 1 " when searching backward, do not invert meaning of n and N
 
-  map / <Plug>(incsearch-forward)
-  map ? <Plug>(incsearch-backward)
+  map /   <Plug>(incsearch-fuzzy-/)
+  map ?   <Plug>(incsearch-fuzzy-?)
+  map zg/ <Plug>(incsearch-fuzzy-stay)
 " }}}
 
 " Fzf {{{
-  " use bottom positioned 20% height bottom split
   let g:fzf_layout = { 'down': '~20%' }
   let g:fzf_colors = {
         \ 'fg':      ['fg', 'Normal'],
