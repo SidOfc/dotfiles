@@ -78,6 +78,7 @@
   set nohlsearch                  " do not highlight searches, incsearch plugin does this
   set smartcase                   " use case-sensitive if a capital letter is included
   set noshowmode                  " statusline makes -- INSERT -- info irrelevant
+  set noruler                     " do not show ruler
   set cursorline                  " highlight cursor line
   set splitbelow                  " split below instead of above
   set splitright                  " split after instead of before
@@ -151,8 +152,8 @@
   endfun
 
   " shortcut for next in quickfix list.
-  " <SID>qfprv() is missing here, but is used in <SID>FilesOrQF()
-  " which toggles between quickfix <C+p> when qf is open,
+  " <SID>qfprv() mapping is missing here, but is used in <SID>FilesOrQF()
+  " which toggles between quickfix <C+p> when qf is open
   " and FZF :Files when qf is closed.
   nnoremap <C-n> :call <SID>qfnxt()<Cr>
 
@@ -214,29 +215,12 @@
   " never move above `colorscheme` option
   hi Normal guibg=NONE ctermbg=NONE
 
-  " delete existing notes in ~/notes
-  fun! s:DeleteNote(paths)
-    call delete(a:paths)
-  endfun
-
-  " create a new note in ~/notes
-  fun! s:NewNote()
-    call inputsave()
-    let l:fname = input('Note name: ')
-    call inputrestore()
-
-    if strlen(l:fname) > 0
-      let l:fpath = expand('~/notes/' . fnameescape(substitute(tolower(l:fname), ' ', '-', 'g')))
-      exe "tabe " . l:fpath . ".md"
-    endif
-  endfun
-
   " convenience function for setting filetype specific spacing
-  fun! s:IndentSize(amount)
+  fun! <SID>IndentSize(amount)
     exe "setlocal expandtab ts=" . a:amount . " sts=" . a:amount . " sw=" . a:amount
   endfun
 
-  fun! s:StripWS()
+  fun! <SID>StripWS()
     if (&ft =~ 'vader' || &ft =~ 'markdown' || &ft == '' || &ft == 'help') | return | endif
     %s/\s\+$//e
   endfun
@@ -303,6 +287,7 @@
 " }}}
 
 " Mkdx {{{
+  let g:polyglot_disabled = ['markdown']
   let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
                             \ 'restore_visual': 1,
                             \ 'enter': { 'shift': 1 },
@@ -310,7 +295,6 @@
                             \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1,
                             \          'details': { 'nesting_level': 0 } },
                             \ 'fold': { 'enable': 1 } }
-  let g:polyglot_disabled = ['markdown']
 " }}}
 
 " Ale {{{
@@ -341,59 +325,6 @@
   map ? <Plug>(incsearch-backward)
 " }}}
 
-" {{{ Status bar
-  let g:mode_colors = {
-        \ 'n': 'StatusBarSection',
-        \ 'v': 'StatusBarSectionV',
-        \ '': 'StatusBarSectionV',
-        \ 'i': 'StatusBarSectionI',
-        \ 'c': 'StatusBarSectionC',
-        \ 'r': 'StatusBarSectionR'
-        \ }
-
-  fun! s:StatusBarHighlights()
-    highlight default StatusBar         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
-    highlight default StatusBarSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
-    highlight default StatusBarSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
-    highlight default StatusBarSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
-    highlight default StatusBarSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
-    highlight default StatusBarSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
-  endfun
-
-  call s:StatusBarHighlights()
-
-  fun! StatusBarFileName()
-    let file_path = substitute(expand('%'), '^netrwtreelisting\|^' . getcwd() . '/\?', '', 'i')
-
-    return (empty(file_path) || file_path =~# ';#FZF') ? '*' : file_path
-  endfun
-
-  fun! StatusBar()
-    let section_hl = get(g:mode_colors, tolower(mode()), g:mode_colors.n)
-
-    return '%#' . section_hl . '#'
-          \ . (&modified ? ' + │' : '')
-          \ . ' %{StatusBarFileName()}'
-          \ . ' %#StatusBar#'
-          \ . '%='
-          \ . '%#' . section_hl . '#'
-          \ . ' %l:%c '
-  endfun
-
-  augroup StatusBarHighlightCmds
-    au!
-    au VimEnter,WinEnter,BufWinEnter *
-      \ setlocal statusline& |
-      \ let statusline=&statusline |
-      \ setlocal statusline=%!StatusBar()
-
-    au VimLeave,WinLeave,BufWinLeave * setlocal statusline&
-    au Colorscheme * call <SID>StatusBarHighlights()
-  augroup END
-
-  let &statusline = '%#StatusBar# %{StatusBarFileName()}%= %l:%c '
-" }}}
-
 " Fzf {{{
   " use bottom positioned 20% height bottom split
   let g:fzf_layout = { 'down': '~20%' }
@@ -412,16 +343,11 @@
     \ 'header':  ['fg', 'Comment']
     \ }
 
-  " simple notes bindings using fzf wrapper
-  nnoremap <silent> <Leader>n :call fzf#run(fzf#wrap({'source': 'rg --files ~/notes', 'options': '--header="[notes:search]" --preview="cat {}"'}))<Cr>
-  nnoremap <silent> <Leader>N :call <SID>NewNote()<Cr>
-  nnoremap <silent> <Leader>nd :call fzf#run(fzf#wrap({'source': 'rg --files ~/notes', 'options': '--header="[notes:delete]" --preview="cat {}"', 'sink': function('<SID>DeleteNote')}))<Cr>
-
-  fun! s:MkdxGoToHeader(header)
+  fun! <SID>MkdxGoToHeader(header)
     call cursor(str2nr(get(matchlist(a:header, ' *\([0-9]\+\)'), 1, '')), 1)
   endfun
 
-  fun! s:MkdxFormatHeader(key, val)
+  fun! <SID>MkdxFormatHeader(key, val)
     let text = get(a:val, 'text', '')
     let lnum = get(a:val, 'lnum', '')
     if (empty(text) || empty(lnum)) | return text | endif
@@ -429,26 +355,24 @@
     return repeat(' ', 4 - strlen(lnum)) . lnum . ': ' . text
   endfun
 
-  fun! s:MkdxFzfQuickfixHeaders()
+  fun! <SID>MkdxFzfQuickfixHeaders()
     let headers = filter(map(mkdx#QuickfixHeaders(0), function('<SID>MkdxFormatHeader')), 'v:val != ""')
-    call fzf#run(fzf#wrap(
-            \ {'source': headers, 'sink': function('<SID>MkdxGoToHeader') }
-          \ ))
+    call fzf#run(fzf#wrap({'source': headers, 'sink': function('<SID>MkdxGoToHeader') }))
   endfun
 
   if (!$VIM_DEV)
     " when not developing mkdx, use fancier <leader>I which uses fzf
+    " instead of qf to jump to headers in markdown documents.
     nnoremap <silent> <Leader>I :call <SID>MkdxFzfQuickfixHeaders()<Cr>
   endif
 
   " keeping Rg command since the built-in one does not skip checking filenames
-  " for an in-file search...
+  " for an in-file search.
   command! -bang -nargs=* Rg
         \ call fzf#vim#grep(
         \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
-        \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
-        \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '§'),
-        \   <bang>0)
+        \    fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '§'),
+        \   0)
 
   fun! <SID>FilesOrQF()
     if len(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist'))
@@ -458,8 +382,8 @@
     endif
   endfun
 
-  nnoremap <C-p> :call <SID>FilesOrQF()<Cr>
-  nnoremap <C-g> :Rg<Cr>
+  nnoremap <silent> <C-p> :call <SID>FilesOrQF()<Cr>
+  nnoremap <silent> <C-g> :Rg<Cr>
 " }}}
 
 " Vimagit {{{
@@ -477,20 +401,80 @@
   nmap gr <Plug>(EasyAlign)
 " }}}
 
-" Autocommands {{{
-  augroup Windows
-    au!
-    au FocusGained,VimEnter,WinEnter,BufWinEnter * setlocal cursorline " enable cursorline in focussed buffer
-    au FocusGained,VimEnter,WinEnter,BufWinEnter * :checktime          " reload file if it has changed on disk
-    au WinLeave,FocusLost * setlocal nocursorline                      " disable cursorline when leaving buffer
-    au VimResized * wincmd =                                           " auto resize splits on resize
-  augroup END
+" {{{ Status bar
+  let g:mode_colors = {
+        \ 'n':  'StatusLineSection',
+        \ 'v':  'StatusLineSectionV',
+        \ '': 'StatusLineSectionV',
+        \ 'i':  'StatusLineSectionI',
+        \ 'c':  'StatusLineSectionC',
+        \ 'r':  'StatusLineSectionR'
+        \ }
 
-  augroup Files
+  fun! <SID>StatusLineHighlights()
+    highlight StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
+    highlight StatusLineNC       ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
+    highlight StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
+    highlight StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
+    highlight StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
+    highlight StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
+    highlight StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
+  endfun
+
+  fun! StatusLineFilename()
+    let file_path = substitute(expand('%'), '^netrwtreelisting\|^' . getcwd() . '/\?', '', 'i')
+
+    return (empty(file_path) || file_path =~# ';#FZF') ? '*' : file_path
+  endfun
+
+  fun! StatusLineRenderer()
+    let section_hl = get(g:mode_colors, tolower(mode()), g:mode_colors.n)
+
+    return '%#' . section_hl . '#'
+          \ . (&modified ? ' + │' : '')
+          \ . ' %{StatusLineFilename()}'
+          \ . ' %#StatusLine#'
+          \ . '%='
+          \ . '%#' . section_hl . '#'
+          \ . ' %l:%c '
+  endfun
+
+  call <SID>StatusLineHighlights()
+  let &statusline = ' %{StatusLineFilename()}%= %l:%c '
+" }}}
+
+" Autocommands {{{
+  augroup VimrcAutoCmds
     au!
-    au BufWritePre *                            call s:StripWS()     " remove trailing whitespace before saving buffer
-    au FileType markdown,python,json,javascript call s:IndentSize(4)
-    au FileType javascriptreact,jsx             call s:IndentSize(4)
-    au FileType help                            nmap <buffer> q :q<Cr>
+
+    " auto resize splits on resize
+    au VimResized * wincmd =
+
+    " auto reload file changes outside of vim, toggle custom status bar,
+    " and toggle cursorline for active buffer.
+    au FocusGained,VimEnter,WinEnter,BufWinEnter *
+          \ setlocal cursorline& statusline& |
+          \ setlocal cursorline  statusline=%!StatusLineRenderer() |
+          \ checktime
+
+    " restore above settings when leaving buffer / vim
+    au FocusLost,VimLeave,WinLeave,BufWinLeave * setlocal statusline& cursorline&
+
+    " set indent for various languages
+    au FileType markdown,python,json,javascript call <SID>IndentSize(4)
+    au FileType javascriptreact,jsx             call <SID>IndentSize(4)
+
+    " remove trailing whitespace before saving buffer
+    au BufWritePre * call <SID>StripWS()
+
+    " hide status and ruler for cleaner fzf windows
+    if has('nvim')
+      autocmd  FileType fzf
+            \ set laststatus& laststatus=0 |
+            \ autocmd BufLeave <buffer> set laststatus&
+    endif
+
+    " restore statusline highlights on colorscheme update
+    au Colorscheme * call <SID>StatusLineHighlights()
   augroup END
 " }}}
