@@ -156,7 +156,7 @@
 
   " close pane using <C-w> since I know it from Chrome / Atom (cmd+w) and do
   " not use the <C-w> mappings anyway
-  noremap <silent> <C-w> :bdelete<Cr>
+  noremap <silent> <C-w> :q<Cr>
 
   " easier one-off navigation in insert mode
   inoremap <C-k> <Up>
@@ -267,10 +267,25 @@
 
 " Netrw {{{
   let g:netrw_banner    = 0
-  let g:netrw_winsize   = 20
+  let g:netrw_winsize   = 70
   let g:netrw_liststyle = 3
   let g:netrw_altv      = 1
+  let g:netrw_alto      = 1
   let g:netrw_cursor    = 1
+
+  fun! <SID>CustomizeNetrw()
+    nmap <buffer> q     <Nop>
+    nmap <buffer> <C-w> <Nop>
+    nmap <buffer> !     :Ntree .
+    nmap <buffer> <C-v> v
+    nmap <buffer> <C-x> o
+    nmap <buffer> <C-l> :wincmd l<Cr>
+
+    augroup VimrcNetrw
+      au!
+      au BufLeave <buffer> echo 'what?'
+    augroup END
+  endfun
 " }}}
 
 " Mkdx {{{
@@ -308,9 +323,10 @@
   let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
   let g:incsearch#consistent_n_direction            = 1 " when searching backward, do not invert meaning of n and N
 
-  map /   <Plug>(incsearch-fuzzy-/)
-  map ?   <Plug>(incsearch-fuzzy-?)
-  map zg/ <Plug>(incsearch-fuzzy-stay)
+  map /         <Plug>(incsearch-forward)
+  map ?         <Plug>(incsearch-backward)
+  map <leader>/ <Plug>(incsearch-fuzzy-/)
+  map <leader>? <Plug>(incsearch-fuzzy-?)
 " }}}
 
 " Fzf {{{
@@ -452,6 +468,7 @@
     " set indent for various languages
     au FileType markdown,python,json,javascript call <SID>IndentSize(4)
     au FileType javascriptreact,jsx             call <SID>IndentSize(4)
+    au FileType netrw                           call <SID>CustomizeNetrw()
 
     " remove trailing whitespace before saving buffer
     au BufWritePre * call <SID>StripWS()
