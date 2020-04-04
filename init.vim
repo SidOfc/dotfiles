@@ -473,7 +473,6 @@
       au FileType fzf
             \ set laststatus& laststatus=0 |
             \ au BufLeave <buffer> set laststatus&
-    augroup END
     endif
 
     " restore statusline highlights on colorscheme update
