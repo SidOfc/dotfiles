@@ -10,8 +10,10 @@
   call plug#begin('~/.vim/plugged')
   Plug 'chriskempson/base16-vim'
   Plug 'christoomey/vim-tmux-navigator'
+  Plug 'easymotion/vim-easymotion'
   Plug 'haya14busa/incsearch.vim'
   Plug 'haya14busa/incsearch-fuzzy.vim'
+  Plug 'haya14busa/incsearch-easymotion.vim'
   Plug 'jreybert/vimagit'
   Plug 'junegunn/vim-easy-align'
   Plug 'junegunn/vader.vim'
@@ -320,10 +322,25 @@
   let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
   let g:incsearch#consistent_n_direction            = 1 " when searching backward, do not invert meaning of n and N
 
-  map /         <Plug>(incsearch-forward)
-  map ?         <Plug>(incsearch-backward)
-  map <leader>/ <Plug>(incsearch-fuzzy-/)
-  map <leader>? <Plug>(incsearch-fuzzy-?)
+  function! <SID>incsearch_config(...) abort
+    return incsearch#util#deepextend(deepcopy({
+    \   'modules': [incsearch#config#easymotion#module()],
+    \   'keymap': {"\<CR>": '<Over>(easymotion)'},
+    \   'is_expr': 0,
+    \ }), get(a:, 1, {}))
+  endfunction
+
+  function! <SID>incsearch_config_fuzzy(...) abort
+    return extend(copy({
+    \   'converters': [incsearch#config#fuzzyword#converter()],
+    \   'is_stay': 1
+    \ }), <SID>incsearch_config(get(a:, 1, {})))
+  endfunction
+
+  map <silent><expr> /         incsearch#go(<SID>incsearch_config())
+  map <silent><expr> ?         incsearch#go(<SID>incsearch_config({'command': '?'}))
+  map <silent><expr> <leader>/ incsearch#go(<SID>incsearch_config_fuzzy())
+  map <silent><expr> <leader>? incsearch#go(<SID>incsearch_config_fuzzy({'command': '?'}))
 " }}}
 
 " Fzf {{{
