@@ -342,7 +342,6 @@
   fun! <SID>incsearch_config_fuzzy(...) abort
     return extend(copy({
           \ 'converters': [incsearch#config#fuzzyword#converter()],
-          \ 'is_stay': 1
           \ }), <SID>incsearch_config(get(a:, 1, {})))
   endfun
 
