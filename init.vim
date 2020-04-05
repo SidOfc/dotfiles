@@ -282,12 +282,12 @@
   let g:netrw_cursor    = 1
 
   fun! <SID>CustomizeNetrw()
-    nmap <buffer> q     <Nop>
-    nmap <buffer> <C-w> <Nop>
-    nmap <buffer> !     :Ntree .
-    nmap <buffer> <C-v> v
-    nmap <buffer> <C-x> o
-    nmap <buffer> <C-l> :wincmd l<Cr>
+    nmap <silent><buffer> q     <Nop>
+    nmap <silent><buffer> <C-w> <Nop>
+    nmap <silent><buffer> !     :Ntree .
+    nmap <silent><buffer> <C-v> v
+    nmap <silent><buffer> <C-x> o
+    nmap <silent><buffer> <C-l> :TmuxNavigateRight<Cr>
   endfun
 " }}}
 
