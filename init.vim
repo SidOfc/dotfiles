@@ -89,12 +89,11 @@
   set smartcase                  " case-sensitive only with capital letters
   set noshowmode                 " no need due to custom statusline
   set noruler                    " do not show ruler
+  set list lcs=tab:‣\ ,trail:•   " customize invisibles
   set cursorline                 " highlight cursor line
   set splitbelow                 " split below instead of above
   set splitright                 " split after instead of before
   set termguicolors              " enable termguicolors for better highlighting
-  set list                       " show invisibles
-  set lcs=tab:·\                 " show tab as that thing
   set background=dark            " set bg dark
   set nobackup                   " do not keep backups
   set noswapfile                 " no more swapfiles
@@ -208,6 +207,9 @@
   " never move above `colorscheme` option
   highlight Normal guibg=NONE ctermbg=NONE
 
+  " highlight trailing whitespace
+  highlight TrailingWhitespace ctermfg=0 guifg=Black ctermbg=8 guibg=#41535B
+
   " hide ghost tilde characters after end of file
   highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
 
@@ -216,12 +218,6 @@
     exe "setlocal expandtab"
           \ . " ts="  . a:amount
           \ . " sts=" . a:amount
-  endfun
-
-  fun! <SID>StripWhitespace()
-    if (&ft != '' && &ft !~? 'vader\|markdown\|help\|netrw')
-      %s/\s\+$//e
-    endif
   endfun
 
   " use ripgrep as grepprg
@@ -500,6 +496,12 @@
     " auto resize splits on resize
     au VimResized * wincmd =
 
+    match TrailingWhitespace /\s\+$/
+    autocmd BufWinEnter * match TrailingWhitespace /\s\+$/
+    autocmd InsertEnter * match TrailingWhitespace /\s\+\%#\@<!$/
+    autocmd InsertLeave * match TrailingWhitespace /\s\+$/
+    autocmd BufWinLeave * call clearmatches()
+
     " auto reload file changes outside of vim, toggle custom status bar,
     " and toggle cursorline for active buffer.
     au FocusGained,VimEnter,WinEnter,BufWinEnter *
@@ -515,9 +517,6 @@
     au FileType markdown,python,json,javascript call <SID>IndentSize(4)
     au FileType javascriptreact,jsx             call <SID>IndentSize(4)
     au FileType netrw                           call <SID>CustomizeNetrw()
-
-    " remove trailing whitespace before saving buffer
-    au BufWritePre * call <SID>StripWhitespace()
 
     " hide status and ruler for cleaner fzf windows
     if has('nvim')
