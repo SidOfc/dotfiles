@@ -55,12 +55,13 @@
   " my leader of choice is <space>
   let mapleader = ' '
 
-  " substitute with highlight preview
+  " substitute with live-highlight preview on matches
   if has('nvim')
     set inccommand=nosplit
   endif
 
-  " can't believe I didn't do this before
+  " store undo history in a file. even after closing and reopening vim
+  " changes from previous editing session are still available.
   if has('persistent_undo')
     let target_path = expand('~/.config/vim-persisted-undo/')
 
@@ -73,7 +74,7 @@
   endif
 
   " it is not 'safe' to set these
-  " while in
+  " while resourcing $MYVIMRC in read-only files (netrw for example)
   if &modifiable
     set fileencoding=utf-8       " utf-8 files
     set fileformat=unix          " use unix line endings
@@ -199,10 +200,9 @@
   " use `u` to undo, use `U` to redo, mind = blown
   nnoremap U <C-r>
 
-  " I always escape from this mode anyway,
-  " best never to enter it
-  nnoremap <S-r> <Nop>
-  inoremap <Ins> <Nop>
+  " maybe there is value to these? :thinking_face:
+  " nnoremap <S-r> <Nop>
+  " inoremap <Ins> <Nop>
 
   " transparent terminal background
   " never move above `colorscheme` option
@@ -218,7 +218,7 @@
           \ . " sts=" . a:amount
   endfun
 
-  fun! <SID>StripWS()
+  fun! <SID>StripWhitespace()
     if (&ft != '' && &ft !~? 'vader\|markdown\|help\|netrw')
       %s/\s\+$//e
     endif
@@ -517,7 +517,7 @@
     au FileType netrw                           call <SID>CustomizeNetrw()
 
     " remove trailing whitespace before saving buffer
-    au BufWritePre * call <SID>StripWS()
+    au BufWritePre * call <SID>StripWhitespace()
 
     " hide status and ruler for cleaner fzf windows
     if has('nvim')
