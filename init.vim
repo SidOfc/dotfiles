@@ -162,7 +162,10 @@
 
   " close pane using <C-w> since I know it from Chrome / Atom (cmd+w) and do
   " not use the <C-w> mappings anyway
-  noremap <silent> <C-w> :q<Cr>
+  fun! CloseBuffer()
+    if &ft !=? 'netrw' | bdelete | endif
+  endfun
+  nnoremap <silent> <C-w> :call CloseBuffer()<Cr>
 
   " easier one-off navigation in insert mode
   inoremap <C-k> <Up>
@@ -213,7 +216,6 @@
     exe "setlocal expandtab"
           \ . " ts="  . a:amount
           \ . " sts=" . a:amount
-          \ . " sw="  . a:amount
   endfun
 
   fun! <SID>StripWS()
@@ -348,9 +350,12 @@
           \ }), <SID>incsearch_config(get(a:, 1, {})))
   endfun
 
+  " non-fuzzy incsearch + easymotion
   map <silent><expr> /         incsearch#go(<SID>incsearch_config())
   map <silent><expr> ?         incsearch#go(<SID>incsearch_config(
         \ {'command': '?'}))
+
+  " fuzzy incsearch + easymotion
   map <silent><expr> <leader>/ incsearch#go(<SID>incsearch_config_fuzzy())
   map <silent><expr> <leader>? incsearch#go(
         \ <SID>incsearch_config_fuzzy({'command': '?'}))
@@ -433,7 +438,7 @@
 " }}}
 
 " Easyalign {{{
-  " some additional easyalign patterns to use with `ga` mapping
+  " allow 'gr' mapping to work with ? and > delimiters
   let g:easy_align_delimiters = {
         \ '?': {'pattern': '?'},
         \ '>': {'pattern': '>>\|=>\|>'}
@@ -453,21 +458,6 @@
         \ 'r':  'StatusLineSectionR'
         \ }
 
-  fun! <SID>StatusLineHighlights()
-    hi StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
-    hi StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
-    hi StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
-    hi StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
-    hi StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
-    hi StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
-    hi StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
-  endfun
-
-  fun! StatusLineFilename()
-    if (&ft ==? 'netrw') | return '*' | endif
-    return substitute(expand('%'), '^' . getcwd() . '/\?', '', 'i')
-  endfun
-
   fun! StatusLineRenderer()
     let hl = '%#' . get(g:mode_colors, tolower(mode()), g:mode_colors.n) . '#'
 
@@ -478,7 +468,26 @@
           \ . ' %l:%c '
   endfun
 
+  fun! StatusLineFilename()
+    if (&ft ==? 'netrw') | return '*' | endif
+    return substitute(expand('%'), '^' . getcwd() . '/\?', '', 'i')
+  endfun
+
+  fun! <SID>StatusLineHighlights()
+    hi StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
+    hi StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
+    hi StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
+    hi StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
+    hi StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
+    hi StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
+    hi StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
+  endfun
+
   call <SID>StatusLineHighlights()
+
+  " only set default status line once on initial startup.
+  " ignored on subsequent 'so $MYVIMRC' calls to prevent
+  " active buffer statusline from being 'blurred'.
   if has('vim_starting')
     let &statusline = ' %{StatusLineFilename()}%= %l:%c '
   endif
