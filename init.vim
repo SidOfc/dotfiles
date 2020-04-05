@@ -5,6 +5,9 @@
 " }}}
 
 " Init / Plugins {{{
+  " vim-specific 'set' statements,
+  " on by default / removed in nvim.
+  set ttyfast
   set nocompatible
 
   call plug#begin('~/.vim/plugged')
@@ -72,45 +75,43 @@
   " it is not 'safe' to set these
   " while in
   if &modifiable
-    set fileencoding=utf-8        " utf-8 files
-    set fileformat=unix           " use unix line endings
-    set fileformats=unix,dos      " try unix line endings before dos, use unix
+    set fileencoding=utf-8       " utf-8 files
+    set fileformat=unix          " use unix line endings
+    set fileformats=unix,dos     " try unix line endings before dos, use unix
   endif
 
-  set lazyredraw                  " less redrawing during macro execution etc
-  set path+=**                    " add cwd and 1 level of nesting to path
-  set hidden                      " allow switching from unsaved buffer without '!'
-  set ignorecase                  " ignore case in search
-  set nohlsearch                  " do not highlight searches, incsearch plugin does this
-  set smartcase                   " use case-sensitive if a capital letter is included
-  set noshowmode                  " statusline makes -- INSERT -- info irrelevant
-  set noruler                     " do not show ruler
-  set cursorline                  " highlight cursor line
-  set splitbelow                  " split below instead of above
-  set splitright                  " split after instead of before
-  set termguicolors               " enable termguicolors for better highlighting
-  set list                        " show invisibles
-  set lcs=tab:·\                  " show tab as that thing
-  set background=dark             " set bg dark
-  set nobackup                    " do not keep backups
-  set noswapfile                  " no more swapfiles
-  set clipboard+=unnamedplus      " copy into osx clipboard by default
-  set encoding=utf-8              " utf-8 files
-  set expandtab                   " softtabs, always (e.g. convert tabs to spaces)
-  set tabstop=2                   " tabsize 2 spaces (by default)
-  set shiftwidth=0                " use 'tabstop' value for 'shiftwidth'
-  set softtabstop=2               " tabsize 2 spaces (by default)
-  set laststatus=2                " always show statusline
-  set showtabline=0               " never show tab bar
-  set backspace=2                 " restore backspace
-  set nowrap                      " do not wrap text at `textwidth`
-  set noerrorbells                " do not show error bells
-  set visualbell                  " do not use visual bell
-  set t_vb=                       " do not flash screen with visualbell
-  set timeoutlen=350              " mapping delay
-  set ttimeoutlen=10              " keycode delay
-  set wildignore+=.git,.DS_Store  " ignore files (netrw)
-  colorscheme base16-seti         " apply color scheme
+  set lazyredraw                 " less redrawing during macro execution etc
+  set path+=**                   " add cwd and 1 level of nesting to path
+  set hidden                     " switching from unsaved buffer without '!'
+  set ignorecase                 " ignore case in search
+  set nohlsearch                 " incsearch plugin does this for us.
+  set smartcase                  " case-sensitive only with capital letters
+  set noshowmode                 " no need due to custom statusline
+  set noruler                    " do not show ruler
+  set cursorline                 " highlight cursor line
+  set splitbelow                 " split below instead of above
+  set splitright                 " split after instead of before
+  set termguicolors              " enable termguicolors for better highlighting
+  set list                       " show invisibles
+  set lcs=tab:·\                 " show tab as that thing
+  set background=dark            " set bg dark
+  set nobackup                   " do not keep backups
+  set noswapfile                 " no more swapfiles
+  set clipboard+=unnamedplus     " copy into osx clipboard by default
+  set encoding=utf-8             " utf-8 files
+  set expandtab                  " softtabs, always (convert tabs to spaces)
+  set tabstop=2                  " tabsize 2 spaces (by default)
+  set shiftwidth=0               " use 'tabstop' value for 'shiftwidth'
+  set softtabstop=2              " tabsize 2 spaces (by default)
+  set laststatus=2               " always show statusline
+  set showtabline=0              " never show tab bar
+  set backspace=2                " restore backspace
+  set nowrap                     " do not wrap text at `textwidth`
+  set belloff=all                " do not show error bells
+  set timeoutlen=350             " mapping delay
+  set ttimeoutlen=10             " keycode delay
+  set wildignore+=.git,.DS_Store " ignore files (netrw)
+  colorscheme base16-seti        " apply color scheme
   set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
   " remap bad habits to do nothing
@@ -133,7 +134,8 @@
   map  }       <Nop>
   map <C-z>    <Nop>
 
-  " Sometimes I press q:, Q: or :Q instead of :q, I never want to open related functionality
+  " Sometimes I press q:, Q: or :Q instead of :q,
+  " I never want to open related functionality
   nmap q: :q<Cr>
   nmap Q: :q<Cr>
   command! -bang -nargs=* Q q
@@ -208,12 +210,16 @@
 
   " convenience function for setting filetype specific spacing
   fun! <SID>IndentSize(amount)
-    exe "setlocal expandtab ts=" . a:amount . " sts=" . a:amount . " sw=" . a:amount
+    exe "setlocal expandtab"
+          \ . " ts="  . a:amount
+          \ . " sts=" . a:amount
+          \ . " sw="  . a:amount
   endfun
 
   fun! <SID>StripWS()
-    if (&ft =~ 'vader' || &ft =~ 'markdown' || &ft == '' || &ft == 'help') | return | endif
-    %s/\s\+$//e
+    if (&ft != '' && &ft !~? 'vader\|markdown\|help\|netrw')
+      %s/\s\+$//e
+    endif
   endfun
 
   " use ripgrep as grepprg
@@ -289,19 +295,24 @@
 
 " Mkdx {{{
   let g:polyglot_disabled = ['markdown']
-  let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
-                            \ 'restore_visual': 1,
-                            \ 'enter': { 'shift': 1 },
-                            \ 'links': { 'external': { 'enable': 1 } },
-                            \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1,
-                            \          'details': { 'nesting_level': 0 } },
-                            \ 'fold': { 'enable': 1 } }
+  let g:mkdx#settings     = {
+        \ 'restore_visual': 1,
+        \ 'highlight': { 'enable':   1 },
+        \ 'enter':     { 'shift':    1 },
+        \ 'links':     { 'external': { 'enable': 1 } },
+        \ 'fold':      { 'enable':   1 },
+        \ 'toc': {
+        \          'text': 'Table of Contents',
+        \          'update_on_write': 1,
+        \          'details': { 'nesting_level': 0 }
+        \        }
+        \ }
 " }}}
 
 " Ale {{{
-  let g:ale_set_highlights        = 0                              " only show errors in sign column
-  let g:ale_echo_msg_format       = '[%linter%] %s [%severity%]'   " status line format
-  let g:ale_lint_delay            = 300                            " relint max once per [amount] milliseconds
+  let g:ale_set_highlights        = 0
+  let g:ale_echo_msg_format       = '[%linter%] %severity%: %s'
+  let g:ale_lint_delay            = 300
   let g:ale_fix_on_save           = 1
   let g:ale_rust_cargo_use_clippy = executable('cargo-clippy')
   let g:ale_fixers                = {
@@ -318,29 +329,31 @@
 " }}}
 
 " Incsearch {{{
-  let g:incsearch#auto_nohlsearch                   = 1 " auto unhighlight after searching
-  let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
-  let g:incsearch#consistent_n_direction            = 1 " when searching backward, do not invert meaning of n and N
+  let g:incsearch#auto_nohlsearch                   = 1
+  let g:incsearch#do_not_save_error_message_history = 1
+  let g:incsearch#consistent_n_direction            = 1
 
-  function! <SID>incsearch_config(...) abort
+  fun! <SID>incsearch_config(...) abort
     return incsearch#util#deepextend(deepcopy({
-    \   'modules': [incsearch#config#easymotion#module()],
-    \   'keymap': {"\<CR>": '<Over>(easymotion)'},
-    \   'is_expr': 0,
-    \ }), get(a:, 1, {}))
-  endfunction
+          \ 'modules': [incsearch#config#easymotion#module()],
+          \ 'keymap': {"\<CR>": '<Over>(easymotion)'},
+          \ 'is_expr': 0,
+          \ }), get(a:, 1, {}))
+  endfun
 
-  function! <SID>incsearch_config_fuzzy(...) abort
+  fun! <SID>incsearch_config_fuzzy(...) abort
     return extend(copy({
-    \   'converters': [incsearch#config#fuzzyword#converter()],
-    \   'is_stay': 1
-    \ }), <SID>incsearch_config(get(a:, 1, {})))
-  endfunction
+          \ 'converters': [incsearch#config#fuzzyword#converter()],
+          \ 'is_stay': 1
+          \ }), <SID>incsearch_config(get(a:, 1, {})))
+  endfun
 
   map <silent><expr> /         incsearch#go(<SID>incsearch_config())
-  map <silent><expr> ?         incsearch#go(<SID>incsearch_config({'command': '?'}))
+  map <silent><expr> ?         incsearch#go(<SID>incsearch_config(
+        \ {'command': '?'}))
   map <silent><expr> <leader>/ incsearch#go(<SID>incsearch_config_fuzzy())
-  map <silent><expr> <leader>? incsearch#go(<SID>incsearch_config_fuzzy({'command': '?'}))
+  map <silent><expr> <leader>? incsearch#go(
+        \ <SID>incsearch_config_fuzzy({'command': '?'}))
 " }}}
 
 " Fzf {{{
@@ -367,14 +380,21 @@
   fun! <SID>MkdxFormatHeader(key, val)
     let text = get(a:val, 'text', '')
     let lnum = get(a:val, 'lnum', '')
-    if (empty(text) || empty(lnum)) | return text | endif
 
+    if (empty(text) || empty(lnum)) | return text | endif
     return repeat(' ', 4 - strlen(lnum)) . lnum . ': ' . text
   endfun
 
   fun! <SID>MkdxFzfQuickfixHeaders()
-    let headers = filter(map(mkdx#QuickfixHeaders(0), function('<SID>MkdxFormatHeader')), 'v:val != ""')
-    call fzf#run(fzf#wrap({'source': headers, 'sink': function('<SID>MkdxGoToHeader') }))
+    let headers = filter(
+          \ map(mkdx#QuickfixHeaders(0),function('<SID>MkdxFormatHeader')),
+          \ 'v:val != ""'
+          \ )
+
+    call fzf#run(fzf#wrap({
+          \ 'source': headers,
+          \ 'sink': function('<SID>MkdxGoToHeader')
+          \ }))
   endfun
 
   if (!$VIM_DEV)
@@ -386,9 +406,12 @@
   " do not use fzf built-in Rg command since it also searches within filenames.
   command! -bang -nargs=* Rg
         \ call fzf#vim#grep(
-        \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
-        \    fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '§'),
-        \   0)
+          \ 'rg --column --line-number --hidden --smart-case '
+            \ . '--no-heading --color=always '
+            \ . shellescape(<q-args>),
+          \ 1,
+          \ {'options':  '--delimiter : --nth 4..'},
+          \ 0)
 
   " when quickfix is open, jump to previous, wrapping back
   " to end of list when at the first item. when quickfix
@@ -431,29 +454,27 @@
         \ }
 
   fun! <SID>StatusLineHighlights()
-    highlight StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
-    highlight StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
-    highlight StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
-    highlight StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
-    highlight StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
-    highlight StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
-    highlight StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
+    hi StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
+    hi StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
+    hi StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
+    hi StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
+    hi StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
+    hi StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
+    hi StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
   endfun
 
   fun! StatusLineFilename()
-    let pattern   = '^netrwtreelisting\|^' . getcwd() . '/\?'
-    let file_path = substitute(expand('%'), pattern, '', 'i')
-
-    return (empty(file_path) || file_path =~# ';#FZF') ? '*' : file_path
+    if (&ft ==? 'netrw') | return '*' | endif
+    return substitute(expand('%'), '^' . getcwd() . '/\?', '', 'i')
   endfun
 
   fun! StatusLineRenderer()
-    let section_hl = '%#' . get(g:mode_colors, tolower(mode()), g:mode_colors.n) . '#'
+    let hl = '%#' . get(g:mode_colors, tolower(mode()), g:mode_colors.n) . '#'
 
-    return section_hl
+    return hl
           \ . (&modified ? ' + │' : '')
           \ . ' %{StatusLineFilename()} %#StatusLine#%='
-          \ . section_hl
+          \ . hl
           \ . ' %l:%c '
   endfun
 
@@ -478,7 +499,8 @@
           \ checktime
 
     " restore above settings when leaving buffer / vim
-    au FocusLost,VimLeave,WinLeave,BufWinLeave * setlocal statusline& cursorline&
+    au FocusLost,VimLeave,WinLeave,BufWinLeave *
+          \ setlocal statusline& cursorline&
 
     " set indent for various languages
     au FileType markdown,python,json,javascript call <SID>IndentSize(4)
