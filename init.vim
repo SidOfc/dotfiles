@@ -354,8 +354,9 @@
 " }}}
 
 " Fzf {{{
-  let g:fzf_layout = { 'down': '~20%' }
-  let g:fzf_colors = {
+  let g:fzf_preview_window = ''
+  let g:fzf_layout         = { 'down': '~20%' }
+  let g:fzf_colors         = {
         \ 'fg':      ['fg', 'Normal'],
         \ 'bg':      ['bg', 'Clear'],
         \ 'hl':      ['fg', 'String'],
