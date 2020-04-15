@@ -110,6 +110,7 @@ function fish_prompt --description 'Write out the prompt'
     case '*' ; set_color red
   end
 
+  set_color -od
   echo -n '• '
   set_color blue
   echo -n (prompt_pwd)
@@ -129,6 +130,7 @@ function fish_prompt --description 'Write out the prompt'
 
   set_color yellow
   echo ' ❯ '
+  set_color -normal
 end
 
 ## GPG
