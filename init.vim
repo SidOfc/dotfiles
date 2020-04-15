@@ -228,12 +228,6 @@
 " }}}
 
 " Development {{{{
-  fun! <SID>SynStack()
-    if exists("*synstack")
-      echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-    endif
-  endfun
-
   if !exists('*VimrcDevRefresh')
     " this function must never be redefined because
     " it reloads the file it is defined in,
@@ -257,8 +251,11 @@
     endfun
   endif
 
-  nmap <silent> <leader>gp :call <SID>SynStack()<Cr>
   nmap <silent> <Leader>R :call VimrcDevRefresh()<Cr>
+  nmap <silent> <space>gp :echo map(
+      \ synstack(line('.'), col('.')),
+      \ 'synIDattr(v:val, "name")'
+      \ )<Cr>
 " }}}
 
 " rust.vim settings {{{
