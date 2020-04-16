@@ -141,8 +141,13 @@
 # }}}
 
 # Sourcing {{{
+  # macOS homebrew installs into /usr/local/share, apt uses /usr/share
   [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
+  [ -f /usr/share/autojump/autojump.fish ]; and source /usr/share/autojump/autojump.fish
+
+  # asdf on macOS installed via homebrew, on linux via a git clone
   [ -f /usr/local/opt/asdf/asdf/asdf.fish ]; and source /usr/local/opt/asdf/asdf.fish
+  [ -f $HOME/.asdf/asdf.fish ]; and source $HOME/.asdf/asdf.fish
 # }}}
 
 # TMUX {{{
