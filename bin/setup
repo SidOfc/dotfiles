@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# ~/.{gitignore, gitconfig, rgignore, tmux.conf, asdfrc, default-gems}
+# ~/.config/fish/config.fish
+# ~/.config/nvim/init.vim
+# ~/.config/alacritty/alacritty.yml
+#
+# vim-plug, neovim, asdf, fish, rg, fzf, autojump, tmux, wget, pinentry-mac,
+# gnupg, alacritty, graphicsmagick, imagemagick, ffmpeg, youtube-dl
+#
+# defaults write com.apple.finder AppleShowAllFiles YES
+# defaults write com.apple.dock autohide-delay -float 1000; killall Dock
+
+REPO_ROOT=$(cd "$(dirname "$BASH_SOURCE")/../" && pwd)
+
+SYMLINKS="
+$REPO_ROOT/config.fish        $HOME/.config/fish/config.fish
+$REPO_ROOT/init.vim           $HOME/.config/nvim/init.vim
+$REPO_ROOT/alacritty.yml      $HOME/.config/alacritty/alacritty.yml
+$REPO_ROOT/gpg-agent.conf     $HOME/.gnupg/gpg-agent.conf
+$REPO_ROOT/.asdfrc            $HOME/.asdfrc
+$REPO_ROOT/.default-gems      $HOME/.default-gems
+$REPO_ROOT/.gitconfig         $HOME/.gitconfig
+$REPO_ROOT/.gitignore         $HOME/.gitignore
+$REPO_ROOT/.rgignore          $HOME/.rgignore
+$REPO_ROOT/.tmux.conf         $HOME/.tmux.conf
+"
+
+while read repo_and_dest; do
+  repo_dotfile=$(echo "$repo_and_dest" | awk '{print $1}')
+  dest_dotfile=$(echo "$repo_and_dest" | awk '{print $2}')
+  repo_short=${repo_dotfile/$HOME/'~'}
+  dest_short=${dest_dotfile/$HOME/'~'}
+
+  if test -e "$repo_dotfile" && test ! -e "$dest_dotfile"; then
+    echo "linking:        $repo_short => $dest_short"
+
+    # ln -s "$repo_dotfile" "$dest_dotfile"
+  elif test -h "$dest_dotfile"; then
+    echo "symlink exists: $dest_short"
+  elif test -f "$dest_dotfile"; then
+    echo "regular file:   $dest_short"
+  elif test ! -e "$repo_dotfile"; then
+    echo "no repo file:   $dest_short"
+  else
+    echo "unknown:        $repo_short => $dest_short"
+  fi
+done <<< "${SYMLINKS:1:-1}"
