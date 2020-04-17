@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 tmp
-public
 _site
 .git
 Library
@@ -11,7 +10,6 @@ Movies
 Desktop
 Downloads
 Applications
-notes
 .asdf
 .cargo
 .npm
