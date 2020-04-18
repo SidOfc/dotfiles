@@ -31,6 +31,7 @@
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   Plug 'w0rp/ale'
+  Plug 'SidOfc/treevial'
 
   if has('mac')
     Plug '/usr/local/opt/fzf'
@@ -81,6 +82,7 @@
     set fileformats=unix,dos     " try unix line endings before dos, use unix
   endif
 
+  colorscheme base16-seti        " apply color scheme
   set lazyredraw                 " less redrawing during macro execution etc
   set path+=**                   " add cwd and 1 level of nesting to path
   set hidden                     " switching from unsaved buffer without '!'
@@ -110,8 +112,7 @@
   set belloff=all                " do not show error bells
   set timeoutlen=350             " mapping delay
   set ttimeoutlen=10             " keycode delay
-  set wildignore+=.git,.DS_Store " ignore files (netrw)
-  colorscheme base16-seti        " apply color scheme
+  set wildignore+=.git,.DS_Store,node_modules
   set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
   " remap bad habits to do nothing
