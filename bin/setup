@@ -31,6 +31,7 @@ function confirm() {
 # {{{ Definitions
 MACOS=$(uname -a | grep -i darwin)
 REPO_ROOT=$(cd "$(dirname "$BASH_SOURCE")/../" && pwd)
+VIM_PLUG="$HOME/.local/share/nvim/site/autoload/plug.vim"
 SYMLINKS=$(trim "
 $REPO_ROOT/config.fish        $HOME/.config/fish/config.fish
 $REPO_ROOT/init.vim           $HOME/.config/nvim/init.vim
@@ -44,67 +45,90 @@ $REPO_ROOT/.rgignore          $HOME/.rgignore
 $REPO_ROOT/.tmux.conf         $HOME/.tmux.conf
 ")
 TOOLS=$(trim "
-$HOME/.local/share/nvim/site/autoload/plug.vim
-asdf
-nvim
-fzf
-rg
+alacritty
 fish
 tmux
-alacritty
+asdf
+nvim
+$VIM_PLUG
+fzf
+rg
 autojump
 gpg
-gm
-ffmpeg
-youtube-dl
 ")
-# }}}
-
-# {{{ Check available tools
-if test ! -z "$TOOLS"; then
-  echo "tools:"
-  while read exe_or_file; do
-    if hash "$exe_or_file" 2>/dev/null; then
-      echo "   installed: $exe_or_file"
-    else
-      echo "   missing:   $exe_or_file"
-    fi
-  done <<< "$TOOLS"
-fi
 # }}}
 
 # {{{ Create symlinks
 if test ! -z "$SYMLINKS"; then
-  echo "symlinks:"
-  for repo_and_dest in $(sed 's/\s\s\+/:/g' <<< "$SYMLINKS"); do
-    repo_dotfile=$(cut -d':' -f1 <<< "$repo_and_dest")
-    dest_dotfile=$(cut -d':' -f2 <<< "$repo_and_dest")
+  answer=$(confirm "check symlinks?")
 
-    if test -e "$repo_dotfile" && test ! -e "$dest_dotfile"; then
-      answer=$(confirm "   create:    $dest_dotfile?")
+  echo "$answer"
+  if [[ "$answer" = "yes" ]]; then
+    for repo_and_dest in $(sed 's/\s\s\+/:/g' <<< "$SYMLINKS"); do
+      repo_dotfile=$(cut -d':' -f1 <<< "$repo_and_dest")
+      dest_dotfile=$(cut -d':' -f2 <<< "$repo_and_dest")
 
-      echo "$answer"
-      [[ "$answer" = "yes" ]] && symlink "$repo_dotfile" "$dest_dotfile"
-    elif ! test -e "$repo_dotfile"; then
-      echo "   unknown:   $repo_dotfile"
-    elif test -e "$dest_dotfile"; then
-      answer=$(confirm "   overwrite: $dest_dotfile")
+      if test -e "$repo_dotfile" && test ! -e "$dest_dotfile"; then
+        answer=$(confirm "   create:    $dest_dotfile?")
 
-      echo "$answer"
-      [[ "$answer" = "yes" ]] && symlink "$repo_dotfile" "$dest_dotfile"
+        echo "$answer"
+        [[ "$answer" = "yes" ]] && symlink "$repo_dotfile" "$dest_dotfile"
+      elif ! test -e "$repo_dotfile"; then
+        echo "   unknown:   $repo_dotfile"
+      elif test -e "$dest_dotfile"; then
+        answer=$(confirm "   overwrite: $dest_dotfile?")
+
+        echo "$answer"
+        [[ "$answer" = "yes" ]] && symlink "$repo_dotfile" "$dest_dotfile"
+      fi
+    done
+  fi
+fi
+# }}}
+
+# {{{ Check available tools
+if test ! -z "$TOOLS"; then
+  answer=$(confirm "check installed tooling?")
+
+  echo "$answer"
+  if [[ "$answer" = "yes" ]]; then
+    while read exe_or_file; do
+      if hash "$exe_or_file" 2>/dev/null; then
+        echo "   installed: $exe_or_file"
+      else
+        echo "   missing:   $exe_or_file"
+      fi
+    done <<< "$TOOLS"
+  fi
+fi
+# }}}
+
+# {{{ Install vim plugins
+if test -e "$VIM_PLUG" && hash "nvim" 2>/dev/null; then
+  answer=$(confirm "install and update vim plugins?")
+
+  echo "$answer"
+  if [[ "$answer" = "yes" ]]; then
+    if nvim +PlugInstall +PlugUpdate +qall; then
+      echo "   successfully installed and updated vim plugins"
+    else
+      echo "   failed to install and update vim plugins"
     fi
-  done
+  fi
 fi
 # }}}
 
 # {{{ macOS defaults
 if $MACOS && hash "defaults" 2>/dev/null; then
-  echo 'macOS defaults:'
+  answer=$(confirm "set macos defaults?")
 
-  echo '   defaults write com.apple.finder AppleShowAllFiles YES'
-  defaults write com.apple.finder AppleShowAllFiles YES
+  echo "$answer"
+  if [[ "$answer" = "yes" ]]; then
+    echo '   defaults write com.apple.finder AppleShowAllFiles YES'
+    defaults write com.apple.finder AppleShowAllFiles YES
 
-  echo '   defaults write com.apple.dock autohide-delay -float 1000; killall Dock'
-  defaults write com.apple.dock autohide-delay -float 1000; killall Dock
+    echo '   defaults write com.apple.dock autohide-delay -float 1000; killall Dock'
+    defaults write com.apple.dock autohide-delay -float 1000; killall Dock
+  fi
 fi
 # }}}
