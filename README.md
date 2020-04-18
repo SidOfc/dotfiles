@@ -18,8 +18,8 @@ following tools:
 
 The included `bin/setup` script will perform the following tasks:
 
-- **ask** to check presence of each path/tool in `$TOOLS`.
 - **ask** what you want to do for each symlink in `$SYMLINKS`.
+- **ask** to check presence of each path/tool in `$TOOLS`.
 - **ask** to install and update vim plugins if `vim-plug` and `neovim` are installed.
 - **ask** to set `defaults` if on macOS.
 

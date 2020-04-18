@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # {{{ Utility
-function symlink() {
+symlink() {
   if ln -fs "$1" "$2"; then
     echo "create symlink: $1 => $2"
   else
@@ -16,7 +16,7 @@ trim() {
     printf '%s' "$var"
 }
 
-function confirm() {
+confirm() {
   local prompt="$1 (y/N): "
   while IFS=; read -s -r -n 1 -p "$prompt" choice; do
     prompt=""
