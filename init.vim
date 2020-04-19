@@ -161,10 +161,6 @@
   inoremap <C-s> <Esc>:write<Cr>
   onoremap <C-s> <Esc>:write<Cr>
 
-  " remapped <S-Space> to <F12> in alacritty so I can remap
-  " <F12> to do something when I press <S-Space>
-  inoremap <F12> <Space><Left>
-
   " close pane using <C-w> since I know it from Chrome / Atom (cmd+w) and do
   " not use the <C-w> mappings anyway
   fun! CloseBuffer()
