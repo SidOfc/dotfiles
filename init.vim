@@ -214,6 +214,15 @@
   " hide ghost tilde characters after end of file
   highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
 
+  " customize message separator in neovim
+  if hlexists('MsgSeparator')
+    hi link MsgSeparator IncSearch
+    set fillchars+=msgsep:·
+  endif
+
+  " consistent CursorLine in both vim and neovim
+  hi CursorLine ctermbg=8 guibg=#282a2b
+
   " convenience function for setting filetype specific spacing
   fun! <SID>IndentSize(amount)
     exe "setlocal expandtab"
@@ -349,9 +358,11 @@
         \ {'command': '?'}))
 
   " fuzzy incsearch + easymotion
-  map <silent><expr> <leader>/ incsearch#go(<SID>incsearch_config_fuzzy())
-  map <silent><expr> <leader>? incsearch#go(
-        \ <SID>incsearch_config_fuzzy({'command': '?'}))
+  if !$VIM_DEV
+    map <silent><expr> <leader>/ incsearch#go(<SID>incsearch_config_fuzzy())
+    map <silent><expr> <leader>? incsearch#go(
+          \ <SID>incsearch_config_fuzzy({'command': '?'}))
+  endif
 " }}}
 
 " Fzf {{{
@@ -510,6 +521,9 @@
     " restore above settings when leaving buffer / vim
     au FocusLost,VimLeave,WinLeave,BufWinLeave *
           \ setlocal statusline& cursorline&
+
+    " experimental, always have proper syntax highlighting, but may be slow
+    autocmd BufEnter * :syntax sync fromstart
 
     " set indent for various languages
     au FileType markdown,python,json,javascript call <SID>IndentSize(4)

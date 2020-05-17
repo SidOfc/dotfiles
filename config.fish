@@ -137,7 +137,7 @@
 # }}}
 
 # Gpg {{{
-  gpg-agent --daemon --no-grab >/dev/null ^&1
+  gpg-agent --daemon --no-grab >/dev/null 2<&1
 # }}}
 
 # Sourcing {{{

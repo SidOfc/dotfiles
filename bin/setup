@@ -35,6 +35,7 @@ VIM_PLUG="$HOME/.local/share/nvim/site/autoload/plug.vim"
 SYMLINKS=$(trim "
 $REPO_ROOT/config.fish        $HOME/.config/fish/config.fish
 $REPO_ROOT/init.vim           $HOME/.config/nvim/init.vim
+$REPO_ROOT/init.vim           $HOME/.vimrc
 $REPO_ROOT/alacritty.yml      $HOME/.config/alacritty/alacritty.yml
 $REPO_ROOT/gpg-agent.conf     $HOME/.gnupg/gpg-agent.conf
 $REPO_ROOT/.asdfrc            $HOME/.asdfrc
@@ -51,6 +52,7 @@ tmux
 asdf
 nvim
 $VIM_PLUG
+$HOME/.vim/autoload/plug.vim
 fzf
 rg
 autojump
