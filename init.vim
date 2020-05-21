@@ -302,9 +302,9 @@
   let g:polyglot_disabled = ['markdown']
   let g:mkdx#settings     = {
         \ 'restore_visual': 1,
+        \ 'gf_on_steroids': 1,
         \ 'highlight': { 'enable':   1 },
         \ 'enter':     { 'shift':    1 },
-        \ 'links':     { 'external': { 'enable': 1 } },
         \ 'fold':      { 'enable':   1 },
         \ 'toc': {
         \          'text': 'Table of Contents',

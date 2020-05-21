@@ -47,16 +47,17 @@ $REPO_ROOT/.tmux.conf         $HOME/.tmux.conf
 ")
 TOOLS=$(trim "
 alacritty
+albert
 fish
 tmux
 asdf
 nvim
-$VIM_PLUG
-$HOME/.vim/autoload/plug.vim
 fzf
 rg
 autojump
 gpg
+$VIM_PLUG
+$HOME/.vim/autoload/plug.vim
 ")
 # }}}
 
