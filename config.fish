@@ -36,6 +36,11 @@
   abbr gs  'git stash'
   abbr gsp 'git stash pop'
 
+  # xclip stuff
+  abbr pbcopy  'xclip -i -selection clipboard'
+  abbr pbpaste 'xclip -o -selection clipboard'
+  abbr pbclear 'echo "" | xclip -i -selection clipboard'
+
   # vim / vim-isms
   abbr v   "$EDITOR ."
   abbr vip "$EDITOR +PlugInstall +qall"

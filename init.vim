@@ -217,7 +217,11 @@
   " customize message separator in neovim
   if hlexists('MsgSeparator')
     hi link MsgSeparator IncSearch
-    set fillchars+=msgsep:·
+    set fillchars+=msgsep:·,vert:\│
+  endif
+
+  if hlexists('VertSplit')
+    hi VertSplit guibg=NONE ctermbg=NONE guifg=Gray ctermfg=Gray
   endif
 
   " consistent CursorLine in both vim and neovim
@@ -305,6 +309,7 @@
         \ 'gf_on_steroids': 1,
         \ 'highlight': { 'enable':   1 },
         \ 'enter':     { 'shift':    1 },
+        \ 'links':     { 'external': { 'enable': 1 } },
         \ 'fold':      { 'enable':   1 },
         \ 'toc': {
         \          'text': 'Table of Contents',
@@ -453,7 +458,7 @@
   nmap gr <Plug>(EasyAlign)
 " }}}
 
-" {{{ Status bar
+" {{{ Status line
   let g:mode_colors = {
         \ 'n':  'StatusLineSection',
         \ 'v':  'StatusLineSectionV',
@@ -468,14 +473,9 @@
 
     return hl
           \ . (&modified ? ' + │' : '')
-          \ . ' %{StatusLineFilename()} %#StatusLine#%='
+          \ . ' %{fnamemodify(expand("%"), ":~:.")} %#StatusLine#%='
           \ . hl
           \ . ' %l:%c '
-  endfun
-
-  fun! StatusLineFilename()
-    if (&ft ==? 'netrw') | return '*' | endif
-    return substitute(expand('%'), '^' . getcwd() . '/\?', '', 'i')
   endfun
 
   fun! <SID>StatusLineHighlights()
@@ -494,7 +494,7 @@
   " ignored on subsequent 'so $MYVIMRC' calls to prevent
   " active buffer statusline from being 'blurred'.
   if has('vim_starting')
-    let &statusline = ' %{StatusLineFilename()}%= %l:%c '
+    let &statusline = ' %{fnamemodify(expand("%"), ":~:.")}%= %l:%c '
   endif
 " }}}
 
