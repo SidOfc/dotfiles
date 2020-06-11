@@ -288,24 +288,6 @@
   let g:highlightedyank_highlight_duration = 150
 " }}}
 
-" Netrw {{{
-  let g:netrw_banner    = 0
-  let g:netrw_winsize   = 0
-  let g:netrw_liststyle = 3
-  let g:netrw_altv      = 1
-  let g:netrw_alto      = 1
-  let g:netrw_cursor    = 1
-
-  fun! <SID>CustomizeNetrw()
-    nmap <silent><buffer> q     <Nop>
-    nmap <silent><buffer> <C-w> <Nop>
-    nmap <silent><buffer> !     :Ntree .
-    nmap <silent><buffer> <C-v> v
-    nmap <silent><buffer> <C-x> o
-    nmap <silent><buffer> <C-l> :TmuxNavigateRight<Cr>
-  endfun
-" }}}
-
 " Mkdx {{{
   let g:polyglot_disabled = ['markdown']
   let g:mkdx#settings     = {
@@ -516,8 +498,7 @@
 
     " set indent for various languages
     au FileType markdown,python,json,javascript call <SID>IndentSize(4)
-    au FileType javascriptreact,jsx             call <SID>IndentSize(4)
-    au FileType netrw                           call <SID>CustomizeNetrw()
+    au FileType javascript,javascriptreact,jsx  call <SID>IndentSize(4)
 
     " hide status and ruler for cleaner fzf windows
     if has('nvim')
