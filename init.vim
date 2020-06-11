@@ -110,7 +110,9 @@
   set backspace=2                " restore backspace
   set nowrap                     " do not wrap text at `textwidth`
   set belloff=all                " do not show error bells
-  set timeoutlen=350             " mapping delay
+  set synmaxcol=1000             " do not highlight long lines
+  set notimeout                  " no mapping delay
+  set ttimeout                   " keycode delay
   set ttimeoutlen=10             " keycode delay
   set wildignore+=.git,.DS_Store,node_modules
   set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
@@ -163,10 +165,14 @@
 
   " close pane using <C-w> since I know it from Chrome / Atom (cmd+w) and do
   " not use the <C-w> mappings anyway
-  fun! CloseBuffer()
-    if &ft !=? 'netrw' | bdelete | endif
+  fun! <SID>CloseBuffer()
+    if len(getwininfo()) >? 1
+      close
+    elseif len(getbufinfo()) >? 1
+      bdelete
+    endif
   endfun
-  nnoremap <silent> <C-w> :call CloseBuffer()<Cr>
+  nnoremap <silent> <C-w> :call <SID>CloseBuffer()<Cr>
 
   " easier one-off navigation in insert mode
   inoremap <C-k> <Up>
