@@ -15,8 +15,6 @@
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'easymotion/vim-easymotion'
   Plug 'haya14busa/incsearch.vim'
-  Plug 'haya14busa/incsearch-fuzzy.vim'
-  Plug 'haya14busa/incsearch-easymotion.vim'
   Plug 'jreybert/vimagit'
   Plug 'junegunn/vim-easy-align'
   Plug 'junegunn/vader.vim'
@@ -351,29 +349,14 @@
 
   fun! <SID>incsearch_config(...) abort
     return incsearch#util#deepextend(deepcopy({
-          \ 'modules': [incsearch#config#easymotion#module()],
-          \ 'keymap': {"\<CR>": '<Over>(easymotion)'},
+          \ 'modules': [],
           \ 'is_expr': 0,
           \ }), get(a:, 1, {}))
   endfun
 
-  fun! <SID>incsearch_config_fuzzy(...) abort
-    return extend(copy({
-          \ 'converters': [incsearch#config#fuzzyword#converter()],
-          \ }), <SID>incsearch_config(get(a:, 1, {})))
-  endfun
-
   " non-fuzzy incsearch + easymotion
-  map <silent><expr> /         incsearch#go(<SID>incsearch_config())
-  map <silent><expr> ?         incsearch#go(<SID>incsearch_config(
-        \ {'command': '?'}))
-
-  " fuzzy incsearch + easymotion
-  if !$VIM_DEV
-    map <silent><expr> <leader>/ incsearch#go(<SID>incsearch_config_fuzzy())
-    map <silent><expr> <leader>? incsearch#go(
-          \ <SID>incsearch_config_fuzzy({'command': '?'}))
-  endif
+  map <silent><expr> / incsearch#go(<SID>incsearch_config())
+  map <silent><expr> ? incsearch#go(<SID>incsearch_config({'command': '?'}))
 " }}}
 
 " Fzf {{{
