@@ -143,9 +143,9 @@
 
   " shortcut for next item in quickfix list, but also wraps
   " around back to the first item.
-  fun! <SID>QuickfixPreviousWrapped()
+  function! <SID>QuickfixPreviousWrapped()
     try | cnext | catch | crewind | endtry
-  endfun
+  endfunction
   nnoremap <silent> <C-n> :call <SID>QuickfixPreviousWrapped()<Cr>
 
   " easier navigation in normal / visual / operator pending mode
@@ -163,13 +163,13 @@
 
   " close pane using <C-w> since I know it from Chrome / Atom (cmd+w) and do
   " not use the <C-w> mappings anyway
-  fun! <SID>CloseBuffer()
+  function! <SID>CloseBuffer()
     if len(getwininfo()) >? 1
       close
     elseif len(getbufinfo()) >? 1
       bdelete
     endif
-  endfun
+  endfunction
   nnoremap <silent> <C-w> :call <SID>CloseBuffer()<Cr>
 
   " easier one-off navigation in insert mode
@@ -232,11 +232,11 @@
   hi CursorLine ctermbg=8 guibg=#282a2b
 
   " convenience function for setting filetype specific spacing
-  fun! <SID>IndentSize(amount)
+  function! <SID>IndentSize(amount)
     exe "setlocal expandtab"
           \ . " ts="  . a:amount
           \ . " sts=" . a:amount
-  endfun
+  endfunction
 
   " use ripgrep as grepprg
   if executable('rg')
@@ -250,7 +250,7 @@
     " this function must never be redefined because
     " it reloads the file it is defined in,
     " will cause an error otherwise.
-    fun! VimrcDevRefresh()
+    function! VimrcDevRefresh()
       if $VIM_DEV
         if (&ft == 'markdown')
           if has('mac')
@@ -266,7 +266,7 @@
       else
         so $MYVIMRC
       endif
-    endfun
+    endfunction
   endif
 
   nmap <silent> <Leader>R :call VimrcDevRefresh()<Cr>
@@ -329,12 +329,12 @@
   let g:incsearch#do_not_save_error_message_history = 1
   let g:incsearch#consistent_n_direction            = 1
 
-  fun! <SID>incsearch_config(...) abort
+  function! <SID>incsearch_config(...) abort
     return incsearch#util#deepextend(deepcopy({
           \ 'modules': [],
           \ 'is_expr': 0,
           \ }), get(a:, 1, {}))
-  endfun
+  endfunction
 
   " non-fuzzy incsearch + easymotion
   map <silent><expr> / incsearch#go(<SID>incsearch_config())
@@ -359,19 +359,19 @@
         \ 'header':  ['fg', 'Comment']
         \ }
 
-  fun! <SID>MkdxGoToHeader(header)
+  function! <SID>MkdxGoToHeader(header)
     call cursor(str2nr(get(matchlist(a:header, ' *\([0-9]\+\)'), 1, '')), 1)
-  endfun
+  endfunction
 
-  fun! <SID>MkdxFormatHeader(key, val)
+  function! <SID>MkdxFormatHeader(key, val)
     let text = get(a:val, 'text', '')
     let lnum = get(a:val, 'lnum', '')
 
     if (empty(text) || empty(lnum)) | return text | endif
     return repeat(' ', 4 - strlen(lnum)) . lnum . ': ' . text
-  endfun
+  endfunction
 
-  fun! <SID>MkdxFzfQuickfixHeaders()
+  function! <SID>MkdxFzfQuickfixHeaders()
     let headers = filter(
           \ map(mkdx#QuickfixHeaders(0),function('<SID>MkdxFormatHeader')),
           \ 'v:val != ""'
@@ -381,7 +381,7 @@
           \ 'source': headers,
           \ 'sink': function('<SID>MkdxGoToHeader')
           \ }))
-  endfun
+  endfunction
 
   if (!$VIM_DEV)
     " when not developing mkdx, use fancier <leader>I which uses fzf
@@ -402,13 +402,13 @@
   " when quickfix is open, jump to previous, wrapping back
   " to end of list when at the first item. when quickfix
   " is closed, spawns an fzf find-file-by-path popup
-  fun! <SID>FilesOrQF()
+  function! <SID>FilesOrQF()
     if len(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist'))
       try | cprev | catch | clast | endtry
     else
       Files
     endif
-  endfun
+  endfunction
 
   nnoremap <silent> <C-p> :call <SID>FilesOrQF()<Cr>
   nnoremap <silent> <C-g> :Rg<Cr>
@@ -439,7 +439,7 @@
         \ 'r':  'StatusLineSectionR'
         \ }
 
-  fun! StatusLineRenderer()
+  function! StatusLineRenderer()
     let hl = '%#' . get(g:mode_colors, tolower(mode()), g:mode_colors.n) . '#'
 
     return hl
@@ -447,9 +447,9 @@
           \ . ' %{fnamemodify(expand("%"), ":~:.")} %#StatusLine#%='
           \ . hl
           \ . ' %l:%c '
-  endfun
+  endfunction
 
-  fun! <SID>StatusLineHighlights()
+  function! <SID>StatusLineHighlights()
     hi StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
     hi StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
     hi StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
@@ -457,7 +457,7 @@
     hi StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
     hi StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
     hi StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
-  endfun
+  endfunction
 
   call <SID>StatusLineHighlights()
 
