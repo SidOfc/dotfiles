@@ -1,3 +1,5 @@
+" |hello|
+
 " Some things to remember {{{
 "   - In Visual-Block mode, pressing 'o' will move to the opposite end
 "   - This init.vim file depends on https://github.com/junegunn/vim-plug
@@ -109,9 +111,7 @@
   set nowrap                     " do not wrap text at `textwidth`
   set belloff=all                " do not show error bells
   set synmaxcol=1000             " do not highlight long lines
-  set notimeout                  " no mapping delay
-  set ttimeout                   " keycode delay
-  set ttimeoutlen=10             " keycode delay
+  set timeoutlen=250             " keycode delay
   set wildignore+=.git,.DS_Store,node_modules
   set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
@@ -288,6 +288,13 @@
   let g:highlightedyank_highlight_duration = 150
 " }}}
 
+" {{{
+  vnoremap a<Bar> :<C-U>normal! T<Bar>vt<Bar><Cr>
+  vnoremap i<Bar> :<C-U>normal! F<Bar>vf<Bar><Cr>
+  omap i<Bar> :normal vi<Bar><Cr>
+  omap a<Bar> :normal va<Bar><Cr>
+" }}}
+
 " Mkdx {{{
   let g:polyglot_disabled = ['markdown']
   let g:mkdx#settings     = {
@@ -298,10 +305,10 @@
         \ 'links':     { 'external': { 'enable': 1 } },
         \ 'fold':      { 'enable':   1 },
         \ 'toc': {
-        \          'text': 'Table of Contents',
-        \          'update_on_write': 1,
-        \          'details': { 'nesting_level': 0 }
-        \        }
+        \    'text': 'Table of Contents',
+        \    'update_on_write': 1,
+        \    'details': { 'nesting_level': 0 }
+        \ }
         \ }
 " }}}
 
@@ -495,6 +502,7 @@
 
     " experimental, always have proper syntax highlighting, but may be slow
     autocmd BufEnter * :syntax sync fromstart
+    autocmd BufEnter *.sss :setf stylus
 
     " set indent for various languages
     au FileType markdown,python,json,javascript call <SID>IndentSize(4)
