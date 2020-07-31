@@ -14,7 +14,6 @@
   Plug 'chriskempson/base16-vim'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'easymotion/vim-easymotion'
-  Plug 'haya14busa/incsearch.vim'
   Plug 'jreybert/vimagit'
   Plug 'junegunn/vim-easy-align'
   Plug 'junegunn/vader.vim'
@@ -80,36 +79,37 @@
     set fileformats=unix,dos     " try unix line endings before dos, use unix
   endif
 
-  colorscheme base16-seti        " apply color scheme
-  set lazyredraw                 " less redrawing during macro execution etc
-  set path+=**                   " add cwd and 1 level of nesting to path
-  set hidden                     " switching from unsaved buffer without '!'
-  set ignorecase                 " ignore case in search
-  set nohlsearch                 " incsearch plugin does this for us.
-  set smartcase                  " case-sensitive only with capital letters
-  set noshowmode                 " no need due to custom statusline
-  set noruler                    " do not show ruler
-  set list lcs=tab:‣\ ,trail:•   " customize invisibles
-  set cursorline                 " highlight cursor line
-  set splitbelow                 " split below instead of above
-  set splitright                 " split after instead of before
-  set termguicolors              " enable termguicolors for better highlighting
-  set background=dark            " set bg dark
-  set nobackup                   " do not keep backups
-  set noswapfile                 " no more swapfiles
-  set clipboard+=unnamedplus     " copy into osx clipboard by default
-  set encoding=utf-8             " utf-8 files
-  set expandtab                  " softtabs, always (convert tabs to spaces)
-  set tabstop=2                  " tabsize 2 spaces (by default)
-  set shiftwidth=0               " use 'tabstop' value for 'shiftwidth'
-  set softtabstop=2              " tabsize 2 spaces (by default)
-  set laststatus=2               " always show statusline
-  set showtabline=0              " never show tab bar
-  set backspace=2                " restore backspace
-  set nowrap                     " do not wrap text at `textwidth`
-  set belloff=all                " do not show error bells
-  set synmaxcol=1000             " do not highlight long lines
-  set timeoutlen=250             " keycode delay
+  colorscheme base16-seti          " apply color scheme
+  set lazyredraw                   " less redrawing during macro execution etc
+  set path+=**                     " add cwd and 1 level of nesting to path
+  set hidden                       " switching from unsaved buffer without '!'
+  set ignorecase                   " ignore case in search
+  set incsearch                    " incremental search highlighting
+  set smartcase                    " case-sensitive only with capital letters
+  set noshowmode                   " no need due to custom statusline
+  set noruler                      " do not show ruler
+  set list lcs=tab:‣\ ,trail:•     " customize invisibles
+  set cursorline                   " highlight cursor line
+  set splitbelow                   " split below instead of above
+  set splitright                   " split after instead of before
+  set termguicolors                " enable termguicolors for better highlighting
+  set background=dark              " set bg dark
+  set nobackup                     " do not keep backups
+  set noswapfile                   " no more swapfiles
+  set clipboard+=unnamedplus       " copy into osx clipboard by default
+  set encoding=utf-8               " utf-8 files
+  set expandtab                    " softtabs, always (convert tabs to spaces)
+  set tabstop=2                    " tabsize 2 spaces (by default)
+  set shiftwidth=0                 " use 'tabstop' value for 'shiftwidth'
+  set softtabstop=2                " tabsize 2 spaces (by default)
+  set laststatus=2                 " always show statusline
+  set showtabline=0                " never show tab bar
+  set backspace=2                  " restore backspace
+  set nowrap                       " do not wrap text at `textwidth`
+  set belloff=all                  " do not show error bells
+  set synmaxcol=1000               " do not highlight long lines
+  set timeoutlen=250               " keycode delay
+  set fillchars+=msgsep:\ ,vert:\│ " customize message separator in neovim
   set wildignore+=.git,.DS_Store,node_modules
   set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
@@ -224,12 +224,6 @@
   " hide ghost tilde characters after end of file
   highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
 
-  " customize message separator in neovim
-  if hlexists('MsgSeparator')
-    hi link MsgSeparator IncSearch
-    set fillchars+=msgsep:·,vert:\│
-  endif
-
   if hlexists('VertSplit')
     hi VertSplit guibg=NONE ctermbg=NONE guifg=Gray ctermfg=Gray
   endif
@@ -335,23 +329,6 @@
         \ 'javascript': ['eslint', 'flow'],
         \ 'fish': []
         \ }
-" }}}
-
-" Incsearch {{{
-  let g:incsearch#auto_nohlsearch                   = 1
-  let g:incsearch#do_not_save_error_message_history = 1
-  let g:incsearch#consistent_n_direction            = 1
-
-  function! <SID>incsearch_config(...) abort
-    return incsearch#util#deepextend(deepcopy({
-          \ 'modules': [],
-          \ 'is_expr': 0,
-          \ }), get(a:, 1, {}))
-  endfunction
-
-  " non-fuzzy incsearch + easymotion
-  map <silent><expr> / incsearch#go(<SID>incsearch_config())
-  map <silent><expr> ? incsearch#go(<SID>incsearch_config({'command': '?'}))
 " }}}
 
 " Fzf {{{
@@ -484,6 +461,10 @@
     autocmd InsertEnter * match TrailingWhitespace /\s\+\%#\@<!$/
     autocmd InsertLeave * match TrailingWhitespace /\s\+$/
     autocmd BufWinLeave * call clearmatches()
+
+    " used in conjunction with incsearch setting
+    autocmd CmdlineEnter /,\? :set hlsearch
+    autocmd CmdlineLeave /,\? :set nohlsearch
 
     " auto reload file changes outside of vim, toggle custom status bar,
     " and toggle cursorline for active buffer.
