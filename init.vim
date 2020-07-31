@@ -1,5 +1,3 @@
-" |hello|
-
 " Some things to remember {{{
 "   - In Visual-Block mode, pressing 'o' will move to the opposite end
 "   - This init.vim file depends on https://github.com/junegunn/vim-plug
@@ -414,6 +412,7 @@
           \ {'options':  '--delimiter : --nth 4..'},
           \ 0)
 
+  nnoremap <silent> <C-f> :BLines<Cr>
   nnoremap <silent> <C-p> :Files<Cr>
   nnoremap <silent> <C-g> :Rg<Cr>
 " }}}
