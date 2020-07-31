@@ -141,12 +141,20 @@
   nmap Q: :q<Cr>
   command! -bang -nargs=* Q q
 
-  " shortcut for next item in quickfix list, but also wraps
-  " around back to the first item.
-  function! <SID>QuickfixPreviousWrapped()
+  " shortcut for next/prev item in quickfix list, but also wraps
+  " around back to the first/last item.
+  function! <SID>QuickfixNextWrapped()
     try | cnext | catch | crewind | endtry
   endfunction
-  nnoremap <silent> <C-n> :call <SID>QuickfixPreviousWrapped()<Cr>
+
+  function! <SID>QuickfixPreviousWrapped()
+    try | cprev | catch | clast | endtry
+  endfunction
+
+  " ctrl+p is already used by FZF's :Files
+  " so use ctrl+n for next and ctrl+m for previous qf entry
+  nnoremap <silent> <C-m> :call <SID>QuickfixPreviousWrapped()<Cr>
+  nnoremap <silent> <C-n> :call <SID>QuickfixNextWrapped()<Cr>
 
   " easier navigation in normal / visual / operator pending mode
   noremap K     {
@@ -406,18 +414,7 @@
           \ {'options':  '--delimiter : --nth 4..'},
           \ 0)
 
-  " when quickfix is open, jump to previous, wrapping back
-  " to end of list when at the first item. when quickfix
-  " is closed, spawns an fzf find-file-by-path popup
-  function! <SID>FilesOrQF()
-    if len(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist'))
-      try | cprev | catch | clast | endtry
-    else
-      Files
-    endif
-  endfunction
-
-  nnoremap <silent> <C-p> :call <SID>FilesOrQF()<Cr>
+  nnoremap <silent> <C-p> :Files<Cr>
   nnoremap <silent> <C-g> :Rg<Cr>
 " }}}
 
