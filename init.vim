@@ -14,7 +14,6 @@
   Plug 'chriskempson/base16-vim'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'easymotion/vim-easymotion'
-  Plug 'haya14busa/incsearch.vim'
   Plug 'jreybert/vimagit'
   Plug 'junegunn/vim-easy-align'
   Plug 'junegunn/vader.vim'
@@ -80,38 +79,37 @@
     set fileformats=unix,dos     " try unix line endings before dos, use unix
   endif
 
-  colorscheme base16-seti        " apply color scheme
-  set lazyredraw                 " less redrawing during macro execution etc
-  set path+=**                   " add cwd and 1 level of nesting to path
-  set hidden                     " switching from unsaved buffer without '!'
-  set ignorecase                 " ignore case in search
-  set nohlsearch                 " incsearch plugin does this for us.
-  set smartcase                  " case-sensitive only with capital letters
-  set noshowmode                 " no need due to custom statusline
-  set noruler                    " do not show ruler
-  set list lcs=tab:‣\ ,trail:•   " customize invisibles
-  set cursorline                 " highlight cursor line
-  set splitbelow                 " split below instead of above
-  set splitright                 " split after instead of before
-  set termguicolors              " enable termguicolors for better highlighting
-  set background=dark            " set bg dark
-  set nobackup                   " do not keep backups
-  set noswapfile                 " no more swapfiles
-  set clipboard+=unnamedplus     " copy into osx clipboard by default
-  set encoding=utf-8             " utf-8 files
-  set expandtab                  " softtabs, always (convert tabs to spaces)
-  set tabstop=2                  " tabsize 2 spaces (by default)
-  set shiftwidth=0               " use 'tabstop' value for 'shiftwidth'
-  set softtabstop=2              " tabsize 2 spaces (by default)
-  set laststatus=2               " always show statusline
-  set showtabline=0              " never show tab bar
-  set backspace=2                " restore backspace
-  set nowrap                     " do not wrap text at `textwidth`
-  set belloff=all                " do not show error bells
-  set synmaxcol=1000             " do not highlight long lines
-  set notimeout                  " no mapping delay
-  set ttimeout                   " keycode delay
-  set ttimeoutlen=10             " keycode delay
+  colorscheme base16-seti          " apply color scheme
+  set lazyredraw                   " less redrawing during macro execution etc
+  set path+=**                     " add cwd and 1 level of nesting to path
+  set hidden                       " switching from unsaved buffer without '!'
+  set ignorecase                   " ignore case in search
+  set incsearch                    " incremental search highlighting
+  set smartcase                    " case-sensitive only with capital letters
+  set noshowmode                   " no need due to custom statusline
+  set noruler                      " do not show ruler
+  set list lcs=tab:‣\ ,trail:•     " customize invisibles
+  set cursorline                   " highlight cursor line
+  set splitbelow                   " split below instead of above
+  set splitright                   " split after instead of before
+  set termguicolors                " enable termguicolors for better highlighting
+  set background=dark              " set bg dark
+  set nobackup                     " do not keep backups
+  set noswapfile                   " no more swapfiles
+  set clipboard+=unnamedplus       " copy into osx clipboard by default
+  set encoding=utf-8               " utf-8 files
+  set expandtab                    " softtabs, always (convert tabs to spaces)
+  set tabstop=2                    " tabsize 2 spaces (by default)
+  set shiftwidth=0                 " use 'tabstop' value for 'shiftwidth'
+  set softtabstop=2                " tabsize 2 spaces (by default)
+  set laststatus=2                 " always show statusline
+  set showtabline=0                " never show tab bar
+  set backspace=2                  " restore backspace
+  set nowrap                       " do not wrap text at `textwidth`
+  set belloff=all                  " do not show error bells
+  set synmaxcol=1000               " do not highlight long lines
+  set timeoutlen=250               " keycode delay
+  set fillchars+=msgsep:\ ,vert:\│ " customize message separator in neovim
   set wildignore+=.git,.DS_Store,node_modules
   set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
@@ -141,12 +139,20 @@
   nmap Q: :q<Cr>
   command! -bang -nargs=* Q q
 
-  " shortcut for next item in quickfix list, but also wraps
-  " around back to the first item.
-  function! <SID>QuickfixPreviousWrapped()
+  " shortcut for next/prev item in quickfix list, but also wraps
+  " around back to the first/last item.
+  function! <SID>QuickfixNextWrapped()
     try | cnext | catch | crewind | endtry
   endfunction
-  nnoremap <silent> <C-n> :call <SID>QuickfixPreviousWrapped()<Cr>
+
+  function! <SID>QuickfixPreviousWrapped()
+    try | cprev | catch | clast | endtry
+  endfunction
+
+  " ctrl+p is already used by FZF's :Files
+  " so use ctrl+n for next and ctrl+m for previous qf entry
+  nnoremap <silent> <C-m> :call <SID>QuickfixPreviousWrapped()<Cr>
+  nnoremap <silent> <C-n> :call <SID>QuickfixNextWrapped()<Cr>
 
   " easier navigation in normal / visual / operator pending mode
   noremap K     {
@@ -218,12 +224,6 @@
   " hide ghost tilde characters after end of file
   highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
 
-  " customize message separator in neovim
-  if hlexists('MsgSeparator')
-    hi link MsgSeparator IncSearch
-    set fillchars+=msgsep:·,vert:\│
-  endif
-
   if hlexists('VertSplit')
     hi VertSplit guibg=NONE ctermbg=NONE guifg=Gray ctermfg=Gray
   endif
@@ -288,6 +288,13 @@
   let g:highlightedyank_highlight_duration = 150
 " }}}
 
+" {{{
+  vnoremap a<Bar> :<C-U>normal! T<Bar>vt<Bar><Cr>
+  vnoremap i<Bar> :<C-U>normal! F<Bar>vf<Bar><Cr>
+  omap i<Bar> :normal vi<Bar><Cr>
+  omap a<Bar> :normal va<Bar><Cr>
+" }}}
+
 " Mkdx {{{
   let g:polyglot_disabled = ['markdown']
   let g:mkdx#settings     = {
@@ -298,10 +305,10 @@
         \ 'links':     { 'external': { 'enable': 1 } },
         \ 'fold':      { 'enable':   1 },
         \ 'toc': {
-        \          'text': 'Table of Contents',
-        \          'update_on_write': 1,
-        \          'details': { 'nesting_level': 0 }
-        \        }
+        \    'text': 'Table of Contents',
+        \    'update_on_write': 1,
+        \    'details': { 'nesting_level': 0 }
+        \ }
         \ }
 " }}}
 
@@ -322,23 +329,6 @@
         \ 'javascript': ['eslint', 'flow'],
         \ 'fish': []
         \ }
-" }}}
-
-" Incsearch {{{
-  let g:incsearch#auto_nohlsearch                   = 1
-  let g:incsearch#do_not_save_error_message_history = 1
-  let g:incsearch#consistent_n_direction            = 1
-
-  function! <SID>incsearch_config(...) abort
-    return incsearch#util#deepextend(deepcopy({
-          \ 'modules': [],
-          \ 'is_expr': 0,
-          \ }), get(a:, 1, {}))
-  endfunction
-
-  " non-fuzzy incsearch + easymotion
-  map <silent><expr> / incsearch#go(<SID>incsearch_config())
-  map <silent><expr> ? incsearch#go(<SID>incsearch_config({'command': '?'}))
 " }}}
 
 " Fzf {{{
@@ -399,18 +389,8 @@
           \ {'options':  '--delimiter : --nth 4..'},
           \ 0)
 
-  " when quickfix is open, jump to previous, wrapping back
-  " to end of list when at the first item. when quickfix
-  " is closed, spawns an fzf find-file-by-path popup
-  function! <SID>FilesOrQF()
-    if len(filter(getwininfo(), 'v:val.quickfix && !v:val.loclist'))
-      try | cprev | catch | clast | endtry
-    else
-      Files
-    endif
-  endfunction
-
-  nnoremap <silent> <C-p> :call <SID>FilesOrQF()<Cr>
+  nnoremap <silent> <C-f> :BLines<Cr>
+  nnoremap <silent> <C-p> :Files<Cr>
   nnoremap <silent> <C-g> :Rg<Cr>
 " }}}
 
@@ -482,6 +462,10 @@
     autocmd InsertLeave * match TrailingWhitespace /\s\+$/
     autocmd BufWinLeave * call clearmatches()
 
+    " used in conjunction with incsearch setting
+    autocmd CmdlineEnter /,\? :set hlsearch
+    autocmd CmdlineLeave /,\? :set nohlsearch
+
     " auto reload file changes outside of vim, toggle custom status bar,
     " and toggle cursorline for active buffer.
     au FocusGained,VimEnter,WinEnter,BufWinEnter *
@@ -495,6 +479,7 @@
 
     " experimental, always have proper syntax highlighting, but may be slow
     autocmd BufEnter * :syntax sync fromstart
+    autocmd BufEnter *.sss :setf stylus
 
     " set indent for various languages
     au FileType markdown,python,json,javascript call <SID>IndentSize(4)

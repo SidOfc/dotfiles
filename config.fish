@@ -37,7 +37,7 @@
   abbr gsp 'git stash pop'
 
   # xclip stuff
-  if type "xclip" > /dev/null; then
+  if type "xclip" > /dev/null
     abbr pbcopy  'xclip -i -selection clipboard'
     abbr pbpaste 'xclip -o -selection clipboard'
     abbr pbclear 'echo "" | xclip -i -selection clipboard'
@@ -63,7 +63,7 @@
       else
         echo $__kp__pid | xargs kill -9
       end
-      kp
+      exec kp
     end
   end
 
