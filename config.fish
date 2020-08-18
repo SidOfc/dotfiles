@@ -37,9 +37,11 @@
   abbr gsp 'git stash pop'
 
   # xclip stuff
-  abbr pbcopy  'xclip -i -selection clipboard'
-  abbr pbpaste 'xclip -o -selection clipboard'
-  abbr pbclear 'echo "" | xclip -i -selection clipboard'
+  if type "xclip" > /dev/null; then
+    abbr pbcopy  'xclip -i -selection clipboard'
+    abbr pbpaste 'xclip -o -selection clipboard'
+    abbr pbclear 'echo "" | xclip -i -selection clipboard'
+  end
 
   # vim / vim-isms
   abbr v   "$EDITOR ."
