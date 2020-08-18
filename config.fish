@@ -5,6 +5,7 @@
   set -gx FZF_DEFAULT_COMMAND        'rg --files --no-ignore-vcs --hidden'
   set -gx FZF_CTRL_T_COMMAND         $FZF_DEFAULT_COMMAND
   set -gx EVENT_NOKQUEUE             1
+  set -gx SHELL                      (which fish || $SHELL || 'bash')
   set -gx EDITOR                     nvim
   set -gx HOMEBREW_FORCE_VENDOR_RUBY 1
   set -gx GPG_TTY                    (tty)
