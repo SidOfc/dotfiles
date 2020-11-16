@@ -10,6 +10,9 @@
   set ttyfast
   set nocompatible
 
+  " needs to be defined above the plugin
+  let g:polyglot_disabled = ['markdown']
+
   call plug#begin('~/.vim/plugged')
   Plug 'chriskempson/base16-vim'
   Plug 'christoomey/vim-tmux-navigator'
@@ -40,7 +43,7 @@
 
   if $VIM_DEV
     if !$DISABLE_MKDX
-      Plug '~/Dev/mkdx'
+      Plug '~/Dev/sidofc/viml/mkdx'
     endif
   else
     Plug 'SidOfc/mkdx'
@@ -48,7 +51,6 @@
 
   call plug#end()
 " }}}
-
 " General {{{
   " my leader of choice is <space>
   let mapleader = ' '
@@ -92,7 +94,6 @@
   set cursorline                   " highlight cursor line
   set splitbelow                   " split below instead of above
   set splitright                   " split after instead of before
-  set termguicolors                " enable termguicolors for better highlighting
   set background=dark              " set bg dark
   set nobackup                     " do not keep backups
   set noswapfile                   " no more swapfiles
@@ -109,9 +110,13 @@
   set belloff=all                  " do not show error bells
   set synmaxcol=1000               " do not highlight long lines
   set timeoutlen=250               " keycode delay
-  set fillchars+=msgsep:\ ,vert:\│ " customize message separator in neovim
   set wildignore+=.git,.DS_Store,node_modules
   set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
+
+  if has('nvim')
+    set termguicolors                " enable termguicolors for better highlighting
+    set fillchars+=msgsep:\ ,vert:\│ " customize message separator in neovim
+  endif
 
   " remap bad habits to do nothing
   imap <Up>    <Nop>
@@ -253,13 +258,8 @@
     function! VimrcDevRefresh()
       if $VIM_DEV
         if (&ft == 'markdown')
-          if has('mac')
-            so ~/Dev/sidney/viml/mkdx/after/syntax/markdown/mkdx.vim
-            so ~/Dev/sidney/viml/mkdx/autoload/mkdx.vim
-          else
-            so ~/Dev/mkdx/after/syntax/markdown/mkdx.vim
-            so ~/Dev/mkdx/autoload/mkdx.vim
-          endif
+          so ~/Dev/sidofc/viml/mkdx/after/syntax/markdown.vim
+          so ~/Dev/sidofc/viml/mkdx/autoload/mkdx.vim
         endif
 
         mess clear
@@ -296,7 +296,6 @@
 " }}}
 
 " Mkdx {{{
-  let g:polyglot_disabled = ['markdown']
   let g:mkdx#settings     = {
         \ 'restore_visual': 1,
         \ 'gf_on_steroids': 1,
