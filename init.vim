@@ -11,7 +11,7 @@
   set nocompatible
 
   " needs to be defined above the plugin
-  let g:polyglot_disabled = ['markdown']
+  let g:polyglot_disabled = ['markdown', 'stylus']
 
   call plug#begin('~/.vim/plugged')
   Plug 'chriskempson/base16-vim'
@@ -24,6 +24,7 @@
   Plug 'pangloss/vim-javascript'
   Plug 'rust-lang/rust.vim'
   Plug 'sheerun/vim-polyglot'
+  Plug 'iloginow/vim-stylus'
   Plug 'styled-components/vim-styled-components', {'branch': 'main'}
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-endwise'
@@ -388,6 +389,17 @@
           \ {'options':  '--delimiter : --nth 4..'},
           \ 0)
 
+  function! s:files_handler(lines)
+    echom a:lines
+  endfunction
+
+  command! -bang -nargs=* Files
+        \ call fzf#vim#grep(
+          \ "rg --files --hidden --smart-case --color=always . | sed 's/$/:1:1/'",
+          \ 0,
+          \ {},
+          \ 0)
+
   nnoremap <silent> <C-f> :BLines<Cr>
   nnoremap <silent> <C-p> :Files<Cr>
   nnoremap <silent> <C-g> :Rg<Cr>
@@ -420,10 +432,15 @@
 
   function! StatusLineRenderer()
     let hl = '%#' . get(g:mode_colors, tolower(mode()), g:mode_colors.n) . '#'
+    let fn = fnamemodify(expand("%"), ":~:.")
+
+    if (fn =~ '^\~')
+      let fn = fnamemodify(fn, ':t')
+    endif
 
     return hl
           \ . (&modified ? ' + │' : '')
-          \ . ' %{fnamemodify(expand("%"), ":~:.")} %#StatusLine#%='
+          \ . ' ' . fn . ' %#StatusLine#%='
           \ . hl
           \ . ' %l:%c '
   endfunction
