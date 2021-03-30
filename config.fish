@@ -11,6 +11,11 @@
   set -gx GPG_TTY                    (tty)
 # }}}
 
+# Aliases {{{
+  # don't send terminal type 'alacritty' through ssh
+  alias ssh "env TERM=xterm-256color ssh"
+# }}}
+
 # Abbreviations {{{
   # gpg-agent
   abbr gpg-add "echo | gpg -s >/dev/null ^&1"

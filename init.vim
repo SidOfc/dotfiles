@@ -327,7 +327,9 @@
   let g:ale_linters = {
         \ 'ruby': ['rubocop'],
         \ 'javascript': ['eslint', 'flow'],
-        \ 'fish': []
+        \ 'fish': [],
+        \ 'sass': [],
+        \ 'scss': []
         \ }
 " }}}
 
