@@ -14,6 +14,7 @@
 # Aliases {{{
   # don't send terminal type 'alacritty' through ssh
   alias ssh "env TERM=xterm-256color ssh"
+  alias rails "env TERM=xterm-256color rails"
 # }}}
 
 # Abbreviations {{{
