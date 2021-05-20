@@ -70,7 +70,7 @@
       else
         echo $__kp__pid | xargs kill -9
       end
-      exec kp
+      kp
     end
   end
 
