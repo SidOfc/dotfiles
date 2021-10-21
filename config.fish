@@ -145,8 +145,8 @@
     end
 
     set_color yellow
-    echo ' ❯ '
-    set_color -normal
+    echo -n ' ❯ '
+    set_color normal
   end
 # }}}
 

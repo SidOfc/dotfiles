@@ -11,7 +11,7 @@
   set nocompatible
 
   " needs to be defined above the plugin
-  let g:polyglot_disabled = ['markdown', 'stylus']
+  let g:polyglot_disabled = ['markdown', 'stylus', 'typescript']
 
   call plug#begin('~/.vim/plugged')
   Plug 'chriskempson/base16-vim'
@@ -22,6 +22,7 @@
   Plug 'junegunn/vader.vim'
   Plug 'machakann/vim-highlightedyank'
   Plug 'pangloss/vim-javascript'
+  Plug 'leafgarland/typescript-vim'
   Plug 'rust-lang/rust.vim'
   Plug 'sheerun/vim-polyglot'
   Plug 'iloginow/vim-stylus'
@@ -33,6 +34,7 @@
   Plug 'tpope/vim-surround'
   Plug 'w0rp/ale'
   Plug 'SidOfc/treevial'
+  " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
   if has('mac')
     Plug '/usr/local/opt/fzf'
@@ -297,7 +299,7 @@
 " }}}
 
 " Mkdx {{{
-  let g:mkdx#settings     = {
+  let g:mkdx#settings = {
         \ 'restore_visual': 1,
         \ 'gf_on_steroids': 1,
         \ 'highlight': { 'enable':   1 },
@@ -321,16 +323,22 @@
   let g:ale_fixers                = {
         \ 'javascript': ['prettier'],
         \ 'javascriptreact': ['prettier'],
-        \ 'jsx': ['prettier'],
+        \ 'typescript': ['prettier'],
+        \ 'typescriptreact': ['prettier'],
         \ 'json': ['prettier']
         \ }
   let g:ale_linters = {
         \ 'ruby': ['rubocop'],
-        \ 'javascript': ['eslint', 'flow'],
+        \ 'javascript': ['eslint'],
+        \ 'javascriptreact': ['eslint'],
+        \ 'typescript': ['eslint'],
+        \ 'typescriptreact': ['eslint'],
+        \ 'rust': ['cargo'],
         \ 'fish': [],
         \ 'sass': [],
         \ 'scss': []
         \ }
+  let g:ale_linters_explicit = 1
 " }}}
 
 " Fzf {{{
@@ -501,7 +509,7 @@
 
     " set indent for various languages
     au FileType markdown,python,json,javascript call <SID>IndentSize(4)
-    au FileType javascript,javascriptreact,jsx  call <SID>IndentSize(4)
+    au FileType javascriptreact,jsx,typescript,html,css call <SID>IndentSize(4)
 
     " hide status and ruler for cleaner fzf windows
     if has('nvim')

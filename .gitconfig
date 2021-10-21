@@ -11,6 +11,7 @@
 	prompt = false
 [push]
 	default = current
+	followTags = true
 [color "branch"]
 	current = yellow bold
 	local = yellow bold
