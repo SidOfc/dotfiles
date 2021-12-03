@@ -19,8 +19,6 @@
   Plug 'easymotion/vim-easymotion'
   Plug 'jreybert/vimagit'
   Plug 'junegunn/vim-easy-align'
-  Plug 'junegunn/vader.vim'
-  Plug 'machakann/vim-highlightedyank'
   Plug 'pangloss/vim-javascript'
   Plug 'leafgarland/typescript-vim'
   Plug 'rust-lang/rust.vim'
@@ -34,22 +32,13 @@
   Plug 'tpope/vim-surround'
   Plug 'w0rp/ale'
   Plug 'SidOfc/treevial'
-  " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-
-  if has('mac')
-    Plug '/usr/local/opt/fzf'
-  else
-    Plug '~/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  endif
-
+  Plug '~/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
+  Plug 'SidOfc/mkdx'
 
   if $VIM_DEV
-    if !$DISABLE_MKDX
-      Plug '~/Dev/sidofc/viml/mkdx'
-    endif
-  else
-    Plug 'SidOfc/mkdx'
+    Plug '~/Dev/sidofc/viml/mkdx'
+    Plug 'junegunn/vader.vim'
   endif
 
   call plug#end()
@@ -287,10 +276,6 @@
   let g:javascript_plugin_flow = 1
 " }}}
 
-" Highlighted yank {{{
-  let g:highlightedyank_highlight_duration = 150
-" }}}
-
 " {{{
   vnoremap a<Bar> :<C-U>normal! T<Bar>vt<Bar><Cr>
   vnoremap i<Bar> :<C-U>normal! F<Bar>vf<Bar><Cr>
@@ -511,14 +496,17 @@
     au FileType markdown,python,json,javascript call <SID>IndentSize(4)
     au FileType javascriptreact,jsx,typescript,html,css call <SID>IndentSize(4)
 
-    " hide status and ruler for cleaner fzf windows
+    " restore statusline highlights on colorscheme update
+    au Colorscheme * call <SID>StatusLineHighlights()
+
     if has('nvim')
+      " hide status and ruler for cleaner fzf windows
       au FileType fzf
             \ set laststatus& laststatus=0 |
             \ au BufLeave <buffer> set laststatus&
-    endif
 
-    " restore statusline highlights on colorscheme update
-    au Colorscheme * call <SID>StatusLineHighlights()
+      " highlight yank
+      au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
+    endif
   augroup END
 " }}}
