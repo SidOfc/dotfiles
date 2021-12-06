@@ -34,6 +34,7 @@
 
   require('paq')({
     'savq/paq-nvim',
+    'nvim-lua/plenary.nvim',
 
     'tpope/vim-repeat',
     'tpope/vim-endwise',
@@ -49,7 +50,7 @@
     'SidOfc/treevial',
 
     'w0rp/ale',
-    'jreybert/vimagit',
+    'TimUntersberger/neogit',
     'chriskempson/base16-vim',
     'christoomey/vim-tmux-navigator',
     {'nvim-treesitter/nvim-treesitter', run = nvim_treesitter_post_install},
@@ -199,6 +200,8 @@
   noremap('o', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
   noremap('v', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
   noremap('o', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
+
+  -- show syntax
 
   -- use <C-n> and <C-m> to scroll through quickfix entries
   function quickfix_next()
@@ -367,8 +370,8 @@
   noremap('n', '<C-x>',     ':call v:lua.fzf_grep()<Cr>',         {silent = true})
 -- }}}
 
--- vimagit {{{
-  noremap('n', '<leader>m', ':MagitO<Cr>')
+-- neogit {{{
+  noremap('n', '<leader>m', ':Neogit<Cr>')
 -- }}}
 
 -- easyalign {{{
