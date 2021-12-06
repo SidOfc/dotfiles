@@ -48,7 +48,6 @@ require('packer').startup({
 
     use({ 'hrsh7th/nvim-cmp' })
     use({ 'hrsh7th/cmp-buffer' })
-    use({ 'hrsh7th/cmp-cmdline' })
 
     use({ 'w0rp/ale' })
     use({ 'sheerun/vim-polyglot' })
@@ -69,9 +68,11 @@ require('packer').startup({
 })
 -- }}}
 
--- general {{{
+-- set mapleader {{{
 vim.g.mapleader = ' '
+-- }}}
 
+-- set options {{{
 vim.opt.ttyfast = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -96,11 +97,9 @@ vim.opt.listchars:append({ tab = '‣ ', trail = '•' })
 vim.opt.fillchars:append({ msgsep = ' ', vert = '│' })
 vim.opt.wildignore:append({ '.git', '.DS_Store', 'node_modules' })
 vim.opt.completeopt:append({ 'menu', 'menuone', 'noselect' })
+-- }}}
 
-if plugin_installed('base16-vim') then
-  vim.cmd('colorscheme base16-seti')
-end
-
+-- persistent undo {{{
 if vim.fn.has('persistent_undo') == 1 then
   local persistent_undo_directory = vim.fn.expand(
     '~/.config/vim-persisted-undo'
@@ -113,6 +112,12 @@ if vim.fn.has('persistent_undo') == 1 then
   vim.opt.undodir = persistent_undo_directory
   vim.opt.undofile = true
 end
+-- }}}
+
+-- colorscheme and misc highlights {{{
+if plugin_installed('base16-vim') then
+  vim.cmd('colorscheme base16-seti')
+end
 
 vim.cmd([[
   highlight CursorLine ctermbg=8 guibg=#282a2b
@@ -121,8 +126,9 @@ vim.cmd([[
   highlight TrailingWhitespace ctermfg=0 guifg=Black ctermbg=8 guibg=#41535B
   highlight VertSplit guibg=NONE ctermbg=NONE guifg=Gray ctermfg=Gray
 ]])
+-- }}}
 
--- no-op bad habit mappings
+-- no-op bad habit mappings {{{
 map('i', '<Up>', '<Nop>')
 map('i', '<Down>', '<Nop>')
 map('i', '<Left>', '<Nop>')
@@ -141,37 +147,43 @@ map('', '^', '<Nop>')
 map('', '{', '<Nop>')
 map('', '}', '<Nop>')
 map('', '<C-z>', '<Nop>')
+-- }}}
 
--- sometimes instead of pressing :q, I press q:, Q:, or :Q.
--- to fix this, we map em all to :q
+-- sometimes instead of pressing :q, I press q:, Q:, or :Q {{{
 map('', 'q:', ':q<Cr>')
 map('', 'Q:', ':q<Cr>')
+-- }}}
 
--- more intuitive navigation mappings in normal / visual / operator pending modes
+-- more intuitive navigation mappings in normal / visual / operator pending modes {{{
 noremap('', 'K', '{')
 noremap('', 'J', '}')
 noremap('', 'H', '^')
 noremap('', 'L', '$')
+-- }}}
 
--- easier one-off navigation in insert mode
+-- easier one-off navigation in insert mode {{{
 noremap('i', '<C-k>', '<Up>')
 noremap('i', '<C-j>', '<Down>')
 noremap('i', '<C-h>', '<Left>')
 noremap('i', '<C-l>', '<Right>')
+-- }}}
 
--- save using <C-s> in every mode
+-- save using <C-s> in every mode {{{
 noremap('n', '<C-s>', ':write<Cr>')
 noremap('v', '<C-s>', '<C-c>:write<Cr>gv')
 noremap('i', '<C-s>', '<C-o>:write<Cr>')
 noremap('o', '<C-s>', '<Esc>:write<Cr>')
+-- }}}
 
--- make Y consistent with C and D
+-- make Y consistent with C and D {{{
 noremap('n', 'Y', 'y$')
+-- }}}
 
--- use qq to record, q to stop, Q to play a macro
+-- use qq to record, q to stop, Q to play a macro {{{
 noremap('n', 'Q', '@q')
+-- }}}
 
--- when pairing brackets, parens, or quotes, place the cursor in the middle
+-- when pairing brackets, parens, or quotes, place the cursor in the middle {{{
 noremap('i', '<>', '<><Left>')
 noremap('i', '()', '()<Left>')
 noremap('i', '{}', '{}<Left>')
@@ -179,24 +191,28 @@ noremap('i', '[]', '[]<Left>')
 noremap('i', '""', '""<Left>')
 noremap('i', "''", "''<Left>")
 noremap('i', '``', '``<Left>')
+-- }}}
 
--- use <Tab> and <S-Tab> to indent and unindent code
+-- use <Tab> and <S-Tab> to indent and unindent code {{{
 noremap('n', '<Tab>', '>>')
 noremap('n', '<S-Tab>', '<<')
 noremap('v', '<Tab>', '>><Esc>gv')
 noremap('v', '<S-Tab>', '<<<Esc>gv')
 noremap('i', '<S-Tab>', '<C-d>')
+-- }}}
 
--- use <u> to undo, <U> to redo
+-- use <u> to undo, <U> to redo {{{
 noremap('n', 'U', '<C-r>')
+-- }}}
 
--- enable acting on content between bar (|) characters
+-- enable acting on content between bar (|) characters {{{
 noremap('v', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
 noremap('o', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
 noremap('v', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
 noremap('o', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
+-- }}}
 
--- use <C-n> and <C-b> to scroll through quickfix entries
+-- use <C-n> and <C-b> to scroll through quickfix entries {{{
 function quickfix_next()
   vim.cmd('try | cnext | catch | cfirst | catch | endtry')
 end
@@ -207,8 +223,9 @@ end
 
 noremap('n', '<C-n>', ':call v:lua.quickfix_next()<Cr>', { silent = true })
 noremap('n', '<C-b>', ':call v:lua.quickfix_prev()<Cr>', { silent = true })
+-- }}}
 
--- close pane using <C-w>
+-- close pane using <C-w> {{{
 function close_buffer()
   if
     #vim.fn.getbufinfo({ buflisted = 1, windows = { vim.fn.bufwinid('%') } })
@@ -221,8 +238,9 @@ function close_buffer()
 end
 
 noremap('n', '<C-w>', ':call v:lua.close_buffer()<Cr>', { silent = true })
+-- }}}
 
--- define auto commands
+-- define auto commands {{{
 function indent_size(spaces)
   vim.opt_local.expandtab = true
   vim.opt_local.tabstop = spaces
@@ -273,14 +291,13 @@ function status_line()
     or status_mode_groups.n
   local highlight = '%#' .. group .. '#'
   local filename = vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
-
   if string.match(filename, '^~') then
     filename = vim.fn.fnamemodify(filename, ':t')
   end
 
   return (
       highlight
-      .. (vim.opt.modified:get() == 1 and ' + |' or '')
+      .. (vim.opt.modified:get() and ' + |' or '')
       .. ' '
       .. filename
       .. ' %#StatusLine#%='
@@ -451,12 +468,6 @@ if plugin_installed('nvim-cmp') then
     },
     sources = {
       { name = 'buffer' },
-    },
-  })
-
-  cmp.setup.cmdline(':', {
-    sources = {
-      { name = 'cmdline' },
     },
   })
 end
