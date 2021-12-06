@@ -246,17 +246,17 @@ vim.cmd([[
 
 -- statusline {{{
 local status_mode_groups = {
-  ['n'] = 'StatusLineSection',
-  ['v'] = 'StatusLineSectionV',
+  n = 'StatusLineSection',
+  i = 'StatusLineSectionI',
+  c = 'StatusLineSectionC',
+  r = 'StatusLineSectionR',
+  v = 'StatusLineSectionV',
   [''] = 'StatusLineSectionV',
-  ['i'] = 'StatusLineSectionI',
-  ['c'] = 'StatusLineSectionC',
-  ['r'] = 'StatusLineSectionR',
 }
 
 function status_line()
   local group = status_mode_groups[vim.fn.mode():lower()]
-    or status_mode_groups['n']
+    or status_mode_groups.n
   local highlight = '%#' .. group .. '#'
   local filename = vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
 
@@ -318,18 +318,18 @@ end
 vim.g.fzf_preview_window = {}
 vim.g.fzf_layout = { down = '20%' }
 vim.g.fzf_colors = {
-  ['fg'] = { 'fg', 'Normal' },
-  ['bg'] = { 'bg', 'Clear' },
-  ['hl'] = { 'fg', 'String' },
+  fg = { 'fg', 'Normal' },
+  bg = { 'bg', 'Clear' },
+  hl = { 'fg', 'String' },
+  info = { 'fg', 'PreProc' },
+  prompt = { 'fg', 'Conditional' },
+  pointer = { 'fg', 'Exception' },
+  marker = { 'fg', 'Keyword' },
+  spinner = { 'fg', 'Label' },
+  header = { 'fg', 'Comment' },
   ['fg+'] = { 'fg', 'CursorLine', 'CursorColumn', 'Normal' },
   ['bg+'] = { 'bg', 'CursorLine', 'CursorColumn' },
   ['hl+'] = { 'fg', 'Statement' },
-  ['info'] = { 'fg', 'PreProc' },
-  ['prompt'] = { 'fg', 'Conditional' },
-  ['pointer'] = { 'fg', 'Exception' },
-  ['marker'] = { 'fg', 'Keyword' },
-  ['spinner'] = { 'fg', 'Label' },
-  ['header'] = { 'fg', 'Comment' },
 }
 
 vim.cmd([[
@@ -383,8 +383,8 @@ if not bootstrap_plugins then
     },
     mappings = {
       status = {
-        ['P'] = 'PullPopup',
-        ['p'] = 'PushPopup',
+        P = 'PullPopup',
+        p = 'PushPopup',
       },
     },
   })
