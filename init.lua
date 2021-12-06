@@ -28,10 +28,6 @@ if bootstrap_plugins then
   })
 end
 
-function nvim_treesitter_post_install()
-  vim.cmd('TSUpdate')
-end
-
 require('paq')({
   'savq/paq-nvim',
   'nvim-lua/plenary.nvim',
@@ -51,7 +47,8 @@ require('paq')({
   'TimUntersberger/neogit',
   'chriskempson/base16-vim',
   'christoomey/vim-tmux-navigator',
-  { 'nvim-treesitter/nvim-treesitter', run = nvim_treesitter_post_install },
+  'sheerun/vim-polyglot',
+  'nvim-treesitter/nvim-treesitter',
 })
 
 if bootstrap_plugins then
@@ -184,8 +181,6 @@ noremap('v', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
 noremap('o', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
 noremap('v', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
 noremap('o', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
-
--- show syntax
 
 -- use <C-n> and <C-m> to scroll through quickfix entries
 function quickfix_next()
@@ -322,6 +317,20 @@ end
 -- fzf {{{
 vim.g.fzf_preview_window = {}
 vim.g.fzf_layout = { down = '20%' }
+vim.g.fzf_colors = {
+  ['fg'] = { 'fg', 'Normal' },
+  ['bg'] = { 'bg', 'Clear' },
+  ['hl'] = { 'fg', 'String' },
+  ['fg+'] = { 'fg', 'CursorLine', 'CursorColumn', 'Normal' },
+  ['bg+'] = { 'bg', 'CursorLine', 'CursorColumn' },
+  ['hl+'] = { 'fg', 'Statement' },
+  ['info'] = { 'fg', 'PreProc' },
+  ['prompt'] = { 'fg', 'Conditional' },
+  ['pointer'] = { 'fg', 'Exception' },
+  ['marker'] = { 'fg', 'Keyword' },
+  ['spinner'] = { 'fg', 'Label' },
+  ['header'] = { 'fg', 'Comment' },
+}
 
 vim.cmd([[
   command! -bang -nargs=* FzfMkdxJumpToHeader
@@ -388,8 +397,6 @@ noremap('n', '<leader>m', ':Neogit<Cr>')
 if not bootstrap_plugins then
   require('nvim-treesitter.configs').setup({
     ensure_installed = {
-      'c',
-      'cpp',
       'css',
       'fish',
       'html',
@@ -397,21 +404,20 @@ if not bootstrap_plugins then
       'javascript',
       'json',
       'lua',
-      'perl',
-      'php',
       'pug',
       'python',
       'ruby',
       'rust',
       'scss',
       'toml',
-      'tsx',
-      'typescript',
       'vim',
-      'vue',
       'yaml',
     },
     highlight = {
+      enable = true,
+      disable = { 'javascript' },
+    },
+    incremental_selection = {
       enable = true,
     },
   })
@@ -439,7 +445,6 @@ vim.g.ale_echo_msg_format = '[%linter%] %severity%: %s'
 vim.g.ale_lint_delay = 300
 vim.g.ale_fix_on_save = 1
 vim.g.ale_linters_explicit = 1
-
 vim.g.ale_fixers = {
   javascript = { 'prettier' },
   javascriptreact = { 'prettier' },
@@ -449,7 +454,6 @@ vim.g.ale_fixers = {
   rust = { 'rustfmt' },
   lua = { 'stylua' },
 }
-
 vim.g.ale_linters = {
   javascript = { 'eslint' },
   javascriptreact = { 'eslint' },
