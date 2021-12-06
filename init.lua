@@ -43,11 +43,15 @@ require('paq')({
   'SidOfc/mkdx',
   'SidOfc/treevial',
 
+  'hrsh7th/nvim-cmp',
+  'hrsh7th/cmp-buffer',
+  'hrsh7th/cmp-cmdline',
+
   'w0rp/ale',
+  'sheerun/vim-polyglot',
   'TimUntersberger/neogit',
   'chriskempson/base16-vim',
   'christoomey/vim-tmux-navigator',
-  'sheerun/vim-polyglot',
   'nvim-treesitter/nvim-treesitter',
 })
 
@@ -82,6 +86,7 @@ vim.opt.clipboard:append({ 'unnamedplus' })
 vim.opt.listchars:append({ tab = '‣ ', trail = '•' })
 vim.opt.fillchars:append({ msgsep = ' ', vert = '│' })
 vim.opt.wildignore:append({ '.git', '.DS_Store', 'node_modules' })
+vim.opt.completeopt:append({ 'menu', 'menuone', 'noselect' })
 
 if vim.fn.has('persistent_undo') == 1 then
   local persistent_undo_directory = vim.fn.expand(
@@ -182,7 +187,7 @@ noremap('o', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
 noremap('v', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
 noremap('o', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
 
--- use <C-n> and <C-m> to scroll through quickfix entries
+-- use <C-n> and <C-b> to scroll through quickfix entries
 function quickfix_next()
   vim.cmd('try | cnext | catch | cfirst | catch | endtry')
 end
@@ -192,7 +197,7 @@ function quickfix_prev()
 end
 
 noremap('n', '<C-n>', ':call v:lua.quickfix_next()<Cr>', { silent = true })
-noremap('n', '<C-m>', ':call v:lua.quickfix_prev()<Cr>', { silent = true })
+noremap('n', '<C-b>', ':call v:lua.quickfix_prev()<Cr>', { silent = true })
 
 -- close pane using <C-w>
 function close_buffer()
@@ -419,6 +424,28 @@ if not bootstrap_plugins then
     },
     incremental_selection = {
       enable = true,
+    },
+  })
+end
+-- }}}
+
+-- nvim-cmp {{{
+if not bootstrap_plugins then
+  local cmp = require('cmp')
+
+  cmp.setup({
+    mapping = {
+      ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+      ['<C-b>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
+    },
+    sources = {
+      { name = 'buffer' },
+    },
+  })
+
+  cmp.setup.cmdline(':', {
+    sources = {
+      { name = 'cmdline' },
     },
   })
 end
