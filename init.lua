@@ -63,17 +63,13 @@ end
 vim.g.mapleader = ' '
 
 vim.opt.ttyfast = true
-vim.opt.lazyredraw = true
-vim.opt.hidden = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.incsearch = true
 vim.opt.showmode = false
 vim.opt.ruler = false
 vim.opt.cursorline = true
 vim.opt.splitbelow = true
 vim.opt.splitright = true
-vim.opt.backup = false
 vim.opt.swapfile = false
 vim.opt.list = true
 vim.opt.wrap = false
@@ -82,26 +78,13 @@ vim.opt.termguicolors = true
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 0
 vim.opt.softtabstop = 2
-vim.opt.laststatus = 2
 vim.opt.showtabline = 0
 vim.opt.timeoutlen = 400
-vim.opt.backspace = '2'
-vim.opt.inccommand = 'nosplit'
-vim.opt.belloff = 'all'
-vim.opt.encoding = 'utf-8'
-vim.opt.background = 'dark'
-vim.opt.clipboard = vim.opt.clipboard + { 'unnamedplus' }
-vim.opt.path = vim.opt.path + { '**' }
-vim.opt.wildignore = vim.opt.wildignore
-  + { '.git', '.DS_Store', 'node_modules' }
-vim.opt.listchars = { tab = '‣ ', trail = '•' }
-vim.opt.fillchars = { msgsep = ' ', vert = '│' }
-
-if vim.opt.modifiable:get() then
-  vim.opt.fileencoding = 'utf-8'
-  vim.opt.fileformat = 'unix'
-  vim.opt.fileformats = { 'unix', 'dos' }
-end
+vim.opt.path:append({ '**' })
+vim.opt.clipboard:append({ 'unnamedplus' })
+vim.opt.listchars:append({ tab = '‣ ', trail = '•' })
+vim.opt.fillchars:append({ msgsep = ' ', vert = '│' })
+vim.opt.wildignore:append({ '.git', '.DS_Store', 'node_modules' })
 
 if vim.fn.has('persistent_undo') == 1 then
   local persistent_undo_directory = vim.fn.expand(
@@ -121,12 +104,12 @@ if not bootstrap_plugins then
 end
 
 vim.cmd([[
-    highlight CursorLine ctermbg=8 guibg=#282a2b
-    highlight Normal guibg=NONE ctermbg=NONE
-    highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
-    highlight TrailingWhitespace ctermfg=0 guifg=Black ctermbg=8 guibg=#41535B
-    highlight VertSplit guibg=NONE ctermbg=NONE guifg=Gray ctermfg=Gray
-  ]])
+  highlight CursorLine ctermbg=8 guibg=#282a2b
+  highlight Normal guibg=NONE ctermbg=NONE
+  highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
+  highlight TrailingWhitespace ctermfg=0 guifg=Black ctermbg=8 guibg=#41535B
+  highlight VertSplit guibg=NONE ctermbg=NONE guifg=Gray ctermfg=Gray
+]])
 
 -- no-op bad habit mappings
 map('i', '<Up>', '<Nop>')
@@ -238,42 +221,43 @@ function indent_size(spaces)
 end
 
 vim.cmd([[
-    augroup InitAutoCommands
-      au!
+  augroup InitAutoCommands
+    au!
 
-      au FileType markdown,python,json,javascript call v:lua.indent_size(4)
-      au FileType javascriptreact,jsx,typescript,html,css call v:lua.indent_size(4)
+    au FileType markdown,python,json,javascript call v:lua.indent_size(4)
+    au FileType javascriptreact,jsx,typescript,html,css call v:lua.indent_size(4)
 
-      au FileType NeogitStatus setlocal nolist
+    au FileType NeogitStatus setlocal nolist
 
-      au CmdlineEnter /,\? set hlsearch
-      au CmdlineLeave /,\? set nohlsearch
+    au CmdlineEnter /,\? set hlsearch
+    au CmdlineLeave /,\? set nohlsearch
 
-      au VimResized * wincmd =
+    au VimResized * wincmd =
 
-      au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
+    au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
 
-      au FileType fzf
-            \ set laststatus& laststatus=0 |
-            \ au BufLeave <buffer> set laststatus&
+    au FileType fzf
+          \ set laststatus& laststatus=0 |
+          \ au BufLeave <buffer> set laststatus&
 
-      au FocusLost,VimLeave,WinLeave,BufWinLeave * setlocal cursorline&
-      au FocusGained,VimEnter,WinEnter,BufWinEnter *
-            \ setlocal cursorline& |
-            \ setlocal cursorline |
-            \ checktime
-    augroup END
-  ]])
+    au FocusLost,VimLeave,WinLeave,BufWinLeave * setlocal cursorline&
+    au FocusGained,VimEnter,WinEnter,BufWinEnter *
+          \ setlocal cursorline& |
+          \ setlocal cursorline |
+          \ checktime
+  augroup END
+]])
 -- }}}
 
 -- statusline {{{
-local status_mode_groups = {}
-status_mode_groups['n'] = 'StatusLineSection'
-status_mode_groups['v'] = 'StatusLineSectionV'
-status_mode_groups[''] = 'StatusLineSectionV'
-status_mode_groups['i'] = 'StatusLineSectionI'
-status_mode_groups['c'] = 'StatusLineSectionC'
-status_mode_groups['r'] = 'StatusLineSectionR'
+local status_mode_groups = {
+  ['n'] = 'StatusLineSection',
+  ['v'] = 'StatusLineSectionV',
+  [''] = 'StatusLineSectionV',
+  ['i'] = 'StatusLineSectionI',
+  ['c'] = 'StatusLineSectionC',
+  ['r'] = 'StatusLineSectionR',
+}
 
 function status_line()
   local group = status_mode_groups[vim.fn.mode():lower()]
@@ -298,14 +282,14 @@ end
 
 function status_line_colors()
   vim.cmd([[
-      highlight StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
-      highlight StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
-      highlight StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
-      highlight StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
-      highlight StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
-      highlight StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
-      highlight StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
-    ]])
+    highlight StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
+    highlight StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
+    highlight StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
+    highlight StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
+    highlight StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
+    highlight StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
+    highlight StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
+  ]])
 end
 
 if vim.fn.has('vim_starting') then
@@ -315,18 +299,18 @@ end
 status_line_colors()
 
 vim.cmd([[
-    augroup StatusLineAutocmds
-      au!
+  augroup StatusLineAutocmds
+    au!
 
-      au FocusLost,VimLeave,WinLeave,BufWinLeave * setlocal statusline&
-      au FocusGained,VimEnter,WinEnter,BufWinEnter *
-            \ setlocal statusline& |
-            \ setlocal statusline=%!v:lua.status_line() |
-            \ checktime
+    au FocusLost,VimLeave,WinLeave,BufWinLeave * setlocal statusline&
+    au FocusGained,VimEnter,WinEnter,BufWinEnter *
+          \ setlocal statusline& |
+          \ setlocal statusline=%!v:lua.status_line() |
+          \ checktime
 
-      au Colorscheme * call v:lua.status_line_colors()
-    augroup END
-  ]])
+    au Colorscheme * call v:lua.status_line_colors()
+  augroup END
+]])
 -- }}}
 
 -- netrw {{{
@@ -340,9 +324,9 @@ vim.g.fzf_preview_window = {}
 vim.g.fzf_layout = { down = '20%' }
 
 vim.cmd([[
-    command! -bang -nargs=* FzfMkdxJumpToHeader
-      \ call cursor(str2nr(get(matchlist(<q-args>, ' *\([0-9]\+\)'), 1, '')), 1)
-  ]])
+  command! -bang -nargs=* FzfMkdxJumpToHeader
+    \ call cursor(str2nr(get(matchlist(<q-args>, ' *\([0-9]\+\)'), 1, '')), 1)
+]])
 
 function fzf_grep()
   vim.fn['fzf#vim#grep'](
