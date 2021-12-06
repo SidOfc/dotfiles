@@ -388,6 +388,12 @@ if not bootstrap_plugins then
     sections = {
       recent = false,
     },
+    mappings = {
+      status = {
+        ['P'] = 'PullPopup',
+        ['p'] = 'PushPopup',
+      },
+    },
   })
 end
 
