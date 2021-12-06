@@ -237,17 +237,19 @@
     augroup InitAutoCommands
       au!
 
-      match TrailingWhitespace /\s\+$/
-      au BufWinEnter * match TrailingWhitespace /\s\+$/
-      au InsertEnter * match TrailingWhitespace /\s\+\%#\@<!$/
-      au InsertLeave * match TrailingWhitespace /\s\+$/
-      au BufWinLeave * call clearmatches()
+      " match TrailingWhitespace /\s\+$/
+      " au BufWinEnter * match TrailingWhitespace /\s\+$/
+      " au InsertEnter * match TrailingWhitespace /\s\+\%#\@<!$/
+      " au InsertLeave * match TrailingWhitespace /\s\+$/
+      " au BufWinLeave * call clearmatches()
 
       au FileType markdown,python,json,javascript call v:lua.indent_size(4)
       au FileType javascriptreact,jsx,typescript,html,css call v:lua.indent_size(4)
 
-      au CmdlineEnter /,\? :set hlsearch
-      au CmdlineLeave /,\? :set nohlsearch
+      au FileType NeogitStatus setlocal nolist
+
+      au CmdlineEnter /,\? set hlsearch
+      au CmdlineLeave /,\? set nohlsearch
 
       au VimResized * wincmd =
 
@@ -371,6 +373,17 @@
 -- }}}
 
 -- neogit {{{
+  if not bootstrap_plugins then
+    require('neogit').setup({
+      disable_hint                = true,
+      disable_signs               = true,
+      disable_commit_confirmation = true,
+      sections                    = {
+        recent = false
+      }
+    })
+  end
+
   noremap('n', '<leader>m', ':Neogit<Cr>')
 -- }}}
 
