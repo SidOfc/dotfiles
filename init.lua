@@ -43,7 +43,6 @@ require('paq')({
 
   'junegunn/fzf',
   'junegunn/fzf.vim',
-  'junegunn/vim-easy-align',
 
   'SidOfc/mkdx',
   'SidOfc/treevial',
@@ -385,6 +384,7 @@ if not bootstrap_plugins then
     disable_hint = true,
     disable_signs = true,
     disable_commit_confirmation = true,
+    disable_insert_on_commit = false,
     sections = {
       recent = false,
     },
@@ -392,11 +392,6 @@ if not bootstrap_plugins then
 end
 
 noremap('n', '<leader>m', ':Neogit<Cr>')
--- }}}
-
--- easyalign {{{
-map('x', 'gr', '<Plug>(EasyAlign)')
-map('n', 'gr', '<Plug>(EasyAlign)')
 -- }}}
 
 -- nvim-treesitter {{{
