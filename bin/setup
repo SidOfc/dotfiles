@@ -34,8 +34,7 @@ REPO_ROOT=$(cd "$(dirname "$BASH_SOURCE")/../" && pwd)
 VIM_PLUG="$HOME/.local/share/nvim/site/autoload/plug.vim"
 SYMLINKS=$(trim "
 $REPO_ROOT/config.fish        $HOME/.config/fish/config.fish
-$REPO_ROOT/init.vim           $HOME/.config/nvim/init.vim
-$REPO_ROOT/init.vim           $HOME/.vimrc
+$REPO_ROOT/init.lua           $HOME/.config/nvim/init.lua
 $REPO_ROOT/alacritty.yml      $HOME/.config/alacritty/alacritty.yml
 $REPO_ROOT/gpg-agent.conf     $HOME/.gnupg/gpg-agent.conf
 $REPO_ROOT/.asdfrc            $HOME/.asdfrc

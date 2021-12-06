@@ -23,7 +23,7 @@
 
   # config files
   abbr aa  "$EDITOR ~/.config/alacritty/alacritty.yml"
-  abbr vv  "$EDITOR ~/.config/nvim/init.vim"
+  abbr vv  "$EDITOR ~/.config/nvim/init.lua"
   abbr tt  "$EDITOR ~/.tmux.conf"
   abbr zz  "$EDITOR ~/.config/fish/config.fish"
   abbr ff  "$EDITOR ~/.config/fish/config.fish"
