@@ -1,6 +1,10 @@
 -- utility functions {{{
 function plugin_path(plugin)
-  return vim.fn.stdpath('data') .. '/site/pack/paqs/start/' .. plugin
+  return vim.fn.stdpath('data') .. '/site/pack/packer/start/' .. plugin
+end
+
+function plugin_installed(plugin)
+  return vim.fn.isdirectory(plugin_path(plugin)) == 1
 end
 
 function map(mode, lhs, rhs, options)
@@ -16,48 +20,53 @@ end
 -- }}}
 
 -- plugins {{{
-local bootstrap_plugins = vim.fn.isdirectory(plugin_path('paq-nvim')) == 0
-
-if bootstrap_plugins then
-  vim.fn.system({
+if not plugin_installed('packer.nvim') then
+  packer_bootstrap = vim.fn.system({
     'git',
     'clone',
     '--depth=1',
-    'https://github.com/savq/paq-nvim.git',
-    plugin_path('paq-nvim'),
+    'https://github.com/wbthomason/packer.nvim',
+    plugin_path('packer.nvim'),
   })
 end
 
-require('paq')({
-  'savq/paq-nvim',
-  'nvim-lua/plenary.nvim',
+require('packer').startup({
+  function()
+    use({ 'wbthomason/packer.nvim' })
+    use({ 'nvim-lua/plenary.nvim' })
 
-  'tpope/vim-repeat',
-  'tpope/vim-fugitive',
-  'tpope/vim-surround',
-  'tpope/vim-commentary',
+    use({ 'tpope/vim-repeat' })
+    use({ 'tpope/vim-fugitive' })
+    use({ 'tpope/vim-surround' })
+    use({ 'tpope/vim-commentary' })
 
-  'junegunn/fzf',
-  'junegunn/fzf.vim',
+    use({ 'junegunn/fzf' })
+    use({ 'junegunn/fzf.vim' })
 
-  'SidOfc/mkdx',
-  'SidOfc/treevial',
+    use({ 'SidOfc/mkdx' })
+    use({ 'SidOfc/treevial' })
 
-  'hrsh7th/nvim-cmp',
-  'hrsh7th/cmp-buffer',
-  'hrsh7th/cmp-cmdline',
+    use({ 'hrsh7th/nvim-cmp' })
+    use({ 'hrsh7th/cmp-buffer' })
+    use({ 'hrsh7th/cmp-cmdline' })
 
-  'w0rp/ale',
-  'sheerun/vim-polyglot',
-  'TimUntersberger/neogit',
-  'chriskempson/base16-vim',
-  'christoomey/vim-tmux-navigator',
-  'nvim-treesitter/nvim-treesitter',
+    use({ 'w0rp/ale' })
+    use({ 'sheerun/vim-polyglot' })
+    use({ 'TimUntersberger/neogit' })
+    use({ 'chriskempson/base16-vim' })
+    use({ 'christoomey/vim-tmux-navigator' })
+    use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
+
+    if packer_bootstrap then
+      require('packer').sync()
+    end
+  end,
+  config = {
+    display = {
+      open_cmd = '50vnew \\[packer\\]',
+    },
+  },
 })
-
-if bootstrap_plugins then
-  vim.cmd('PaqInstall')
-end
 -- }}}
 
 -- general {{{
@@ -88,6 +97,10 @@ vim.opt.fillchars:append({ msgsep = ' ', vert = '│' })
 vim.opt.wildignore:append({ '.git', '.DS_Store', 'node_modules' })
 vim.opt.completeopt:append({ 'menu', 'menuone', 'noselect' })
 
+if plugin_installed('base16-vim') then
+  vim.cmd('colorscheme base16-seti')
+end
+
 if vim.fn.has('persistent_undo') == 1 then
   local persistent_undo_directory = vim.fn.expand(
     '~/.config/vim-persisted-undo'
@@ -99,10 +112,6 @@ if vim.fn.has('persistent_undo') == 1 then
 
   vim.opt.undodir = persistent_undo_directory
   vim.opt.undofile = true
-end
-
-if not bootstrap_plugins then
-  vim.cmd('colorscheme base16-seti')
 end
 
 vim.cmd([[
@@ -314,70 +323,72 @@ vim.cmd([[
 -- }}}
 
 -- netrw {{{
-if not bootstrap_plugins then
+if plugin_installed('treevial') then
   vim.g.loaded_netrwPlugin = 1
 end
 -- }}}
 
 -- fzf {{{
-vim.g.fzf_preview_window = {}
-vim.g.fzf_layout = { down = '20%' }
-vim.g.fzf_colors = {
-  fg = { 'fg', 'Normal' },
-  bg = { 'bg', 'Clear' },
-  hl = { 'fg', 'String' },
-  info = { 'fg', 'PreProc' },
-  prompt = { 'fg', 'Conditional' },
-  pointer = { 'fg', 'Exception' },
-  marker = { 'fg', 'Keyword' },
-  spinner = { 'fg', 'Label' },
-  header = { 'fg', 'Comment' },
-  ['fg+'] = { 'fg', 'CursorLine', 'CursorColumn', 'Normal' },
-  ['bg+'] = { 'bg', 'CursorLine', 'CursorColumn' },
-  ['hl+'] = { 'fg', 'Statement' },
-}
+if plugin_installed('fzf') and plugin_installed('fzf.vim') then
+  vim.g.fzf_preview_window = {}
+  vim.g.fzf_layout = { down = '20%' }
+  vim.g.fzf_colors = {
+    fg = { 'fg', 'Normal' },
+    bg = { 'bg', 'Clear' },
+    hl = { 'fg', 'String' },
+    info = { 'fg', 'PreProc' },
+    prompt = { 'fg', 'Conditional' },
+    pointer = { 'fg', 'Exception' },
+    marker = { 'fg', 'Keyword' },
+    spinner = { 'fg', 'Label' },
+    header = { 'fg', 'Comment' },
+    ['fg+'] = { 'fg', 'CursorLine', 'CursorColumn', 'Normal' },
+    ['bg+'] = { 'bg', 'CursorLine', 'CursorColumn' },
+    ['hl+'] = { 'fg', 'Statement' },
+  }
 
-vim.cmd([[
-  command! -bang -nargs=* FzfMkdxJumpToHeader
-    \ call cursor(str2nr(get(matchlist(<q-args>, ' *\([0-9]\+\)'), 1, '')), 1)
-]])
+  vim.cmd([[
+    command! -bang -nargs=* FzfMkdxJumpToHeader
+      \ call cursor(str2nr(get(matchlist(<q-args>, ' *\([0-9]\+\)'), 1, '')), 1)
+  ]])
 
-function fzf_grep()
-  vim.fn['fzf#vim#grep'](
-    'rg --column --line-number --hidden --smart-case --color=always .',
-    1,
-    { options = { '--delimiter=:', '--nth=4..', '--no-hscroll' } }
-  )
-end
-
-function fzf_mkdx_headers()
-  local lines = vim.api.nvim_buf_get_lines(0, 1, vim.fn.line('$'), 0)
-  local headers = {}
-
-  for lnum, line in ipairs(lines) do
-    if line:find('^#') then
-      table.insert(headers, string.format('%4d: %s', lnum + 1, line))
-    end
+  function fzf_grep()
+    vim.fn['fzf#vim#grep'](
+      'rg --column --line-number --hidden --smart-case --color=always .',
+      1,
+      { options = { '--delimiter=:', '--nth=4..', '--no-hscroll' } }
+    )
   end
 
-  vim.fn['fzf#run'](vim.fn['fzf#wrap']({
-    source = headers,
-    sink = 'FzfMkdxJumpToHeader',
-  }))
-end
+  function fzf_mkdx_headers()
+    local lines = vim.api.nvim_buf_get_lines(0, 1, vim.fn.line('$'), 0)
+    local headers = {}
 
-noremap(
-  'n',
-  '<leader>I',
-  ':call v:lua.fzf_mkdx_headers()<Cr>',
-  { silent = true }
-)
-noremap('n', '<C-p>', ':Files<Cr>', { silent = true })
-noremap('n', '<C-x>', ':call v:lua.fzf_grep()<Cr>', { silent = true })
+    for lnum, line in ipairs(lines) do
+      if line:find('^#') then
+        table.insert(headers, string.format('%4d: %s', lnum + 1, line))
+      end
+    end
+
+    vim.fn['fzf#run'](vim.fn['fzf#wrap']({
+      source = headers,
+      sink = 'FzfMkdxJumpToHeader',
+    }))
+  end
+
+  noremap(
+    'n',
+    '<leader>I',
+    ':call v:lua.fzf_mkdx_headers()<Cr>',
+    { silent = true }
+  )
+  noremap('n', '<C-p>', ':Files<Cr>', { silent = true })
+  noremap('n', '<C-g>', ':call v:lua.fzf_grep()<Cr>', { silent = true })
+end
 -- }}}
 
 -- neogit {{{
-if not bootstrap_plugins then
+if plugin_installed('neogit') then
   require('neogit').setup({
     disable_hint = true,
     disable_signs = true,
@@ -393,13 +404,13 @@ if not bootstrap_plugins then
       },
     },
   })
-end
 
-noremap('n', '<leader>m', ':Neogit<Cr>')
+  noremap('n', '<leader>m', ':Neogit<Cr>')
+end
 -- }}}
 
 -- nvim-treesitter {{{
-if not bootstrap_plugins then
+if plugin_installed('nvim-treesitter') then
   require('nvim-treesitter.configs').setup({
     ensure_installed = {
       'css',
@@ -430,7 +441,7 @@ end
 -- }}}
 
 -- nvim-cmp {{{
-if not bootstrap_plugins then
+if plugin_installed('nvim-cmp') then
   local cmp = require('cmp')
 
   cmp.setup({
@@ -452,42 +463,46 @@ end
 -- }}}
 
 -- mkdx {{{
-vim.g['mkdx#settings'] = {
-  restore_visual = 1,
-  gf_on_steroids = 1,
-  enter = { shift = 1 },
-  highlight = { enable = 1 },
-  fold = { enable = 1 },
-  links = { external = { enable = 1 } },
-  toc = {
-    text = 'Table of Contents',
-    update_on_write = 1,
-    details = { nesting_level = 0 },
-  },
-}
+if plugin_installed('mkdx') then
+  vim.g['mkdx#settings'] = {
+    restore_visual = 1,
+    gf_on_steroids = 1,
+    enter = { shift = 1 },
+    highlight = { enable = 1 },
+    fold = { enable = 1 },
+    links = { external = { enable = 1 } },
+    toc = {
+      text = 'Table of Contents',
+      update_on_write = 1,
+      details = { nesting_level = 0 },
+    },
+  }
+end
 -- }}}
 
 -- ale {{{
-vim.g.ale_echo_msg_format = '[%linter%] %severity%: %s'
-vim.g.ale_lint_delay = 300
-vim.g.ale_fix_on_save = 1
-vim.g.ale_linters_explicit = 1
-vim.g.ale_fixers = {
-  javascript = { 'prettier' },
-  javascriptreact = { 'prettier' },
-  typescript = { 'prettier' },
-  typescriptreact = { 'prettier' },
-  json = { 'prettier' },
-  rust = { 'rustfmt' },
-  lua = { 'stylua' },
-}
-vim.g.ale_linters = {
-  javascript = { 'eslint' },
-  javascriptreact = { 'eslint' },
-  typescript = { 'eslint' },
-  typescriptreact = { 'eslint' },
-  json = { 'eslint' },
-  rust = { 'cargo' },
-  ruby = { 'rubocop' },
-}
+if plugin_installed('ale') then
+  vim.g.ale_echo_msg_format = '[%linter%] %severity%: %s'
+  vim.g.ale_lint_delay = 300
+  vim.g.ale_fix_on_save = 1
+  vim.g.ale_linters_explicit = 1
+  vim.g.ale_fixers = {
+    javascript = { 'prettier' },
+    javascriptreact = { 'prettier' },
+    typescript = { 'prettier' },
+    typescriptreact = { 'prettier' },
+    json = { 'prettier' },
+    rust = { 'rustfmt' },
+    lua = { 'stylua' },
+  }
+  vim.g.ale_linters = {
+    javascript = { 'eslint' },
+    javascriptreact = { 'eslint' },
+    typescript = { 'eslint' },
+    typescriptreact = { 'eslint' },
+    json = { 'eslint' },
+    rust = { 'cargo' },
+    ruby = { 'rubocop' },
+  }
+end
 -- }}}
