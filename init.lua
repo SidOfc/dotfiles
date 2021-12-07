@@ -36,7 +36,6 @@ require('packer').startup({
     use({ 'nvim-lua/plenary.nvim' })
 
     use({ 'tpope/vim-repeat' })
-    use({ 'tpope/vim-fugitive' })
     use({ 'tpope/vim-surround' })
     use({ 'tpope/vim-commentary' })
 
@@ -511,7 +510,6 @@ if plugin_installed('ale') then
     javascriptreact = { 'eslint' },
     typescript = { 'eslint' },
     typescriptreact = { 'eslint' },
-    json = { 'eslint' },
     rust = { 'cargo' },
     ruby = { 'rubocop' },
   }
