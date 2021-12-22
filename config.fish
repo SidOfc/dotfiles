@@ -34,7 +34,6 @@
   abbr g.  'git add .'
   abbr gc  'git commit -m'
   abbr gco 'git checkout'
-  abbr ggo 'git checkout (git branch | grep -v "^*" | sed -E "s/^ +//" | fzf)'
   abbr gd  'git diff'
   abbr gl  'git log'
   abbr gp  'git push'
@@ -52,9 +51,9 @@
 
   # vim / vim-isms
   abbr v   "$EDITOR ."
-  abbr vip "$EDITOR +PlugInstall +qall"
-  abbr vup "$EDITOR +PlugUpdate"
-  abbr vcp "$EDITOR +PlugClean +qall"
+  abbr vip "$EDITOR +PackerInstall +qall"
+  abbr vup "$EDITOR +PackerUpdate"
+  abbr vcp "$EDITOR +PackerClean +qall"
   abbr :q  "exit"
   abbr :Q  "exit"
 # }}}
@@ -132,12 +131,13 @@
     echo -n (prompt_pwd)
 
     if test (git rev-parse --git-dir 2>/dev/null)
+      and not test (pwd | grep '.git')
       set_color yellow
       echo -n " on "
       set_color green
-      echo -n (git status | head -1 | string split ' ')[-1]
+      echo -n (git status 2>/dev/null | head -1 | string split ' ')[-1]
 
-      if test -n (echo (git status -s))
+      if test -n (echo (git status -s 2>/dev/null))
         set_color magenta
       end
 

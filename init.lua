@@ -43,7 +43,7 @@ require('packer').startup({
     use({ 'junegunn/fzf.vim' })
 
     use({ 'SidOfc/mkdx' })
-    use({ 'SidOfc/treevial' })
+    use({ 'SidOfc/carbon.nvim' })
 
     use({ 'hrsh7th/nvim-cmp' })
     use({ 'hrsh7th/cmp-buffer' })
@@ -338,9 +338,11 @@ vim.cmd([[
 ]])
 -- }}}
 
--- netrw {{{
-if plugin_installed('treevial') then
-  vim.g.loaded_netrwPlugin = 1
+-- carbon.nvim {{{
+if plugin_installed('carbon.nvim') then
+  require('carbon').setup({
+    exclude = { '.git', 'node_modules' },
+  })
 end
 -- }}}
 
