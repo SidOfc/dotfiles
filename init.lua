@@ -49,7 +49,6 @@ require('packer').startup({
     use({ 'hrsh7th/cmp-buffer' })
 
     use({ 'w0rp/ale' })
-    use({ 'sheerun/vim-polyglot' })
     use({ 'TimUntersberger/neogit' })
     use({ 'chriskempson/base16-vim' })
     use({ 'christoomey/vim-tmux-navigator' })
@@ -72,44 +71,41 @@ vim.g.mapleader = ' '
 -- }}}
 
 -- set options {{{
-vim.opt.ttyfast = true
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.showmode = false
+local undo_directory = vim.env.HOME .. '/.local/share/nvim/undo//'
+local backup_directory = vim.env.HOME .. '/.local/share/nvim/backup//'
+
+vim.opt.list = true
+vim.opt.wrap = false
 vim.opt.ruler = false
+vim.opt.tabstop = 2
+vim.opt.ttyfast = true
+vim.opt.showmode = false
+vim.opt.undofile = true
+vim.opt.swapfile = false
+vim.opt.smartcase = true
+vim.opt.expandtab = true
+vim.opt.ignorecase = true
 vim.opt.cursorline = true
 vim.opt.splitbelow = true
 vim.opt.splitright = true
-vim.opt.swapfile = false
-vim.opt.list = true
-vim.opt.wrap = false
-vim.opt.expandtab = true
-vim.opt.termguicolors = true
-vim.opt.tabstop = 2
 vim.opt.shiftwidth = 0
+vim.opt.timeoutlen = 400
 vim.opt.softtabstop = 2
 vim.opt.showtabline = 0
-vim.opt.timeoutlen = 400
+vim.opt.termguicolors = true
 vim.opt.path:append({ '**' })
+vim.opt.undodir:prepend({ undo_directory })
+vim.opt.backupdir:prepend({ backup_directory })
 vim.opt.clipboard:append({ 'unnamedplus' })
 vim.opt.listchars:append({ tab = '‣ ', trail = '•' })
 vim.opt.fillchars:append({ msgsep = ' ', vert = '│' })
 vim.opt.wildignore:append({ '.git', '.DS_Store', 'node_modules' })
 vim.opt.completeopt:append({ 'menu', 'menuone', 'noselect' })
--- }}}
 
--- persistent undo {{{
-if vim.fn.has('persistent_undo') == 1 then
-  local persistent_undo_directory = vim.fn.expand(
-    '~/.config/vim-persisted-undo'
-  )
-
-  if vim.fn.isdirectory(persistent_undo_directory) == 0 then
-    vim.fn.system({ 'mkdir', '-p', persistent_undo_directory })
+for _, path in ipairs({ undo_directory, backup_directory }) do
+  if vim.fn.isdirectory(path) == 0 then
+    vim.fn.mkdir(path, 'p')
   end
-
-  vim.opt.undodir = persistent_undo_directory
-  vim.opt.undofile = true
 end
 -- }}}
 
@@ -430,6 +426,8 @@ end
 -- nvim-treesitter {{{
 if plugin_installed('nvim-treesitter') then
   require('nvim-treesitter.configs').setup({
+    highlight = { enable = true },
+    incremental_selection = { enable = true },
     ensure_installed = {
       'css',
       'fish',
@@ -446,13 +444,6 @@ if plugin_installed('nvim-treesitter') then
       'toml',
       'vim',
       'yaml',
-    },
-    highlight = {
-      enable = true,
-      disable = { 'javascript' },
-    },
-    incremental_selection = {
-      enable = true,
     },
   })
 end
