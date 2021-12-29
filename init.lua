@@ -222,13 +222,15 @@ noremap('n', '<C-b>', ':call v:lua.quickfix_prev()<Cr>', { silent = true })
 
 -- close pane using <C-w> {{{
 function close_buffer()
-  if
-    #vim.fn.getbufinfo({ buflisted = 1, windows = { vim.fn.bufwinid('%') } })
-    > 1
-  then
+  local winid = vim.fn.bufwinid('%')
+
+  if #vim.fn.getbufinfo({ buflisted = 1, windows = { winid } }) > 1 then
     vim.cmd('bdelete')
   elseif #vim.fn.getwininfo() > 1 then
     vim.cmd('close')
+  elseif vim.bo.filetype ~= 'carbon' then
+    vim.cmd('Carbon')
+    vim.cmd('silent! bdelete#')
   end
 end
 
@@ -292,7 +294,7 @@ function status_line()
 
   return (
       highlight
-      .. (vim.opt.modified:get() and ' + |' or '')
+      .. (vim.bo.modified and ' + |' or '')
       .. ' '
       .. filename
       .. ' %#StatusLine#%='
@@ -338,6 +340,7 @@ vim.cmd([[
 if plugin_installed('carbon.nvim') then
   require('carbon').setup({
     exclude = { '.git', 'node_modules' },
+    indicators = { collapse = '▾', expand = '▸' },
   })
 end
 -- }}}
