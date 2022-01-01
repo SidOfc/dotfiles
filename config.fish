@@ -1,6 +1,5 @@
 # Settings {{{
   set fish_greeting
-  set -U  fish_user_paths            /usr/local/opt/openssl/bin $HOME/bin $HOME/.asdf/asdf.fish $HOME/.fzf/bin
   set -gx FZF_DEFAULT_OPTS           '--height=50% --min-height=15 --reverse'
   set -gx FZF_DEFAULT_COMMAND        'rg --files --no-ignore-vcs --hidden'
   set -gx FZF_CTRL_T_COMMAND         $FZF_DEFAULT_COMMAND
@@ -151,23 +150,11 @@
 # }}}
 
 # Gpg {{{
-  gpg-agent --daemon --no-grab >/dev/null 2<&1
+  if not test (pgrep gpg-agent)
+    gpg-agent --daemon --no-grab >/dev/null 2>&1
+  end
 # }}}
 
 # Sourcing {{{
-  # macOS homebrew installs into /usr/local/share, apt uses /usr/share
-  [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
-  [ -f /usr/share/autojump/autojump.fish ]; and source /usr/share/autojump/autojump.fish
-
-  # asdf on macOS installed via homebrew, on linux via a git clone
-  [ -f /usr/local/opt/asdf/asdf/asdf.fish ]; and source /usr/local/opt/asdf/asdf.fish
-  [ -f $HOME/.asdf/asdf.fish ]; and source $HOME/.asdf/asdf.fish
-# }}}
-
-# TMUX {{{
-  if status --is-interactive
-  and command -s tmux >/dev/null
-  and not set -q TMUX
-    exec tmux new -A -s (whoami)
-  end
+  [ -f /opt/homebrew/share/autojump/autojump.fish ]; and source /opt/homebrew/share/autojump/autojump.fish
 # }}}
