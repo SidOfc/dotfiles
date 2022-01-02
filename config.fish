@@ -7,6 +7,7 @@
   set -gx SHELL                      (which fish || $SHELL || 'bash')
   set -gx EDITOR                     nvim
   set -gx HOMEBREW_FORCE_VENDOR_RUBY 1
+  set -gx HOMEBREW_NO_ENV_HINTS      1
   set -gx GPG_TTY                    (tty)
 # }}}
 
@@ -157,4 +158,8 @@
 
 # Sourcing {{{
   [ -f /opt/homebrew/share/autojump/autojump.fish ]; and source /opt/homebrew/share/autojump/autojump.fish
+# }}}
+
+# Path modifications {{{
+  fish_add_path $HOME/.asdf/shims
 # }}}
