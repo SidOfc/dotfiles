@@ -1,38 +1,14 @@
 [user]
-	name = Sidney Liebrand
-	email = sidneyliebrand@gmail.com
-	signingkey = 32E59628A8DBA32F
+  name = Sidney Liebrand
+  email = sidneyliebrand@gmail.com
+  signingkey = 32E59628A8DBA32F
 [core]
-	editor = nvim
-	excludesfile = ~/.gitignore
-[diff]
-	tool = vimdiff
-[difftool]
-	prompt = false
+  editor = nvim
+  excludesfile = ~/.gitignore
 [push]
-	default = current
-	followTags = true
-[color "branch"]
-	current = yellow bold
-	local = yellow bold
-	remote = green bold
-[color "diff"]
-	meta = yellow bold
-	frag = magenta bold
-	old = red bold
-	new = green bold
-[color "status"]
-	added = green bold
-	changed = yellow bold
-	untracked = blue bold
-[merge]
-	tool = vimdiff
-	conflictstyle = diff3
-[mergetool "vimdiff"]
-	cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
-	prompt = false
-	keepBackup = false
+  default = current
+  followTags = true
 [commit]
-	gpgsign = true
+  gpgsign = true
 [tag]
-	gpgsign = true
+  gpgsign = true

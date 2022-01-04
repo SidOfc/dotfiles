@@ -1,19 +1,23 @@
 # Settings {{{
   set fish_greeting
-  set -gx FZF_DEFAULT_OPTS           '--height=50% --min-height=15 --reverse'
+  set -gx RIPGREP_CONFIG_PATH        "$HOME/.ripgreprc"
+  set -gx FZF_DEFAULT_OPTS           '--height=50% --layout=reverse'
   set -gx FZF_DEFAULT_COMMAND        'rg --files --no-ignore-vcs --hidden'
-  set -gx FZF_CTRL_T_COMMAND         $FZF_DEFAULT_COMMAND
-  set -gx EVENT_NOKQUEUE             1
-  set -gx SHELL                      (which fish || $SHELL || 'bash')
+  set -gx SHELL                      (which fish)
+  set -gx GPG_TTY                    (tty)
   set -gx EDITOR                     nvim
+  set -gx EVENT_NOKQUEUE             1
   set -gx HOMEBREW_FORCE_VENDOR_RUBY 1
   set -gx HOMEBREW_NO_ENV_HINTS      1
-  set -gx GPG_TTY                    (tty)
+# }}}
+
+# Path modifications {{{
+  fish_add_path $HOME/.asdf/shims
 # }}}
 
 # Aliases {{{
   # don't send terminal type 'alacritty' through ssh
-  alias ssh "env TERM=xterm-256color ssh"
+  alias ssh   "env TERM=xterm-256color ssh"
   alias rails "env TERM=xterm-256color rails"
 # }}}
 
@@ -22,13 +26,11 @@
   abbr gpg-add "echo | gpg -s >/dev/null ^&1"
 
   # config files
-  abbr aa  "$EDITOR ~/.config/alacritty/alacritty.yml"
-  abbr vv  "$EDITOR ~/.config/nvim/init.lua"
-  abbr tt  "$EDITOR ~/.tmux.conf"
-  abbr zz  "$EDITOR ~/.config/fish/config.fish"
-  abbr ff  "$EDITOR ~/.config/fish/config.fish"
-  abbr zx  ". ~/.config/fish/config.fish"
-  abbr ks  "kp --tcp"
+  abbr tt "$EDITOR ~/.tmux.conf"
+  abbr aa "$EDITOR ~/.config/alacritty/alacritty.yml"
+  abbr vv "$EDITOR ~/.config/nvim/init.lua"
+  abbr ff "$EDITOR ~/.config/fish/config.fish"
+  abbr zx "source ~/.config/fish/config.fish"
 
   # git
   abbr g.  'git add .'
@@ -42,20 +44,11 @@
   abbr gs  'git stash'
   abbr gsp 'git stash pop'
 
-  # xclip stuff
-  if type "xclip" >/dev/null 2>&1
-    abbr pbcopy  'xclip -i -selection clipboard'
-    abbr pbpaste 'xclip -o -selection clipboard'
-    abbr pbclear 'echo "" | xclip -i -selection clipboard'
-  end
-
   # vim / vim-isms
   abbr v   "$EDITOR ."
   abbr vip "$EDITOR +PackerInstall +qall"
   abbr vup "$EDITOR +PackerUpdate"
   abbr vcp "$EDITOR +PackerClean +qall"
-  abbr :q  "exit"
-  abbr :Q  "exit"
 # }}}
 
 # Utility functions {{{
@@ -85,36 +78,6 @@
 
     if test -n "$branches_to_delete"
       git branch $delete_mode $branches_to_delete
-    end
-  end
-
-  function bip --description "Install brew plugins"
-    set -l inst (brew search | eval "fzf $FZF_DEFAULT_OPTS -m --header='[brew:install]'")
-
-    if not test (count $inst) = 0
-      for prog in $inst
-        brew install "$prog"
-      end
-    end
-  end
-
-  function bup --description "Update brew plugins"
-    set -l inst (brew leaves | eval "fzf $FZF_DEFAULT_OPTS -m --header='[brew:update]'")
-
-    if not test (count $inst) = 0
-      for prog in $inst
-        brew upgrade "$prog"
-      end
-    end
-  end
-
-  function bcp --description "Remove brew plugins"
-    set -l inst (brew leaves | eval "fzf $FZF_DEFAULT_OPTS -m --header='[brew:uninstall]'")
-
-    if not test (count $inst) = 0
-      for prog in $inst
-        brew uninstall "$prog"
-      end
     end
   end
 
@@ -150,7 +113,7 @@
   end
 # }}}
 
-# Gpg {{{
+# GPG {{{
   if not test (pgrep gpg-agent)
     gpg-agent --daemon --no-grab >/dev/null 2>&1
   end
@@ -158,8 +121,4 @@
 
 # Sourcing {{{
   [ -f /opt/homebrew/share/autojump/autojump.fish ]; and source /opt/homebrew/share/autojump/autojump.fish
-# }}}
-
-# Path modifications {{{
-  fish_add_path $HOME/.asdf/shims
 # }}}
