@@ -1,5 +1,8 @@
 # Settings {{{
-  set fish_greeting
+  set -U  fish_greeting
+  set -U  fish_color_command         magenta
+  set -U  fish_color_param           blue
+
   set -gx RIPGREP_CONFIG_PATH        "$HOME/.ripgreprc"
   set -gx FZF_DEFAULT_OPTS           '--height=50% --layout=reverse'
   set -gx FZF_DEFAULT_COMMAND        'rg --files --no-ignore-vcs --hidden'
@@ -82,13 +85,14 @@
   end
 
   function fish_prompt --description 'Write out the prompt'
+    set_color --bold
+
     switch $status
       case 0   ; set_color green
       case 127 ; set_color yellow
       case '*' ; set_color red
     end
 
-    set_color -od
     echo -n '• '
     set_color blue
     echo -n (prompt_pwd)

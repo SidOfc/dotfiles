@@ -20,28 +20,27 @@ font:
 colors:
   primary:
     background: '#000000'
-    foreground: '#eaeaea'
+    foreground: '#d8d7d7'
 
   normal:
     black:   '#000000'
-    red:     '#ff3334'
-    green:   '#9ec400'
-    yellow:  '#e7c547'
-    blue:    '#7aa6da'
-    magenta: '#b77ee0'
-    cyan:    '#54ced6'
-    white:   '#eaeaea'
-
+    red:     '#d15c5c'
+    green:   '#afd75f'
+    yellow:  '#d1d05c'
+    blue:    '#5eabd3'
+    magenta: '#af87d7'
+    cyan:    '#60d7af'
+    white:   '#d8d7d7'
 
   bright:
-    black:   '#444444'
-    red:     '#d54e53'
-    green:   '#c2f200'
-    yellow:  '#ffdb4d'
-    blue:    '#7ac8da'
-    magenta: '#f199ff'
-    cyan:    '#83d4ce'
-    white:   '#ffffff'
+    black:   '#000000'
+    red:     '#d15c5c'
+    green:   '#afd75f'
+    yellow:  '#d1d05c'
+    blue:    '#5eabd3'
+    magenta: '#af87d7'
+    cyan:    '#60d7af'
+    white:   '#d8d7d7'
 
 shell:
   program: /bin/zsh
