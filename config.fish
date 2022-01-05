@@ -3,7 +3,8 @@
   set -U  fish_color_command         magenta
   set -U  fish_color_param           blue
 
-  set -gx RIPGREP_CONFIG_PATH        "$HOME/.ripgreprc"
+  set -gx ASDF_CONFIG_FILE           "$HOME/.config/asdf/asdfrc"
+  set -gx RIPGREP_CONFIG_PATH        "$HOME/.config/ripgrep/ripgreprc"
   set -gx FZF_DEFAULT_OPTS           '--height=50% --layout=reverse'
   set -gx FZF_DEFAULT_COMMAND        'rg --files --no-ignore-vcs --hidden'
   set -gx SHELL                      (which fish)
@@ -29,7 +30,7 @@
   abbr gpg-add "echo | gpg -s >/dev/null ^&1"
 
   # config files
-  abbr tt "$EDITOR ~/.tmux.conf"
+  abbr tt "$EDITOR ~/.config/tmux/tmux.conf"
   abbr aa "$EDITOR ~/.config/alacritty/alacritty.yml"
   abbr vv "$EDITOR ~/.config/nvim/init.lua"
   abbr ff "$EDITOR ~/.config/fish/config.fish"
