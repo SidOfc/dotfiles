@@ -32,6 +32,8 @@ end
 
 require('packer').startup({
   function()
+    use({ 'lewis6991/impatient.nvim' })
+
     use({ 'wbthomason/packer.nvim' })
     use({ 'nvim-lua/plenary.nvim' })
 
@@ -338,10 +340,7 @@ vim.cmd([[
 
 -- carbon.nvim {{{
 if plugin_installed('carbon.nvim') then
-  require('carbon').setup({
-    exclude = { '.git', 'node_modules' },
-    indicators = { collapse = '▾', expand = '▸' },
-  })
+  require('carbon').setup({ indicators = { collapse = '▾', expand = '▸' } })
 end
 -- }}}
 
