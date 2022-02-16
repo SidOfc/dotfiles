@@ -47,9 +47,6 @@ require('packer').startup({
     use({ 'SidOfc/mkdx' })
     use({ 'SidOfc/carbon.nvim' })
 
-    use({ 'hrsh7th/nvim-cmp' })
-    use({ 'hrsh7th/cmp-buffer' })
-
     use({ 'w0rp/ale' })
     use({ 'TimUntersberger/neogit' })
     use({ 'chriskempson/base16-vim' })
@@ -431,6 +428,7 @@ if plugin_installed('nvim-treesitter') then
     highlight = { enable = true },
     incremental_selection = { enable = true },
     ensure_installed = {
+      'php',
       'css',
       'fish',
       'html',
@@ -446,22 +444,6 @@ if plugin_installed('nvim-treesitter') then
       'toml',
       'vim',
       'yaml',
-    },
-  })
-end
--- }}}
-
--- nvim-cmp {{{
-if plugin_installed('nvim-cmp') then
-  local cmp = require('cmp')
-
-  cmp.setup({
-    mapping = {
-      ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
-      ['<C-b>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
-    },
-    sources = {
-      { name = 'buffer' },
     },
   })
 end
