@@ -489,6 +489,7 @@ if plugin_installed('ale') then
     typescriptreact = { 'eslint' },
     rust = { 'cargo' },
     ruby = { 'rubocop' },
+    lua = { 'luacheck' },
   }
 end
 -- }}}
