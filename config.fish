@@ -3,6 +3,7 @@
   set -U  fish_color_command         magenta
   set -U  fish_color_param           blue
 
+  set -gx DOTFILES_DIRECTORY         "$HOME/dotfiles"
   set -gx ASDF_CONFIG_FILE           "$HOME/.config/asdf/asdfrc"
   set -gx RIPGREP_CONFIG_PATH        "$HOME/.config/ripgrep/ripgreprc"
   set -gx FZF_DEFAULT_OPTS           '--height=50% --layout=reverse'
@@ -30,10 +31,10 @@
   abbr gpg-add "echo | gpg -s >/dev/null ^&1"
 
   # config files
-  abbr tt "$EDITOR ~/.config/tmux/tmux.conf"
-  abbr aa "$EDITOR ~/.config/alacritty/alacritty.yml"
-  abbr vv "$EDITOR ~/.config/nvim/init.lua"
-  abbr ff "$EDITOR ~/.config/fish/config.fish"
+  abbr tt "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/tmux/tmux.conf && cd -"
+  abbr aa "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/alacritty/alacritty.yml && cd -"
+  abbr vv "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/nvim/init.lua && cd -"
+  abbr ff "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/fish/config.fish && cd -"
   abbr zx "source ~/.config/fish/config.fish"
 
   # git

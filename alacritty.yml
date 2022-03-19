@@ -19,11 +19,11 @@ font:
 
 colors:
   primary:
-    background: '#000000'
+    background: '#111111'
     foreground: '#d8d7d7'
 
   normal:
-    black:   '#000000'
+    black:   '#555555'
     red:     '#d15c5c'
     green:   '#afd75f'
     yellow:  '#d1d05c'
@@ -33,7 +33,17 @@ colors:
     white:   '#d8d7d7'
 
   bright:
-    black:   '#000000'
+    black:   '#555555'
+    red:     '#d15c5c'
+    green:   '#afd75f'
+    yellow:  '#d1d05c'
+    blue:    '#5eabd3'
+    magenta: '#af87d7'
+    cyan:    '#60d7af'
+    white:   '#d8d7d7'
+
+  dim:
+    black:   '#555555'
     red:     '#d15c5c'
     green:   '#afd75f'
     yellow:  '#d1d05c'

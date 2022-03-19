@@ -1,17 +1,19 @@
+-- luacheck: globals vim
+
 -- utility functions {{{
-function plugin_path(plugin)
+local function plugin_path(plugin)
   return vim.fn.stdpath('data') .. '/site/pack/packer/start/' .. plugin
 end
 
-function plugin_installed(plugin)
+local function plugin_installed(plugin)
   return vim.fn.isdirectory(plugin_path(plugin)) == 1
 end
 
-function map(mode, lhs, rhs, options)
+local function map(mode, lhs, rhs, options)
   return vim.api.nvim_set_keymap(mode, lhs, rhs, options or {})
 end
 
-function noremap(mode, lhs, rhs, options)
+local function noremap(mode, lhs, rhs, options)
   local opts = options or {}
   opts.noremap = true
 
@@ -20,6 +22,8 @@ end
 -- }}}
 
 -- plugins {{{
+local packer_bootstrap
+
 if not plugin_installed('packer.nvim') then
   packer_bootstrap = vim.fn.system({
     'git',
@@ -31,7 +35,7 @@ if not plugin_installed('packer.nvim') then
 end
 
 require('packer').startup({
-  function()
+  function(use)
     use({ 'lewis6991/impatient.nvim' })
 
     use({ 'wbthomason/packer.nvim' })
@@ -52,6 +56,8 @@ require('packer').startup({
     use({ 'chriskempson/base16-vim' })
     use({ 'christoomey/vim-tmux-navigator' })
     use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
+
+    use({ 'wuelnerdotexe/vim-enfocado' })
 
     if packer_bootstrap then
       require('packer').sync()
@@ -207,11 +213,11 @@ noremap('o', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
 -- }}}
 
 -- use <C-n> and <C-b> to scroll through quickfix entries {{{
-function quickfix_next()
+function quickfix_next() -- luacheck: ignore
   vim.cmd('try | cnext | catch | cfirst | catch | endtry')
 end
 
-function quickfix_prev()
+function quickfix_prev() -- luacheck: ignore
   vim.cmd('try | cprev | catch | clast | catch | endtry')
 end
 
@@ -220,7 +226,7 @@ noremap('n', '<C-b>', ':call v:lua.quickfix_prev()<Cr>', { silent = true })
 -- }}}
 
 -- close pane using <C-w> {{{
-function close_buffer()
+function close_buffer() -- luacheck: ignore
   local winid = vim.fn.bufwinid('%')
 
   if #vim.fn.getbufinfo({ buflisted = 1, windows = { winid } }) > 1 then
@@ -237,7 +243,7 @@ noremap('n', '<C-w>', ':call v:lua.close_buffer()<Cr>', { silent = true })
 -- }}}
 
 -- define auto commands {{{
-function indent_size(spaces)
+function indent_size(spaces) -- luacheck: ignore
   vim.opt_local.expandtab = true
   vim.opt_local.tabstop = spaces
   vim.opt_local.softtabstop = spaces
@@ -247,7 +253,7 @@ vim.cmd([[
   augroup InitAutoCommands
     au!
 
-    au FileType markdown,python,json,javascript call v:lua.indent_size(4)
+    au FileType markdown,python,json,javascript,php call v:lua.indent_size(4)
     au FileType javascriptreact,jsx,typescript,html,css call v:lua.indent_size(4)
 
     au FileType NeogitStatus setlocal nolist
@@ -282,7 +288,7 @@ local status_mode_groups = {
   [''] = 'StatusLineSectionV',
 }
 
-function status_line()
+function status_line() -- luacheck: ignore
   local group = status_mode_groups[vim.fn.mode():lower()]
     or status_mode_groups.n
   local highlight = '%#' .. group .. '#'
@@ -302,7 +308,7 @@ function status_line()
     )
 end
 
-function status_line_colors()
+function status_line_colors() -- luacheck: ignore
   vim.cmd([[
     highlight StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
     highlight StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
@@ -314,11 +320,11 @@ function status_line_colors()
   ]])
 end
 
+status_line_colors() -- luacheck: ignore
+
 if vim.fn.has('vim_starting') then
   vim.opt.statusline = ' %{fnamemodify(expand("%"), ":~:.")}%= %l:%c '
 end
-
-status_line_colors()
 
 vim.cmd([[
   augroup StatusLineAutocmds
@@ -365,7 +371,7 @@ if plugin_installed('fzf') and plugin_installed('fzf.vim') then
       \ call cursor(str2nr(get(matchlist(<q-args>, ' *\([0-9]\+\)'), 1, '')), 1)
   ]])
 
-  function fzf_grep()
+  function fzf_grep() -- luacheck: ignore
     vim.fn['fzf#vim#grep'](
       'rg --column --line-number --hidden --smart-case --color=always .',
       1,
@@ -373,7 +379,7 @@ if plugin_installed('fzf') and plugin_installed('fzf.vim') then
     )
   end
 
-  function fzf_mkdx_headers()
+  function fzf_mkdx_headers() -- luacheck: ignore
     local lines = vim.api.nvim_buf_get_lines(0, 1, vim.fn.line('$'), 0)
     local headers = {}
 
