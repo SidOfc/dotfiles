@@ -57,8 +57,6 @@ require('packer').startup({
     use({ 'christoomey/vim-tmux-navigator' })
     use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
 
-    use({ 'wuelnerdotexe/vim-enfocado' })
-
     if packer_bootstrap then
       require('packer').sync()
     end
