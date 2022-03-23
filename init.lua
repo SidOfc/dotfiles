@@ -483,6 +483,8 @@ if plugin_installed('ale') then
     typescript = { 'prettier' },
     typescriptreact = { 'prettier' },
     json = { 'prettier' },
+    scss = { 'prettier' },
+    css = { 'prettier' },
     rust = { 'rustfmt' },
     lua = { 'stylua' },
   }
