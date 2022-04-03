@@ -296,14 +296,14 @@ function status_line() -- luacheck: ignore
   end
 
   return (
-      highlight
-      .. (vim.bo.modified and ' + |' or '')
-      .. ' '
-      .. filename
-      .. ' %#StatusLine#%='
-      .. highlight
-      .. ' %l:%c '
-    )
+    highlight
+    .. (vim.bo.modified and ' + |' or '')
+    .. ' '
+    .. filename
+    .. ' %#StatusLine#%='
+    .. highlight
+    .. ' %l:%c '
+  )
 end
 
 function status_line_colors() -- luacheck: ignore
@@ -429,26 +429,10 @@ end
 -- nvim-treesitter {{{
 if plugin_installed('nvim-treesitter') then
   require('nvim-treesitter.configs').setup({
+    indent = { enable = true },
     highlight = { enable = true },
     incremental_selection = { enable = true },
-    ensure_installed = {
-      'php',
-      'css',
-      'fish',
-      'html',
-      'java',
-      'javascript',
-      'json',
-      'lua',
-      'pug',
-      'python',
-      'ruby',
-      'rust',
-      'scss',
-      'toml',
-      'vim',
-      'yaml',
-    },
+    ensure_installed = 'maintained',
   })
 end
 -- }}}
@@ -496,6 +480,8 @@ if plugin_installed('ale') then
     rust = { 'cargo' },
     ruby = { 'rubocop' },
     lua = { 'luacheck' },
+    scss = { 'stylelint' },
+    css = { 'stylelint' },
   }
 end
 -- }}}
