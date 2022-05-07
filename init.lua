@@ -430,9 +430,32 @@ end
 if plugin_installed('nvim-treesitter') then
   require('nvim-treesitter.configs').setup({
     indent = { enable = true },
-    highlight = { enable = true },
     incremental_selection = { enable = true },
-    ensure_installed = 'maintained',
+    highlight = {
+      enable = true,
+      additional_vim_regex_highlighting = { 'php', 'markdown' },
+    },
+    ensure_installed = {
+      'c',
+      'cpp',
+      'css',
+      'html',
+      'java',
+      'javascript',
+      'json',
+      'json5',
+      'lua',
+      'pug',
+      'python',
+      'ruby',
+      'rust',
+      'scss',
+      'toml',
+      'tsx',
+      'typescript',
+      'vim',
+      'yaml',
+    },
   })
 end
 -- }}}
@@ -468,6 +491,7 @@ if plugin_installed('ale') then
     typescriptreact = { 'prettier' },
     json = { 'prettier' },
     scss = { 'prettier' },
+    html = { 'prettier' },
     css = { 'prettier' },
     rust = { 'rustfmt' },
     lua = { 'stylua' },
