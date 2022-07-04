@@ -16,27 +16,23 @@
   set -gx HOMEBREW_NO_ENV_HINTS      1
 # }}}
 
-# Path modifications {{{
-  fish_add_path $HOME/.asdf/shims
-# }}}
-
 # Aliases {{{
   # don't send terminal type 'alacritty' through ssh
   alias ssh   "env TERM=xterm-256color ssh"
   alias rails "env TERM=xterm-256color rails"
+
+  # config files
+  alias tt "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/tmux/tmux.conf && cd -"
+  alias aa "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/alacritty/alacritty.yml && cd -"
+  alias vv "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/nvim/init.lua && cd -"
+  alias ff "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/fish/config.fish && cd -"
+  alias zx "source ~/.config/fish/config.fish"
+
+  # gpg-agent
+  alias gpg-add "echo | gpg -s >/dev/null ^&1"
 # }}}
 
 # Abbreviations {{{
-  # gpg-agent
-  abbr gpg-add "echo | gpg -s >/dev/null ^&1"
-
-  # config files
-  abbr tt "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/tmux/tmux.conf && cd -"
-  abbr aa "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/alacritty/alacritty.yml && cd -"
-  abbr vv "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/nvim/init.lua && cd -"
-  abbr ff "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/fish/config.fish && cd -"
-  abbr zx "source ~/.config/fish/config.fish"
-
   # git
   abbr g.  'git add .'
   abbr gc  'git commit -m'
@@ -127,4 +123,5 @@
 
 # Sourcing {{{
   [ -f /opt/homebrew/share/autojump/autojump.fish ]; and source /opt/homebrew/share/autojump/autojump.fish
+  [ -f /opt/homebrew/opt/asdf/libexec/asdf.fish ]; and source /opt/homebrew/opt/asdf/libexec/asdf.fish
 # }}}
