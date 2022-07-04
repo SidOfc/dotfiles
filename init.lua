@@ -92,6 +92,7 @@ vim.opt.listchars:append({ tab = '‣ ', trail = '•' })
 vim.opt.fillchars:append({ msgsep = ' ', vert = '│' })
 vim.opt.wildignore:append({ '.git', '.DS_Store', 'node_modules' })
 vim.opt.completeopt:append({ 'menu', 'menuone', 'noselect' })
+vim.opt.virtualedit:append({ 'onemore' })
 
 for _, path in ipairs({ undo_directory, backup_directory }) do
   if vim.fn.isdirectory(path) == 0 then
