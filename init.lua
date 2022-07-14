@@ -46,7 +46,7 @@ require('packer').startup({
     use({ 'w0rp/ale' })
     use({ 'timuntersberger/neogit' })
     use({ 'RRethy/nvim-base16' })
-    use({ 'nvim-treesitter/nvim-treesitter', run = ':tsupdate' })
+    use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
     use({ 'aserowy/tmux.nvim' })
 
     if packer_bootstrap then
