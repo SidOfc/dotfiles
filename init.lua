@@ -265,18 +265,18 @@ vim.keymap.set('n', '^', '<Nop>')
 vim.keymap.set('n', '{', '<Nop>')
 vim.keymap.set('n', '}', '<Nop>')
 
-vim.keymap.set('n', 'q:', ':q<Cr>')
-vim.keymap.set('n', 'Q:', ':q<Cr>')
+vim.keymap.set('n', 'q:', ':q<Cr>', { silent = true })
+vim.keymap.set('n', 'Q:', ':q<Cr>', { silent = true })
 
 vim.keymap.set('i', '<C-k>', '<Up>')
 vim.keymap.set('i', '<C-j>', '<Down>')
 vim.keymap.set('i', '<C-h>', '<Left>')
 vim.keymap.set('i', '<C-l>', '<Right>')
 
-vim.keymap.set('n', '<C-s>', ':write<Cr>')
-vim.keymap.set('v', '<C-s>', '<C-c>:write<Cr>gv')
-vim.keymap.set('i', '<C-s>', '<C-o>:write<Cr>')
-vim.keymap.set('o', '<C-s>', '<Esc>:write<Cr>')
+vim.keymap.set('n', '<C-s>', ':write<Cr>', { silent = true })
+vim.keymap.set('v', '<C-s>', '<C-c>:write<Cr>gv', { silent = true })
+vim.keymap.set('i', '<C-s>', '<C-o>:write<Cr>', { silent = true })
+vim.keymap.set('o', '<C-s>', '<Esc>:write<Cr>', { silent = true })
 
 vim.keymap.set('i', '<>', '<><Left>')
 vim.keymap.set('i', '()', '()<Left>')
@@ -323,20 +323,20 @@ vim.keymap.set('n', '<C-w>', function()
   end
 end)
 
-vim.keymap.set('n', '<leader>m', ':Neogit<Cr>')
+vim.keymap.set('n', '<leader>m', ':Neogit<Cr>', { silent = true })
 
-vim.keymap.set('n', '<C-h>', ':NavigatorLeft<Cr>')
-vim.keymap.set('n', '<C-j>', ':NavigatorDown<Cr>')
-vim.keymap.set('n', '<C-k>', ':NavigatorUp<Cr>')
-vim.keymap.set('n', '<C-l>', ':NavigatorRight<Cr>')
+vim.keymap.set('n', '<C-h>', ':NavigatorLeft<Cr>', { silent = true })
+vim.keymap.set('n', '<C-j>', ':NavigatorDown<Cr>', { silent = true })
+vim.keymap.set('n', '<C-k>', ':NavigatorUp<Cr>', { silent = true })
+vim.keymap.set('n', '<C-l>', ':NavigatorRight<Cr>', { silent = true })
 
-vim.keymap.set('n', '<C-p>', ':Files<Cr>')
+vim.keymap.set('n', '<C-p>', ':Files<Cr>', { silent = true })
 vim.keymap.set('n', '<C-g>', function()
   local options = { '--delimiter=:', '--nth=4..' }
   local source = 'rg --line-number --hidden --smart-case --color=always .'
 
   vim.fn['fzf#vim#grep'](source, 1, { options = options })
-end)
+end, { silent = true })
 -- }}}
 
 -- statusline and cursorline {{{
