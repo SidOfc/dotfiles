@@ -1,21 +1,5 @@
 -- luacheck: globals vim
 
--- utilities {{{
-local function map(mode, lhs, rhs, options)
-  local opts = options or {}
-  opts.silent = opts.silent == nil and true or opts.silent
-
-  return vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
-end
-
-local function noremap(mode, lhs, rhs, options)
-  local opts = options or {}
-  opts.noremap = true
-
-  return map(mode, lhs, rhs, opts)
-end
--- }}}
-
 -- globals {{{
 vim.g.mapleader = ' '
 
@@ -262,125 +246,97 @@ require('packer').startup({
 -- }}}
 
 -- mappings {{{
--- no-op bad habits
-map('i', '<Up>', '<Nop>')
-map('i', '<Down>', '<Nop>')
-map('i', '<Left>', '<Nop>')
-map('i', '<Right>', '<Nop>')
-map('n', '<Up>', '<Nop>')
-map('n', '<Down>', '<Nop>')
-map('n', '<Left>', '<Nop>')
-map('n', '<Right>', '<Nop>')
-map('n', '<S-s>', '<Nop>')
-map('n', '>>', '<Nop>')
-map('n', '<<', '<Nop>')
-map('v', '>>', '<Nop>')
-map('v', '<<', '<Nop>')
-map('', '$', '<Nop>')
-map('', '^', '<Nop>')
-map('', '{', '<Nop>')
-map('', '}', '<Nop>')
-map('', '<C-z>', '<Nop>')
+vim.keymap.set({ 'n', 'i' }, '<Up>', '<Nop>')
+vim.keymap.set({ 'n', 'i' }, '<Down>', '<Nop>')
+vim.keymap.set({ 'n', 'i' }, '<Left>', '<Nop>')
+vim.keymap.set({ 'n', 'i' }, '<Right>', '<Nop>')
+vim.keymap.set({ 'n', 'v' }, '>>', '<Nop>')
+vim.keymap.set({ 'n', 'v' }, '<<', '<Nop>')
+vim.keymap.set({ 'n', 'v' }, 'K', '{')
+vim.keymap.set({ 'n', 'v' }, 'J', '}')
+vim.keymap.set({ 'n', 'v' }, 'H', '^')
+vim.keymap.set({ 'n', 'v' }, 'L', '$')
 
--- sometimes instead :q, I press q:, Q:, or :Q
-map('', 'q:', ':q<Cr>')
-map('', 'Q:', ':q<Cr>')
+vim.keymap.set('n', '<S-s>', '<Nop>')
+vim.keymap.set('n', '<C-z>', '<Nop>')
 
--- more intuitive navigation mappings in normal / visual / operator pending modes
-noremap('', 'K', '{')
-noremap('', 'J', '}')
-noremap('', 'H', '^')
-noremap('', 'L', '$')
+vim.keymap.set('n', '$', '<Nop>')
+vim.keymap.set('n', '^', '<Nop>')
+vim.keymap.set('n', '{', '<Nop>')
+vim.keymap.set('n', '}', '<Nop>')
 
--- easier one-off navigation in insert mode
-noremap('i', '<C-k>', '<Up>')
-noremap('i', '<C-j>', '<Down>')
-noremap('i', '<C-h>', '<Left>')
-noremap('i', '<C-l>', '<Right>')
+vim.keymap.set('n', 'q:', ':q<Cr>')
+vim.keymap.set('n', 'Q:', ':q<Cr>')
 
--- save using <C-s> in every mode
-noremap('n', '<C-s>', ':write<Cr>')
-noremap('v', '<C-s>', '<C-c>:write<Cr>gv')
-noremap('i', '<C-s>', '<C-o>:write<Cr>')
-noremap('o', '<C-s>', '<Esc>:write<Cr>')
+vim.keymap.set('i', '<C-k>', '<Up>')
+vim.keymap.set('i', '<C-j>', '<Down>')
+vim.keymap.set('i', '<C-h>', '<Left>')
+vim.keymap.set('i', '<C-l>', '<Right>')
 
--- when pairing brackets, parens, or quotes, place the cursor in the middle
-noremap('i', '<>', '<><Left>')
-noremap('i', '()', '()<Left>')
-noremap('i', '{}', '{}<Left>')
-noremap('i', '[]', '[]<Left>')
-noremap('i', '""', '""<Left>')
-noremap('i', "''", "''<Left>")
-noremap('i', '``', '``<Left>')
+vim.keymap.set('n', '<C-s>', ':write<Cr>')
+vim.keymap.set('v', '<C-s>', '<C-c>:write<Cr>gv')
+vim.keymap.set('i', '<C-s>', '<C-o>:write<Cr>')
+vim.keymap.set('o', '<C-s>', '<Esc>:write<Cr>')
 
--- use <Tab> and <S-Tab> to indent and unindent code
-noremap('n', '<Tab>', '>>')
-noremap('n', '<S-Tab>', '<<')
-noremap('v', '<Tab>', '>><Esc>gv')
-noremap('v', '<S-Tab>', '<<<Esc>gv')
-noremap('i', '<S-Tab>', '<C-d>')
+vim.keymap.set('i', '<>', '<><Left>')
+vim.keymap.set('i', '()', '()<Left>')
+vim.keymap.set('i', '{}', '{}<Left>')
+vim.keymap.set('i', '[]', '[]<Left>')
+vim.keymap.set('i', '""', '""<Left>')
+vim.keymap.set('i', "''", "''<Left>")
+vim.keymap.set('i', '``', '``<Left>')
 
--- enable acting on content between bar (|) characters
-noremap('v', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
-noremap('o', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
-noremap('v', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
-noremap('o', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
+vim.keymap.set('n', '<Tab>', '>>')
+vim.keymap.set('n', '<S-Tab>', '<<')
+vim.keymap.set('v', '<Tab>', '>><Esc>gv')
+vim.keymap.set('v', '<S-Tab>', '<<<Esc>gv')
+vim.keymap.set('i', '<S-Tab>', '<C-d>')
 
--- make Y consistent with C and D
-noremap('n', 'Y', 'y$')
+vim.keymap.set('v', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
+vim.keymap.set('o', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
+vim.keymap.set('v', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
+vim.keymap.set('o', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
 
--- use qq to record, q to stop, Q to play a macro
-noremap('n', 'Q', '@q')
+vim.keymap.set('n', 'Y', 'y$')
+vim.keymap.set('n', 'Q', '@q')
+vim.keymap.set('n', 'U', '<C-r>')
 
--- use <u> to undo, <U> to redo
-noremap('n', 'U', '<C-r>')
+vim.keymap.set('n', '<C-n>', function()
+  return pcall(vim.cmd, { cmd = 'cnext' }) or pcall(vim.cmd, { cmd = 'cfirst' })
+end)
 
--- use <C-n> and <C-b> to scroll through quickfix entries
-noremap('n', '<C-n>', '<Nop>', {
-  callback = function()
-    vim.cmd('try | cnext | catch | cfirst | catch | endtry')
-  end,
-})
+vim.keymap.set('n', '<C-b>', function()
+  return pcall(vim.cmd, { cmd = 'cprev' }) or pcall(vim.cmd, { cmd = 'clast' })
+end)
 
-noremap('n', '<C-b>', '<Nop>', {
-  callback = function()
-    vim.cmd('try | cprev | catch | clast | catch | endtry')
-  end,
-})
+vim.keymap.set('n', '<C-w>', function()
+  local winid = vim.api.nvim_get_current_win()
+  local bufnr = vim.api.nvim_get_current_buf()
 
--- close pane using <C-w>
-noremap('n', '<C-w>', '<Nop>', {
-  callback = function()
-    local winid = vim.fn.bufwinid('%')
+  if #vim.fn.getbufinfo({ buflisted = 1, windows = { winid } }) > 2 then
+    vim.api.nvim_buf_delete(bufnr, {})
+  elseif #vim.fn.getwininfo() > 1 then
+    vim.api.nvim_win_close(winid, false)
+  elseif vim.bo.filetype ~= 'carbon' then
+    vim.cmd({ cmd = 'Carbon' })
+    vim.api.nvim_buf_delete(bufnr, {})
+  end
+end)
 
-    if #vim.fn.getbufinfo({ buflisted = 1, windows = { winid } }) > 1 then
-      vim.cmd('bdelete')
-    elseif #vim.fn.getwininfo() > 1 then
-      vim.cmd('close')
-    elseif vim.bo.filetype ~= 'carbon' then
-      vim.cmd('Carbon')
-      vim.cmd('silent! bdelete#')
-    end
-  end,
-})
+vim.keymap.set('n', '<leader>m', ':Neogit<Cr>')
 
--- plugin mappings
-noremap('n', '<leader>m', ':Neogit<Cr>')
+vim.keymap.set('n', '<C-h>', ':NavigatorLeft<Cr>')
+vim.keymap.set('n', '<C-j>', ':NavigatorDown<Cr>')
+vim.keymap.set('n', '<C-k>', ':NavigatorUp<Cr>')
+vim.keymap.set('n', '<C-l>', ':NavigatorRight<Cr>')
 
-noremap('n', '<C-h>', ':NavigatorLeft<Cr>')
-noremap('n', '<C-j>', ':NavigatorDown<Cr>')
-noremap('n', '<C-k>', ':NavigatorUp<Cr>')
-noremap('n', '<C-l>', ':NavigatorRight<Cr>')
+vim.keymap.set('n', '<C-p>', ':Files<Cr>')
+vim.keymap.set('n', '<C-g>', function()
+  local options = { '--delimiter=:', '--nth=4..' }
+  local source = 'rg --line-number --hidden --smart-case --color=always .'
 
-noremap('n', '<C-p>', ':Files<Cr>')
-noremap('n', '<C-g>', '<Nop>', {
-  callback = function()
-    local options = { '--delimiter=:', '--nth=4..' }
-    local source = 'rg --line-number --hidden --smart-case --color=always .'
-
-    vim.fn['fzf#vim#grep'](source, 1, { options = options })
-  end,
-})
+  vim.fn['fzf#vim#grep'](source, 1, { options = options })
+end)
 -- }}}
 
 -- statusline and cursorline {{{
@@ -413,61 +369,90 @@ end
 -- }}}
 
 -- define auto commands {{{
-local function on_filetype()
-  vim.opt_local.expandtab = true
-  vim.opt_local.tabstop = 4
-  vim.opt_local.softtabstop = 4
-  vim.opt_local.list = vim.o.filetype ~= 'NeogitStatus'
-end
+local augroup = 'init.lua'
 
-local function on_colorscheme()
-  vim.cmd([[
-    highlight StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
-    highlight StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
-    highlight StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
-    highlight StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
-    highlight StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
-    highlight StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
-    highlight StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
-  ]])
-end
+vim.api.nvim_create_augroup(augroup, {})
 
-local function on_focus()
-  vim.opt_local.cursorline = vim.opt_global.cursorline:get()
-  vim.opt_local.statusline = vim.opt_global.statusline:get()
-end
+vim.api.nvim_create_autocmd(
+  { 'FocusLost', 'VimLeave', 'WinLeave', 'BufWinLeave' },
+  {
+    group = augroup,
+    pattern = '*',
+    callback = function()
+      vim.opt_local.cursorline = vim.opt_global.cursorline:get()
+      vim.opt_local.statusline = vim.opt_global.statusline:get()
+    end,
+  }
+)
 
-local function on_blur()
-  vim.opt_local.cursorline = true
-  vim.opt_local.statusline = '%!v:lua.status_line()'
+vim.api.nvim_create_autocmd(
+  { 'FocusGained', 'VimEnter', 'WinEnter', 'BufWinEnter' },
+  {
+    group = augroup,
+    pattern = '*',
+    callback = function()
+      vim.opt_local.cursorline = true
+      vim.opt_local.statusline = '%!v:lua.status_line()'
 
-  vim.cmd({ cmd = 'checktime' })
-end
+      vim.cmd({ cmd = 'checktime' })
+    end,
+  }
+)
 
-local function on_resize()
-  vim.cmd({ cmd = 'wincmd', args = { '=' } })
-end
+vim.api.nvim_create_autocmd('ColorScheme', {
+  group = augroup,
+  pattern = '*',
+  callback = function()
+    vim.cmd([[
+      highlight StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
+      highlight StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
+      highlight StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
+      highlight StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
+      highlight StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
+      highlight StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
+      highlight StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
+    ]])
+  end,
+})
 
-local function on_yank_post()
-  vim.highlight.on_yank({
-    higroup = 'IncSearch',
-    timeout = 150,
-    on_visual = true,
-  })
-end
+vim.api.nvim_create_autocmd('VimResized', {
+  group = augroup,
+  pattern = '*',
+  callback = function()
+    vim.cmd({ cmd = 'wincmd', args = { '=' } })
+  end,
+})
 
-local function on_cmdline_enter()
-  vim.opt_global.hlsearch = true
-end
+vim.api.nvim_create_autocmd('TextYankPost', {
+  group = augroup,
+  pattern = '*',
+  callback = function()
+    vim.highlight.on_yank({
+      higroup = 'IncSearch',
+      timeout = 150,
+      on_visual = true,
+    })
+  end,
+})
 
-local function on_cmdline_leave()
-  vim.opt_global.hlsearch = false
-end
+vim.api.nvim_create_autocmd('CmdlineEnter', {
+  group = augroup,
+  pattern = { '/', '?' },
+  callback = function()
+    vim.opt_global.hlsearch = true
+  end,
+})
 
-vim.api.nvim_create_autocmd('FileType', {
-  callback = on_filetype,
-  pattern = {
-    'NeogitStatus',
+vim.api.nvim_create_autocmd('CmdlineLeave', {
+  group = augroup,
+  pattern = { '/', '?' },
+  callback = function()
+    vim.opt_global.hlsearch = false
+  end,
+})
+
+local filetype_handlers = {
+  [{
     'markdown',
     'python',
     'json',
@@ -478,41 +463,35 @@ vim.api.nvim_create_autocmd('FileType', {
     'html',
     'css',
     'php',
-  },
-})
+  }] = function()
+    vim.opt_local.expandtab = true
+    vim.opt_local.tabstop = 4
+    vim.opt_local.softtabstop = 4
+  end,
 
-vim.api.nvim_create_autocmd('ColorScheme', {
-  callback = on_colorscheme,
-  pattern = '*',
-})
+  NeogitStatus = function()
+    vim.opt_local.list = false
+  end,
 
-vim.api.nvim_create_autocmd(
-  { 'FocusLost', 'VimLeave', 'WinLeave', 'BufWinLeave' },
-  { callback = on_focus, pattern = '*' }
-)
+  fzf = function()
+    local original = vim.opt_global.laststatus:get()
 
-vim.api.nvim_create_autocmd(
-  { 'FocusGained', 'VimEnter', 'WinEnter', 'BufWinEnter' },
-  { callback = on_blur, pattern = '*' }
-)
+    vim.opt.laststatus = 0
 
-vim.api.nvim_create_autocmd('VimResized', {
-  callback = on_resize,
-  pattern = '*',
-})
+    vim.api.nvim_create_autocmd('BufLeave', {
+      buffer = vim.api.nvim_get_current_buf(),
+      callback = function()
+        vim.opt.laststatus = original
+      end,
+    })
+  end,
+}
 
-vim.api.nvim_create_autocmd('TextYankPost', {
-  callback = on_yank_post,
-  pattern = '*',
-})
-
-vim.api.nvim_create_autocmd('CmdlineEnter', {
-  callback = on_cmdline_enter,
-  pattern = { '/', '?' },
-})
-
-vim.api.nvim_create_autocmd('CmdlineLeave', {
-  callback = on_cmdline_leave,
-  pattern = { '/', '?' },
-})
+for pattern, callback in pairs(filetype_handlers) do
+  vim.api.nvim_create_autocmd('FileType', {
+    group = augroup,
+    pattern = pattern,
+    callback = callback,
+  })
+end
 -- }}}
