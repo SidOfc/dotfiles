@@ -1,8 +1,11 @@
 -- luacheck: globals vim
 
--- utility functions {{{
+-- utilities {{{
 local function map(mode, lhs, rhs, options)
-  return vim.api.nvim_set_keymap(mode, lhs, rhs, options or {})
+  local opts = options or {}
+  opts.silent = opts.silent == nil and true or opts.silent
+
+  return vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
 end
 
 local function noremap(mode, lhs, rhs, options)
@@ -13,338 +16,13 @@ local function noremap(mode, lhs, rhs, options)
 end
 -- }}}
 
--- plugins {{{
-local packer_bootstrap
-local packer_path = vim.fn.stdpath('data')
-  .. '/site/pack/packer/start/packer.nvim'
-
-if vim.fn.isdirectory(packer_path) ~= 1 then
-  packer_bootstrap = vim.fn.system({
-    'git',
-    'clone',
-    '--depth=1',
-    'https://github.com/wbthomason/packer.nvim',
-    packer_path,
-  })
-end
-
-require('packer').startup({
-  function(use)
-    use({ 'wbthomason/packer.nvim' })
-    use({ 'nvim-lua/plenary.nvim' })
-
-    use({ 'tpope/vim-repeat' })
-    use({ 'tpope/vim-surround' })
-    use({ 'tpope/vim-commentary' })
-
-    use({ 'junegunn/fzf' })
-    use({ 'junegunn/fzf.vim' })
-
-    use({ 'sidofc/mkdx' })
-    use({ 'sidofc/carbon.nvim' })
-
-    use({ 'w0rp/ale' })
-    use({ 'timuntersberger/neogit' })
-    use({ 'RRethy/nvim-base16' })
-    use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
-    use({ 'aserowy/tmux.nvim' })
-
-    if packer_bootstrap then
-      require('packer').sync()
-    end
-  end,
-})
--- }}}
-
--- set mapleader {{{
+-- globals {{{
 vim.g.mapleader = ' '
--- }}}
 
--- set options {{{
-local undo_directory = vim.env.HOME .. '/.local/share/nvim/undo//'
-local backup_directory = vim.env.HOME .. '/.local/share/nvim/backup//'
-
-vim.opt.list = true
-vim.opt.wrap = false
-vim.opt.ruler = false
-vim.opt.tabstop = 2
-vim.opt.ttyfast = true
-vim.opt.showmode = false
-vim.opt.undofile = true
-vim.opt.swapfile = false
-vim.opt.smartcase = true
-vim.opt.expandtab = true
-vim.opt.backupcopy = 'yes'
-vim.opt.ignorecase = true
-vim.opt.cursorline = true
-vim.opt.splitbelow = true
-vim.opt.splitright = true
-vim.opt.shiftwidth = 0
-vim.opt.timeoutlen = 400
-vim.opt.softtabstop = 2
-vim.opt.showtabline = 0
-vim.opt.termguicolors = true
-vim.opt.path:append({ '**' })
-vim.opt.undodir:prepend({ undo_directory })
-vim.opt.backupdir:prepend({ backup_directory })
-vim.opt.clipboard:append({ 'unnamedplus' })
-vim.opt.listchars:append({ tab = '‣ ', trail = '•' })
-vim.opt.fillchars:append({ msgsep = ' ', vert = '│' })
-vim.opt.wildignore:append({ '.git', '.DS_Store', 'node_modules' })
-vim.opt.completeopt:append({ 'menu', 'menuone', 'noselect' })
-vim.opt.virtualedit:append({ 'onemore' })
-
-for _, path in ipairs({ undo_directory, backup_directory }) do
-  if vim.fn.isdirectory(path) == 0 then
-    vim.fn.mkdir(path, 'p')
-  end
-end
--- }}}
-
--- tmux.nvim {{{
-require('tmux').setup({
-  navigation = { enable_default_keybindings = true },
-  resize = { enable_default_keybindings = true },
-})
--- }}}
-
--- colorscheme and misc highlights {{{
-vim.cmd([[
-  colorscheme base16-seti
-  highlight CursorLine ctermbg=8 guibg=#282a2b
-  highlight Normal guibg=NONE ctermbg=NONE
-  highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
-  highlight TrailingWhitespace ctermfg=0 guifg=Black ctermbg=8 guibg=#41535B
-  highlight VertSplit guibg=NONE ctermbg=NONE guifg=Gray ctermfg=Gray
-]])
--- }}}
-
--- no-op bad habit mappings {{{
-map('i', '<Up>', '<Nop>')
-map('i', '<Down>', '<Nop>')
-map('i', '<Left>', '<Nop>')
-map('i', '<Right>', '<Nop>')
-map('n', '<Up>', '<Nop>')
-map('n', '<Down>', '<Nop>')
-map('n', '<Left>', '<Nop>')
-map('n', '<Right>', '<Nop>')
-map('n', '<S-s>', '<Nop>')
-map('n', '>>', '<Nop>')
-map('n', '<<', '<Nop>')
-map('v', '>>', '<Nop>')
-map('v', '<<', '<Nop>')
-map('', '$', '<Nop>')
-map('', '^', '<Nop>')
-map('', '{', '<Nop>')
-map('', '}', '<Nop>')
-map('', '<C-z>', '<Nop>')
--- }}}
-
--- sometimes instead of pressing :q, I press q:, Q:, or :Q {{{
-map('', 'q:', ':q<Cr>')
-map('', 'Q:', ':q<Cr>')
--- }}}
-
--- more intuitive navigation mappings in normal / visual / operator pending modes {{{
-noremap('', 'K', '{')
-noremap('', 'J', '}')
-noremap('', 'H', '^')
-noremap('', 'L', '$')
--- }}}
-
--- easier one-off navigation in insert mode {{{
-noremap('i', '<C-k>', '<Up>')
-noremap('i', '<C-j>', '<Down>')
-noremap('i', '<C-h>', '<Left>')
-noremap('i', '<C-l>', '<Right>')
--- }}}
-
--- save using <C-s> in every mode {{{
-noremap('n', '<C-s>', ':write<Cr>')
-noremap('v', '<C-s>', '<C-c>:write<Cr>gv')
-noremap('i', '<C-s>', '<C-o>:write<Cr>')
-noremap('o', '<C-s>', '<Esc>:write<Cr>')
--- }}}
-
--- make Y consistent with C and D {{{
-noremap('n', 'Y', 'y$')
--- }}}
-
--- use qq to record, q to stop, Q to play a macro {{{
-noremap('n', 'Q', '@q')
--- }}}
-
--- when pairing brackets, parens, or quotes, place the cursor in the middle {{{
-noremap('i', '<>', '<><Left>')
-noremap('i', '()', '()<Left>')
-noremap('i', '{}', '{}<Left>')
-noremap('i', '[]', '[]<Left>')
-noremap('i', '""', '""<Left>')
-noremap('i', "''", "''<Left>")
-noremap('i', '``', '``<Left>')
--- }}}
-
--- use <Tab> and <S-Tab> to indent and unindent code {{{
-noremap('n', '<Tab>', '>>')
-noremap('n', '<S-Tab>', '<<')
-noremap('v', '<Tab>', '>><Esc>gv')
-noremap('v', '<S-Tab>', '<<<Esc>gv')
-noremap('i', '<S-Tab>', '<C-d>')
--- }}}
-
--- use <u> to undo, <U> to redo {{{
-noremap('n', 'U', '<C-r>')
--- }}}
-
--- enable acting on content between bar (|) characters {{{
-noremap('v', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
-noremap('o', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
-noremap('v', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
-noremap('o', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
--- }}}
-
--- use <C-n> and <C-b> to scroll through quickfix entries {{{
-function _G.quickfix_next()
-  vim.cmd('try | cnext | catch | cfirst | catch | endtry')
-end
-
-function _G.quickfix_prev()
-  vim.cmd('try | cprev | catch | clast | catch | endtry')
-end
-
-noremap('n', '<C-n>', ':call v:lua.quickfix_next()<Cr>', { silent = true })
-noremap('n', '<C-b>', ':call v:lua.quickfix_prev()<Cr>', { silent = true })
--- }}}
-
--- close pane using <C-w> {{{
-function _G.close_buffer()
-  local winid = vim.fn.bufwinid('%')
-
-  if #vim.fn.getbufinfo({ buflisted = 1, windows = { winid } }) > 1 then
-    vim.cmd('bdelete')
-  elseif #vim.fn.getwininfo() > 1 then
-    vim.cmd('close')
-  elseif vim.bo.filetype ~= 'carbon' then
-    vim.cmd('Carbon')
-    vim.cmd('silent! bdelete#')
-  end
-end
-
-noremap('n', '<C-w>', ':call v:lua.close_buffer()<Cr>', { silent = true })
--- }}}
-
--- define auto commands {{{
-function _G.indent_size(spaces)
-  vim.opt_local.expandtab = true
-  vim.opt_local.tabstop = spaces
-  vim.opt_local.softtabstop = spaces
-end
-
-vim.cmd([[
-  augroup InitAutoCommands
-    au!
-
-    au FileType markdown,python,json,javascript,php call v:lua.indent_size(4)
-    au FileType javascriptreact,jsx,typescript,html,css call v:lua.indent_size(4)
-
-    au FileType NeogitStatus setlocal nolist
-
-    au CmdlineEnter /,\? set hlsearch
-    au CmdlineLeave /,\? set nohlsearch
-
-    au VimResized * wincmd =
-
-    au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
-
-    au FileType fzf
-          \ set laststatus& laststatus=0 |
-          \ au BufLeave <buffer> set laststatus&
-
-    au FocusLost,VimLeave,WinLeave,BufWinLeave * setlocal cursorline&
-    au FocusGained,VimEnter,WinEnter,BufWinEnter *
-          \ setlocal cursorline& |
-          \ setlocal cursorline |
-          \ checktime
-  augroup END
-]])
--- }}}
-
--- statusline {{{
-local status_mode_groups = {
-  n = 'StatusLineSection',
-  i = 'StatusLineSectionI',
-  c = 'StatusLineSectionC',
-  r = 'StatusLineSectionR',
-  v = 'StatusLineSectionV',
-  [''] = 'StatusLineSectionV',
-}
-
-function _G.status_line()
-  local group = status_mode_groups[vim.fn.mode():lower()]
-    or status_mode_groups.n
-  local highlight = '%#' .. group .. '#'
-  local filename = vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
-  if string.match(filename, '^~') then
-    filename = vim.fn.fnamemodify(filename, ':t')
-  end
-
-  return (
-    highlight
-    .. (vim.bo.modified and ' + |' or '')
-    .. ' '
-    .. filename
-    .. ' %#StatusLine#%='
-    .. highlight
-    .. ' %l:%c '
-  )
-end
-
-function _G.status_line_colors()
-  vim.cmd([[
-    highlight StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
-    highlight StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
-    highlight StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
-    highlight StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
-    highlight StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
-    highlight StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
-    highlight StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
-  ]])
-end
-
-_G.status_line_colors()
-
-if vim.fn.has('vim_starting') then
-  vim.opt.statusline = ' %{fnamemodify(expand("%"), ":~:.")}%= %l:%c '
-end
-
-vim.cmd([[
-  augroup StatusLineAutocmds
-    au!
-
-    au FocusLost,VimLeave,WinLeave,BufWinLeave * setlocal statusline&
-    au FocusGained,VimEnter,WinEnter,BufWinEnter *
-          \ setlocal statusline& |
-          \ setlocal statusline=%!v:lua.status_line() |
-          \ checktime
-
-    au Colorscheme * call v:lua.status_line_colors()
-  augroup END
-]])
--- }}}
-
--- carbon.nvim {{{
-require('carbon').setup({
-  sync_pwd = true,
-  indicators = { collapse = '▾', expand = '▸' },
-})
--- }}}
-
--- fzf {{{
 vim.g.fzf_preview_window = {}
 vim.g.fzf_layout = { down = '20%' }
 vim.g.fzf_colors = {
   fg = { 'fg', 'Normal' },
-  bg = { 'bg', 'Clear' },
   hl = { 'fg', 'String' },
   info = { 'fg', 'PreProc' },
   prompt = { 'fg', 'Conditional' },
@@ -352,119 +30,11 @@ vim.g.fzf_colors = {
   marker = { 'fg', 'Keyword' },
   spinner = { 'fg', 'Label' },
   header = { 'fg', 'Comment' },
-  ['fg+'] = { 'fg', 'CursorLine', 'CursorColumn', 'Normal' },
-  ['bg+'] = { 'bg', 'CursorLine', 'CursorColumn' },
+  ['fg+'] = { 'fg', 'CursorLine' },
+  ['bg+'] = { 'bg', 'CursorLine' },
   ['hl+'] = { 'fg', 'Statement' },
 }
 
-vim.cmd([[
-  command! -bang -nargs=* FzfMkdxJumpToHeader
-    \ call cursor(str2nr(get(matchlist(<q-args>, ' *\([0-9]\+\)'), 1, '')), 1)
-]])
-
-function _G.fzf_grep()
-  vim.fn['fzf#vim#grep'](
-    'rg --column --line-number --hidden --smart-case --color=always .',
-    1,
-    { options = { '--delimiter=:', '--nth=4..', '--no-hscroll' } }
-  )
-end
-
-function _G.fzf_mkdx_headers()
-  local lines = vim.api.nvim_buf_get_lines(0, 1, vim.fn.line('$'), 0)
-  local headers = {}
-
-  for lnum, line in ipairs(lines) do
-    if line:find('^#') then
-      table.insert(headers, string.format('%4d: %s', lnum + 1, line))
-    end
-  end
-
-  vim.fn['fzf#run'](vim.fn['fzf#wrap']({
-    source = headers,
-    sink = 'FzfMkdxJumpToHeader',
-  }))
-end
-
-noremap(
-  'n',
-  '<leader>I',
-  ':call v:lua.fzf_mkdx_headers()<Cr>',
-  { silent = true }
-)
-noremap('n', '<C-p>', ':Files<Cr>', { silent = true })
-noremap('n', '<C-g>', ':call v:lua.fzf_grep()<Cr>', { silent = true })
--- }}}
-
--- neogit {{{
-require('neogit').setup({
-  disable_hint = true,
-  disable_signs = true,
-  disable_commit_confirmation = true,
-  disable_insert_on_commit = false,
-  sections = {
-    recent = false,
-  },
-  mappings = {
-    status = {
-      P = 'PullPopup',
-      p = 'PushPopup',
-    },
-  },
-})
-
-noremap('n', '<leader>m', ':Neogit<Cr>')
--- }}}
-
--- nvim-treesitter {{{
-require('nvim-treesitter.configs').setup({
-  indent = { enable = true },
-  incremental_selection = { enable = true },
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = { 'php', 'markdown', 'help', 'vim' },
-  },
-  ensure_installed = {
-    'c',
-    'cpp',
-    'css',
-    'fish',
-    'html',
-    'java',
-    'javascript',
-    'json',
-    'json5',
-    'lua',
-    'pug',
-    'python',
-    'ruby',
-    'rust',
-    'scss',
-    'toml',
-    'tsx',
-    'typescript',
-    'yaml',
-  },
-})
--- }}}
-
--- mkdx {{{
-vim.g['mkdx#settings'] = {
-  restore_visual = 1,
-  gf_on_steroids = 1,
-  enter = { shift = 1 },
-  highlight = { enable = 1 },
-  fold = { enable = 1 },
-  links = { external = { enable = 1 } },
-  toc = {
-    text = 'Table of Contents',
-    update_on_write = 1,
-    details = { nesting_level = 0 },
-  },
-}
--- }}}
-
--- ale {{{
 vim.g.ale_echo_msg_format = '[%linter%] %severity%: %s'
 vim.g.ale_lint_delay = 300
 vim.g.ale_fix_on_save = 1
@@ -492,4 +62,457 @@ vim.g.ale_linters = {
   scss = { 'stylelint' },
   css = { 'stylelint' },
 }
+
+vim.g['mkdx#settings'] = {
+  restore_visual = 1,
+  gf_on_steroids = 1,
+  enter = { shift = 1 },
+  highlight = { enable = 1 },
+  fold = { enable = 1 },
+  links = { external = { enable = 1 } },
+  toc = {
+    text = 'Table of Contents',
+    update_on_write = 1,
+    details = { nesting_level = 0 },
+  },
+}
+-- }}}
+
+-- settings {{{
+local undo_directory = vim.env.HOME .. '/.local/share/nvim/undo//'
+local backup_directory = vim.env.HOME .. '/.local/share/nvim/backup//'
+vim.opt.list = true
+vim.opt.wrap = false
+vim.opt.ruler = false
+vim.opt.tabstop = 2
+vim.opt.ttyfast = true
+vim.opt.showmode = false
+vim.opt.undofile = true
+vim.opt.swapfile = false
+vim.opt.smartcase = true
+vim.opt.expandtab = true
+vim.opt.backupcopy = 'yes'
+vim.opt.ignorecase = true
+vim.opt.cursorline = true
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+vim.opt.shiftwidth = 0
+vim.opt.timeoutlen = 400
+vim.opt.statusline = ' %{fnamemodify(expand("%"), ":~:.")}%= %l:%c '
+vim.opt.softtabstop = 2
+vim.opt.showtabline = 0
+vim.opt.termguicolors = true
+vim.opt.path:append({ '**' })
+vim.opt.undodir:prepend({ undo_directory })
+vim.opt.backupdir:prepend({ backup_directory })
+vim.opt.clipboard:append({ 'unnamedplus' })
+vim.opt.listchars:append({ tab = '‣ ', trail = '•' })
+vim.opt.fillchars:append({ msgsep = ' ', vert = '│' })
+vim.opt.wildignore:append({ '.git', '.DS_Store', 'node_modules' })
+vim.opt.completeopt:append({ 'menu', 'menuone', 'noselect' })
+vim.opt.virtualedit:append({ 'onemore' })
+
+for _, path in ipairs({ undo_directory, backup_directory }) do
+  if vim.fn.isdirectory(path) == 0 then
+    vim.fn.mkdir(path, 'p')
+  end
+end
+-- }}}
+
+-- plugins {{{
+local packer_bootstrap
+local packer_path = vim.fn.stdpath('data')
+  .. '/site/pack/packer/start/packer.nvim'
+
+if vim.fn.isdirectory(packer_path) ~= 1 then
+  packer_bootstrap = vim.fn.system({
+    'git',
+    'clone',
+    '--depth=1',
+    'https://github.com/wbthomason/packer.nvim',
+    packer_path,
+  })
+end
+
+require('packer').startup({
+  function(use)
+    use({ 'wbthomason/packer.nvim' })
+
+    use({ 'tpope/vim-repeat' })
+    use({ 'tpope/vim-surround' })
+    use({ 'tpope/vim-commentary' })
+
+    use({ 'sidofc/mkdx', ft = { 'markdown' } })
+    use({ 'junegunn/fzf', requires = { 'junegunn/fzf.vim' } })
+
+    use({
+      'numToStr/Navigator.nvim',
+      cmd = {
+        'NavigatorUp',
+        'NavigatorDown',
+        'NavigatorLeft',
+        'NavigatorRight',
+      },
+      config = function()
+        require('Navigator').setup()
+      end,
+    })
+
+    use({
+      'sidofc/carbon.nvim',
+      config = function()
+        require('carbon').setup({
+          sync_pwd = true,
+          indicators = { collapse = '▾', expand = '▸' },
+        })
+      end,
+    })
+
+    use({
+      'RRethy/nvim-base16',
+      config = function()
+        vim.cmd([[
+          colorscheme base16-seti
+          highlight CursorLine ctermbg=8 guibg=#282a2b
+          highlight Normal guibg=NONE ctermbg=NONE
+          highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
+          highlight TrailingWhitespace ctermfg=0 guifg=Black ctermbg=8 guibg=#41535B
+          highlight VertSplit guibg=NONE ctermbg=NONE guifg=Gray ctermfg=Gray
+        ]])
+      end,
+    })
+
+    use({
+      'timuntersberger/neogit',
+      requires = { 'nvim-lua/plenary.nvim' },
+      cmd = { 'Neogit' },
+      config = function()
+        require('neogit').setup({
+          disable_hint = true,
+          disable_signs = true,
+          disable_commit_confirmation = true,
+          disable_insert_on_commit = false,
+          sections = {
+            recent = false,
+          },
+          mappings = {
+            status = {
+              P = 'PullPopup',
+              p = 'PushPopup',
+            },
+          },
+        })
+      end,
+    })
+
+    use({
+      'w0rp/ale',
+      ft = {
+        'javascript',
+        'javascriptreact',
+        'typescript',
+        'typescriptreact',
+        'json',
+        'scss',
+        'html',
+        'css',
+        'rust',
+        'lua',
+      },
+    })
+
+    use({
+      'nvim-treesitter/nvim-treesitter',
+      run = ':TSUpdate',
+      config = function()
+        require('nvim-treesitter.configs').setup({
+          indent = { enable = true },
+          incremental_selection = { enable = true },
+          highlight = { enable = true },
+          ensure_installed = {
+            'c',
+            'cpp',
+            'css',
+            'fish',
+            'html',
+            'java',
+            'javascript',
+            'json',
+            'json5',
+            'lua',
+            'pug',
+            'python',
+            'ruby',
+            'rust',
+            'scss',
+            'toml',
+            'tsx',
+            'typescript',
+            'yaml',
+          },
+        })
+      end,
+    })
+
+    if packer_bootstrap then
+      require('packer').sync()
+    end
+  end,
+})
+-- }}}
+
+-- mappings {{{
+-- no-op bad habits
+map('i', '<Up>', '<Nop>')
+map('i', '<Down>', '<Nop>')
+map('i', '<Left>', '<Nop>')
+map('i', '<Right>', '<Nop>')
+map('n', '<Up>', '<Nop>')
+map('n', '<Down>', '<Nop>')
+map('n', '<Left>', '<Nop>')
+map('n', '<Right>', '<Nop>')
+map('n', '<S-s>', '<Nop>')
+map('n', '>>', '<Nop>')
+map('n', '<<', '<Nop>')
+map('v', '>>', '<Nop>')
+map('v', '<<', '<Nop>')
+map('', '$', '<Nop>')
+map('', '^', '<Nop>')
+map('', '{', '<Nop>')
+map('', '}', '<Nop>')
+map('', '<C-z>', '<Nop>')
+
+-- sometimes instead :q, I press q:, Q:, or :Q
+map('', 'q:', ':q<Cr>')
+map('', 'Q:', ':q<Cr>')
+
+-- more intuitive navigation mappings in normal / visual / operator pending modes
+noremap('', 'K', '{')
+noremap('', 'J', '}')
+noremap('', 'H', '^')
+noremap('', 'L', '$')
+
+-- easier one-off navigation in insert mode
+noremap('i', '<C-k>', '<Up>')
+noremap('i', '<C-j>', '<Down>')
+noremap('i', '<C-h>', '<Left>')
+noremap('i', '<C-l>', '<Right>')
+
+-- save using <C-s> in every mode
+noremap('n', '<C-s>', ':write<Cr>')
+noremap('v', '<C-s>', '<C-c>:write<Cr>gv')
+noremap('i', '<C-s>', '<C-o>:write<Cr>')
+noremap('o', '<C-s>', '<Esc>:write<Cr>')
+
+-- when pairing brackets, parens, or quotes, place the cursor in the middle
+noremap('i', '<>', '<><Left>')
+noremap('i', '()', '()<Left>')
+noremap('i', '{}', '{}<Left>')
+noremap('i', '[]', '[]<Left>')
+noremap('i', '""', '""<Left>')
+noremap('i', "''", "''<Left>")
+noremap('i', '``', '``<Left>')
+
+-- use <Tab> and <S-Tab> to indent and unindent code
+noremap('n', '<Tab>', '>>')
+noremap('n', '<S-Tab>', '<<')
+noremap('v', '<Tab>', '>><Esc>gv')
+noremap('v', '<S-Tab>', '<<<Esc>gv')
+noremap('i', '<S-Tab>', '<C-d>')
+
+-- enable acting on content between bar (|) characters
+noremap('v', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
+noremap('o', 'i<Bar>', ':<C-u>normal! T<Bar>vt<Bar><Cr>')
+noremap('v', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
+noremap('o', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
+
+-- make Y consistent with C and D
+noremap('n', 'Y', 'y$')
+
+-- use qq to record, q to stop, Q to play a macro
+noremap('n', 'Q', '@q')
+
+-- use <u> to undo, <U> to redo
+noremap('n', 'U', '<C-r>')
+
+-- use <C-n> and <C-b> to scroll through quickfix entries
+noremap('n', '<C-n>', '<Nop>', {
+  callback = function()
+    vim.cmd('try | cnext | catch | cfirst | catch | endtry')
+  end,
+})
+
+noremap('n', '<C-b>', '<Nop>', {
+  callback = function()
+    vim.cmd('try | cprev | catch | clast | catch | endtry')
+  end,
+})
+
+-- close pane using <C-w>
+noremap('n', '<C-w>', '<Nop>', {
+  callback = function()
+    local winid = vim.fn.bufwinid('%')
+
+    if #vim.fn.getbufinfo({ buflisted = 1, windows = { winid } }) > 1 then
+      vim.cmd('bdelete')
+    elseif #vim.fn.getwininfo() > 1 then
+      vim.cmd('close')
+    elseif vim.bo.filetype ~= 'carbon' then
+      vim.cmd('Carbon')
+      vim.cmd('silent! bdelete#')
+    end
+  end,
+})
+
+-- plugin mappings
+noremap('n', '<leader>m', ':Neogit<Cr>')
+
+noremap('n', '<C-h>', ':NavigatorLeft<Cr>')
+noremap('n', '<C-j>', ':NavigatorDown<Cr>')
+noremap('n', '<C-k>', ':NavigatorUp<Cr>')
+noremap('n', '<C-l>', ':NavigatorRight<Cr>')
+
+noremap('n', '<C-p>', ':Files<Cr>')
+noremap('n', '<C-g>', '<Nop>', {
+  callback = function()
+    local options = { '--delimiter=:', '--nth=4..' }
+    local source = 'rg --line-number --hidden --smart-case --color=always .'
+
+    vim.fn['fzf#vim#grep'](source, 1, { options = options })
+  end,
+})
+-- }}}
+
+-- statusline and cursorline {{{
+local status_mode_groups = {
+  n = 'StatusLineSection',
+  i = 'StatusLineSectionI',
+  c = 'StatusLineSectionC',
+  r = 'StatusLineSectionR',
+  v = 'StatusLineSectionV',
+  [''] = 'StatusLineSectionV',
+}
+
+function _G.status_line()
+  local mode = vim.fn.mode():lower()
+  local group = status_mode_groups[mode] or status_mode_groups.n
+  local filename = vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
+
+  if string.match(filename, '^~') then
+    filename = vim.fn.fnamemodify(filename, ':t')
+  end
+
+  return string.format(
+    '%%#%s#%s %s %%#StatusLine#%%=%%#%s# %%l:%%c ',
+    group,
+    vim.bo.modified and ' + |' or '',
+    filename,
+    group
+  )
+end
+-- }}}
+
+-- define auto commands {{{
+local function on_filetype()
+  vim.opt_local.expandtab = true
+  vim.opt_local.tabstop = 4
+  vim.opt_local.softtabstop = 4
+  vim.opt_local.list = vim.o.filetype ~= 'NeogitStatus'
+end
+
+local function on_colorscheme()
+  vim.cmd([[
+    highlight StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
+    highlight StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
+    highlight StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
+    highlight StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
+    highlight StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
+    highlight StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
+    highlight StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
+  ]])
+end
+
+local function on_focus()
+  vim.opt_local.cursorline = vim.opt_global.cursorline:get()
+  vim.opt_local.statusline = vim.opt_global.statusline:get()
+end
+
+local function on_blur()
+  vim.opt_local.cursorline = true
+  vim.opt_local.statusline = '%!v:lua.status_line()'
+
+  vim.cmd({ cmd = 'checktime' })
+end
+
+local function on_resize()
+  vim.cmd({ cmd = 'wincmd', args = { '=' } })
+end
+
+local function on_yank_post()
+  vim.highlight.on_yank({
+    higroup = 'IncSearch',
+    timeout = 150,
+    on_visual = true,
+  })
+end
+
+local function on_cmdline_enter()
+  vim.opt_global.hlsearch = true
+end
+
+local function on_cmdline_leave()
+  vim.opt_global.hlsearch = false
+end
+
+vim.api.nvim_create_autocmd('FileType', {
+  callback = on_filetype,
+  pattern = {
+    'NeogitStatus',
+    'markdown',
+    'python',
+    'json',
+    'javascript',
+    'javascriptreact',
+    'typescript',
+    'typescriptreact',
+    'html',
+    'css',
+    'php',
+  },
+})
+
+vim.api.nvim_create_autocmd('ColorScheme', {
+  callback = on_colorscheme,
+  pattern = '*',
+})
+
+vim.api.nvim_create_autocmd(
+  { 'FocusLost', 'VimLeave', 'WinLeave', 'BufWinLeave' },
+  { callback = on_focus, pattern = '*' }
+)
+
+vim.api.nvim_create_autocmd(
+  { 'FocusGained', 'VimEnter', 'WinEnter', 'BufWinEnter' },
+  { callback = on_blur, pattern = '*' }
+)
+
+vim.api.nvim_create_autocmd('VimResized', {
+  callback = on_resize,
+  pattern = '*',
+})
+
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = on_yank_post,
+  pattern = '*',
+})
+
+vim.api.nvim_create_autocmd('CmdlineEnter', {
+  callback = on_cmdline_enter,
+  pattern = { '/', '?' },
+})
+
+vim.api.nvim_create_autocmd('CmdlineLeave', {
+  callback = on_cmdline_leave,
+  pattern = { '/', '?' },
+})
 -- }}}
