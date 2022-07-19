@@ -123,11 +123,17 @@ require('packer').startup({
     use({ 'wbthomason/packer.nvim' })
 
     use({ 'tpope/vim-repeat' })
-    use({ 'tpope/vim-surround' })
     use({ 'tpope/vim-commentary' })
 
     use({ 'sidofc/mkdx', ft = { 'markdown' } })
     use({ 'junegunn/fzf', requires = { 'junegunn/fzf.vim' } })
+
+    use({
+      'kylechui/nvim-surround',
+      config = function()
+        require('nvim-surround').setup()
+      end,
+    })
 
     use({
       'numToStr/Navigator.nvim',
@@ -332,10 +338,10 @@ vim.keymap.set('n', '<C-l>', ':NavigatorRight<Cr>', { silent = true })
 
 vim.keymap.set('n', '<C-p>', ':Files<Cr>', { silent = true })
 vim.keymap.set('n', '<C-g>', function()
-  local options = { '--delimiter=:', '--nth=4..' }
-  local source = 'rg --line-number --hidden --smart-case --color=always .'
+  local options = { '--delimiter=:', '--nth=2..' }
+  local command = 'rg --line-number --hidden --color=always --smart-case .'
 
-  vim.fn['fzf#vim#grep'](source, 1, { options = options })
+  vim.fn['fzf#vim#grep'](command, 0, { options = options })
 end, { silent = true })
 -- }}}
 
