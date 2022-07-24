@@ -252,16 +252,16 @@ require('packer').startup({
 -- }}}
 
 -- mappings {{{
-vim.keymap.set({ 'n', 'i' }, '<Up>', '<Nop>')
-vim.keymap.set({ 'n', 'i' }, '<Down>', '<Nop>')
-vim.keymap.set({ 'n', 'i' }, '<Left>', '<Nop>')
-vim.keymap.set({ 'n', 'i' }, '<Right>', '<Nop>')
-vim.keymap.set({ 'n', 'v' }, '>>', '<Nop>')
-vim.keymap.set({ 'n', 'v' }, '<<', '<Nop>')
-vim.keymap.set({ 'n', 'v' }, 'K', '{')
-vim.keymap.set({ 'n', 'v' }, 'J', '}')
-vim.keymap.set({ 'n', 'v' }, 'H', '^')
-vim.keymap.set({ 'n', 'v' }, 'L', '$')
+vim.keymap.set({ 'n', 'v', 'o', 'i' }, '<Up>', '<Nop>')
+vim.keymap.set({ 'n', 'v', 'o', 'i' }, '<Down>', '<Nop>')
+vim.keymap.set({ 'n', 'v', 'o', 'i' }, '<Left>', '<Nop>')
+vim.keymap.set({ 'n', 'v', 'o', 'i' }, '<Right>', '<Nop>')
+vim.keymap.set({ 'n', 'v', 'o' }, '>>', '<Nop>')
+vim.keymap.set({ 'n', 'v', 'o' }, '<<', '<Nop>')
+vim.keymap.set({ 'n', 'v', 'o' }, 'K', '{')
+vim.keymap.set({ 'n', 'v', 'o' }, 'J', '}')
+vim.keymap.set({ 'n', 'v', 'o' }, 'H', '^')
+vim.keymap.set({ 'n', 'v', 'o' }, 'L', '$')
 
 vim.keymap.set('n', '<S-s>', '<Nop>')
 vim.keymap.set('n', '<C-z>', '<Nop>')
