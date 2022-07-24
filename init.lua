@@ -2,6 +2,10 @@
 
 -- globals {{{
 vim.g.mapleader = ' '
+vim.g.loaded_node_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_python3_provider = 0
 
 vim.g.fzf_preview_window = {}
 vim.g.fzf_layout = { down = '20%' }
@@ -161,14 +165,7 @@ require('packer').startup({
     use({
       'RRethy/nvim-base16',
       config = function()
-        vim.cmd([[
-          colorscheme base16-seti
-          highlight CursorLine ctermbg=8 guibg=#282a2b
-          highlight Normal guibg=NONE ctermbg=NONE
-          highlight EndOfBuffer guibg=NONE ctermbg=NONE guifg=Black ctermfg=0
-          highlight TrailingWhitespace ctermfg=0 guifg=Black ctermbg=8 guibg=#41535B
-          highlight VertSplit guibg=NONE ctermbg=NONE guifg=Gray ctermfg=Gray
-        ]])
+        vim.cmd({ cmd = 'colorscheme', args = { 'base16-seti' } })
       end,
     })
 
@@ -403,7 +400,7 @@ vim.api.nvim_create_autocmd(
     group = augroup,
     pattern = '*',
     callback = function()
-      vim.opt_local.cursorline = vim.opt_global.cursorline:get()
+      vim.opt_local.cursorline = false
       vim.opt_local.statusline = vim.opt_global.statusline:get()
     end,
   }
@@ -428,13 +425,19 @@ vim.api.nvim_create_autocmd('ColorScheme', {
   pattern = '*',
   callback = function()
     vim.cmd([[
-      highlight StatusLine         ctermbg=8  guibg=#313131 ctermfg=15 guifg=#cccccc
-      highlight StatusLineNC       ctermbg=0  guibg=#313131 ctermfg=8  guifg=#999999
-      highlight StatusLineSection  ctermbg=8  guibg=#55b5db ctermfg=0  guifg=#333333
-      highlight StatusLineSectionV ctermbg=11 guibg=#a074c4 ctermfg=0  guifg=#000000
-      highlight StatusLineSectionI ctermbg=10 guibg=#9fca56 ctermfg=0  guifg=#000000
-      highlight StatusLineSectionC ctermbg=12 guibg=#db7b55 ctermfg=0  guifg=#000000
-      highlight StatusLineSectionR ctermbg=12 guibg=#ed3f45 ctermfg=0  guifg=#000000
+      highlight Normal             ctermbg=NONE guibg=NONE
+      highlight NormalNC           ctermbg=NONE guibg=NONE
+      highlight CursorLine         ctermbg=8    guibg=#282a2b
+      highlight EndOfBuffer        ctermbg=NONE guibg=NONE    ctermfg=0    guifg=Black
+      highlight TrailingWhitespace ctermbg=8    guibg=#41535B ctermfg=0    guifg=Black
+      highlight VertSplit          ctermbg=NONE guibg=NONE    ctermfg=Gray guifg=Gray
+      highlight StatusLine         ctermbg=8    guibg=#313131 ctermfg=15   guifg=#cccccc
+      highlight StatusLineNC       ctermbg=0    guibg=#313131 ctermfg=8    guifg=#999999
+      highlight StatusLineSection  ctermbg=8    guibg=#55b5db ctermfg=0    guifg=#333333
+      highlight StatusLineSectionV ctermbg=11   guibg=#a074c4 ctermfg=0    guifg=#000000
+      highlight StatusLineSectionI ctermbg=10   guibg=#9fca56 ctermfg=0    guifg=#000000
+      highlight StatusLineSectionC ctermbg=12   guibg=#db7b55 ctermfg=0    guifg=#000000
+      highlight StatusLineSectionR ctermbg=12   guibg=#ed3f45 ctermfg=0    guifg=#000000
     ]])
   end,
 })
