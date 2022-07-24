@@ -214,11 +214,29 @@ require('packer').startup({
     use({
       'nvim-treesitter/nvim-treesitter',
       run = ':TSUpdate',
+      requires = { 'nvim-treesitter/nvim-treesitter-refactor' },
       config = function()
         require('nvim-treesitter.configs').setup({
           indent = { enable = true },
           incremental_selection = { enable = true },
           highlight = { enable = true },
+          refactor = {
+            enable = true,
+            navigation = {
+              enable = true,
+              keymaps = {
+                goto_definition = 'gt',
+                goto_next_usage = 'gn',
+                goto_previous_usage = 'gp',
+              },
+            },
+            smart_rename = {
+              enable = true,
+              keymaps = {
+                smart_rename = 'gr',
+              },
+            },
+          },
           ensure_installed = {
             'c',
             'cpp',
