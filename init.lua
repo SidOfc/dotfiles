@@ -158,6 +158,7 @@ require('packer').startup({
         require('carbon').setup({
           sync_pwd = true,
           indicators = { collapse = '▾', expand = '▸' },
+          actions = { toggle_recursive = '<s-cr>' },
         })
       end,
     })
