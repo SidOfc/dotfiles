@@ -129,7 +129,12 @@ require('packer').startup({
     use({ 'tpope/vim-repeat' })
     use({ 'tpope/vim-commentary' })
 
-    use({ 'kylechui/nvim-surround' })
+    use({
+      'kylechui/nvim-surround',
+      config = function()
+        require('nvim-surround').setup()
+      end,
+    })
 
     use({ 'sidofc/mkdx', ft = { 'markdown' } })
     use({ 'junegunn/fzf', requires = { 'junegunn/fzf.vim' } })
@@ -506,14 +511,6 @@ local filetype_handlers = {
         vim.opt.laststatus = original
       end,
     })
-  end,
-
-  ['*'] = function()
-    local ft = vim.bo.filetype
-
-    if ft ~= 'carbon' then
-      require('nvim-surround').buffer_setup()
-    end
   end,
 }
 
