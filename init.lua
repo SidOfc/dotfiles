@@ -154,7 +154,7 @@ require('packer').startup({
     })
 
     use({
-      'sidofc/carbon.nvim',
+      '~/Dev/sidofc/lua/carbon.nvim',
       config = function()
         require('carbon').setup({
           sync_pwd = true,
@@ -179,8 +179,6 @@ require('packer').startup({
         require('neogit').setup({
           disable_hint = true,
           disable_signs = true,
-          disable_commit_confirmation = true,
-          disable_insert_on_commit = false,
           sections = {
             recent = false,
           },
