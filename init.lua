@@ -167,7 +167,7 @@ require('packer').startup({
     use({
       'RRethy/nvim-base16',
       config = function()
-        vim.cmd({ cmd = 'colorscheme', args = { 'base16-seti' } })
+        vim.cmd.colorscheme('base16-seti')
       end,
     })
 
@@ -316,11 +316,11 @@ vim.keymap.set('n', 'Q', '@q')
 vim.keymap.set('n', 'U', '<C-r>')
 
 vim.keymap.set('n', '<C-n>', function()
-  return pcall(vim.cmd, { cmd = 'cnext' }) or pcall(vim.cmd, { cmd = 'cfirst' })
+  return pcall(vim.cmd.cnext) or pcall(vim.cmd.cfirst)
 end)
 
 vim.keymap.set('n', '<C-b>', function()
-  return pcall(vim.cmd, { cmd = 'cprev' }) or pcall(vim.cmd, { cmd = 'clast' })
+  return pcall(vim.cmd.cprev) or pcall(vim.cmd.clast)
 end)
 
 vim.keymap.set('n', '<C-w>', function()
@@ -332,7 +332,7 @@ vim.keymap.set('n', '<C-w>', function()
   elseif #vim.fn.getwininfo() > 1 then
     vim.api.nvim_win_close(winid, false)
   elseif vim.bo.filetype ~= 'carbon' then
-    vim.cmd({ cmd = 'Carbon' })
+    vim.cmd.Carbon()
     vim.api.nvim_buf_delete(bufnr, {})
   end
 end)
@@ -399,23 +399,18 @@ vim.api.nvim_create_autocmd(
   }
 )
 
-vim.api.nvim_create_autocmd(
-  { 'FocusGained', 'VimEnter', 'WinEnter', 'BufWinEnter' },
-  {
-    group = augroup,
-    pattern = '*',
-    callback = function()
-      vim.opt_local.cursorline = true
-      vim.opt_local.statusline = '%!v:lua.status_line()'
+vim.api.nvim_create_autocmd('WinEnter', {
+  group = augroup,
+  callback = function()
+    vim.opt_local.cursorline = true
+    vim.opt_local.statusline = '%!v:lua.status_line()'
 
-      vim.cmd({ cmd = 'checktime' })
-    end,
-  }
-)
+    vim.cmd.checktime()
+  end,
+})
 
 vim.api.nvim_create_autocmd('ColorScheme', {
   group = augroup,
-  pattern = '*',
   callback = function()
     vim.cmd([[
       highlight Normal             ctermbg=NONE guibg=NONE
@@ -437,15 +432,13 @@ vim.api.nvim_create_autocmd('ColorScheme', {
 
 vim.api.nvim_create_autocmd('VimResized', {
   group = augroup,
-  pattern = '*',
   callback = function()
-    vim.cmd({ cmd = 'wincmd', args = { '=' } })
+    vim.cmd.wincmd('=')
   end,
 })
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = augroup,
-  pattern = '*',
   callback = function()
     vim.highlight.on_yank({
       higroup = 'IncSearch',
