@@ -399,15 +399,20 @@ vim.api.nvim_create_autocmd(
   }
 )
 
-vim.api.nvim_create_autocmd('WinEnter', {
-  group = augroup,
-  callback = function()
-    vim.opt_local.cursorline = true
-    vim.opt_local.statusline = '%!v:lua.status_line()'
+vim.api.nvim_create_autocmd(
+  { 'FocusGained', 'VimEnter', 'WinEnter', 'BufWinEnter' },
+  {
+    group = augroup,
+    callback = function(info)
+      vim.opt_local.cursorline = true
+      vim.opt_local.statusline = '%!v:lua.status_line()'
 
-    vim.cmd.checktime()
-  end,
-})
+      if info.event == 'BufWinEnter' then
+        vim.cmd.checktime()
+      end
+    end,
+  }
+)
 
 vim.api.nvim_create_autocmd('ColorScheme', {
   group = augroup,
