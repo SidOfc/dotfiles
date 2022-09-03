@@ -87,7 +87,7 @@ vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.shiftwidth = 0
 vim.opt.timeoutlen = 400
-vim.opt.statusline = ' %{fnamemodify(expand("%"), ":~:.")}%= %l:%c '
+vim.opt.statusline = '%!v:lua.status_line_inactive()'
 vim.opt.softtabstop = 2
 vim.opt.showtabline = 0
 vim.opt.termguicolors = true
@@ -179,6 +179,8 @@ require('packer').startup({
         require('neogit').setup({
           disable_hint = true,
           disable_signs = true,
+          disable_insert_on_commit = false,
+          disable_commit_confirmation = true,
           sections = {
             recent = false,
           },
@@ -351,20 +353,31 @@ local status_mode_groups = {
   [''] = 'StatusLineSectionV',
 }
 
-function _G.status_line()
-  local mode = vim.fn.mode():lower()
-  local group = status_mode_groups[mode] or status_mode_groups.n
+local function status_line_filename()
   local filename = vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
 
   if string.match(filename, '^~') then
     filename = vim.fn.fnamemodify(filename, ':t')
+  elseif string.match(filename, 'carbon%[%d+%]') then
+    filename = vim.b.carbon and vim.b.carbon.name or 'explorer'
   end
+
+  return filename
+end
+
+function _G.status_line_inactive()
+  return string.format(' %s%%= %%l:%%c ', status_line_filename())
+end
+
+function _G.status_line()
+  local mode = vim.fn.mode():lower()
+  local group = status_mode_groups[mode] or status_mode_groups.n
 
   return string.format(
     '%%#%s#%s %s %%#StatusLine#%%=%%#%s# %%l:%%c ',
     group,
     vim.bo.modified and ' + |' or '',
-    filename,
+    status_line_filename(),
     group
   )
 end
