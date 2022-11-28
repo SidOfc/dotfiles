@@ -160,6 +160,17 @@ require('packer').startup({
           sync_pwd = true,
           indicators = { collapse = '▾', expand = '▸' },
           actions = { toggle_recursive = '<s-cr>' },
+          highlights = {
+            CarbonDir = { fg = '#00aaff', bold = true },
+            CarbonFile = { fg = '#f8f8f8', bold = true },
+            CarbonExe = { fg = '#22cc22', bold = true },
+            CarbonSymlink = { fg = '#d77ee0', bold = true },
+            CarbonBrokenSymlink = { fg = '#ea871e', bold = true },
+            CarbonIndicator = { fg = 'Gray', bold = true },
+            CarbonDanger = { fg = '#ff3333', bold = true },
+            CarbonPending = { fg = '#ffee00', bold = true },
+            CarbonFlash = { link = 'Visual' },
+          },
         })
       end,
     })
