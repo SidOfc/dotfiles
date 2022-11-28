@@ -87,7 +87,7 @@ vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.shiftwidth = 0
 vim.opt.timeoutlen = 400
-vim.opt.statusline = '%!v:lua.status_line_inactive()'
+vim.opt.statusline = ' %{v:lua.status_line_filename()}%= %l:%c '
 vim.opt.softtabstop = 2
 vim.opt.showtabline = 0
 vim.opt.termguicolors = true
@@ -353,20 +353,20 @@ local status_mode_groups = {
   [''] = 'StatusLineSectionV',
 }
 
-local function status_line_filename()
+function _G.status_line_filename()
   local filename = vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
 
   if string.match(filename, '^~') then
     filename = vim.fn.fnamemodify(filename, ':t')
-  elseif string.match(filename, 'carbon%[%d+%]') then
-    filename = vim.b.carbon and vim.b.carbon.name or 'explorer'
+  elseif vim.b.carbon and vim.b.carbon.path then
+    filename = string.gsub(
+      vim.b.carbon.path,
+      vim.fn.fnamemodify(vim.loop.cwd(), ':h') .. '/',
+      ''
+    )
   end
 
   return filename
-end
-
-function _G.status_line_inactive()
-  return string.format(' %s%%= %%l:%%c ', status_line_filename())
 end
 
 function _G.status_line()
@@ -377,7 +377,7 @@ function _G.status_line()
     '%%#%s#%s %s %%#StatusLine#%%=%%#%s# %%l:%%c ',
     group,
     vim.bo.modified and ' + |' or '',
-    status_line_filename(),
+    _G.status_line_filename(),
     group
   )
 end
