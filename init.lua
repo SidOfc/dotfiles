@@ -481,6 +481,7 @@ local filetype_handlers = {
     'typescriptreact',
     'html',
     'css',
+    'scss',
     'php',
   }] = function()
     vim.opt_local.expandtab = true
