@@ -415,15 +415,17 @@ vim.api.nvim_create_autocmd(
   { 'FocusGained', 'VimEnter', 'WinEnter', 'BufWinEnter' },
   {
     group = augroup,
-    callback = function(info)
+    pattern = '*',
+    callback = function()
       vim.opt_local.cursorline = true
       vim.opt_local.statusline = '%!v:lua.status_line()'
-
-      if info.event == 'BufWinEnter' then
-        vim.cmd.checktime()
-      end
     end,
   }
+)
+
+vim.api.nvim_create_autocmd(
+  { 'BufEnter' },
+  { group = augroup, pattern = 'global', callback = vim.cmd.checktime }
 )
 
 vim.api.nvim_create_autocmd('ColorScheme', {
