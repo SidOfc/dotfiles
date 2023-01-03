@@ -390,6 +390,7 @@ end, { silent = true })
 -- }}}
 
 -- statusline and cursorline {{{
+local severity_labels = { 'Error', 'Warn', 'Info', 'Hint' }
 local status_mode_groups = {
   n = 'StatusLineSection',
   i = 'StatusLineSectionI',
@@ -398,6 +399,31 @@ local status_mode_groups = {
   v = 'StatusLineSectionV',
   [''] = 'StatusLineSectionV',
 }
+
+function _G.custom_status_line_lsp()
+  local counts = { 0, 0, 0, 0 }
+  local segment = ''
+
+  for _, diagnostic in ipairs(vim.diagnostic.get()) do
+    counts[diagnostic.severity] = counts[diagnostic.severity] + 1
+  end
+
+  for severity_index, count in ipairs(counts) do
+    if count > 0 then
+      local type = severity_labels[severity_index]
+
+      segment = string.format(
+        '%s%%#StatusLineLsp%s# %d%s ',
+        segment,
+        type,
+        count,
+        type:sub(0, 1)
+      )
+    end
+  end
+
+  return segment
+end
 
 function _G.custom_status_line_filename()
   local filename = vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
@@ -420,10 +446,11 @@ function _G.custom_status_line()
   local group = status_mode_groups[mode] or status_mode_groups.n
 
   return string.format(
-    '%%#%s#%s %s %%#StatusLine#%%=%%#%s# %%l:%%c ',
+    '%%#%s#%s %s %s%%#StatusLine#%%=%%#%s# %%l:%%c ',
     group,
     vim.bo.modified and ' + |' or '',
     _G.custom_status_line_filename(),
+    _G.custom_status_line_lsp(),
     group
   )
 end
@@ -496,6 +523,10 @@ vim.api.nvim_create_autocmd('ColorScheme', {
       highlight StatusLineSectionI ctermbg=10   guibg=#9fca56 ctermfg=0    guifg=#000000
       highlight StatusLineSectionC ctermbg=12   guibg=#db7b55 ctermfg=0    guifg=#000000
       highlight StatusLineSectionR ctermbg=12   guibg=#ed3f45 ctermfg=0    guifg=#000000
+      highlight StatusLineLspError ctermbg=8    guifg=#313131              guibg=#ff0000
+      highlight StatusLineLspWarn  ctermbg=8    guifg=#313131              guibg=#ff8800
+      highlight StatusLineLspInfo  ctermbg=8    guifg=#313131              guibg=#2266cc
+      highlight StatusLineLspHint  ctermbg=8    guifg=#313131              guibg=#d6d6d6
     ]])
   end,
 })
