@@ -29,7 +29,7 @@
   alias zx "source ~/.config/fish/config.fish"
 
   # gpg-agent
-  alias gpg-add "echo | gpg -s >/dev/null ^&1"
+  alias gpg-add "echo | gpg -s >/dev/null >&1"
 # }}}
 
 # Abbreviations {{{

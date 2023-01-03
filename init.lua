@@ -23,34 +23,6 @@ vim.g.fzf_colors = {
   ['hl+'] = { 'fg', 'Statement' },
 }
 
-vim.g.ale_echo_msg_format = '[%linter%] %severity%: %s'
-vim.g.ale_lint_delay = 300
-vim.g.ale_fix_on_save = 1
-vim.g.ale_linters_explicit = 1
-vim.g.ale_fixers = {
-  javascript = { 'prettier' },
-  javascriptreact = { 'prettier' },
-  typescript = { 'prettier' },
-  typescriptreact = { 'prettier' },
-  json = { 'prettier' },
-  scss = { 'prettier' },
-  html = { 'prettier' },
-  css = { 'prettier' },
-  rust = { 'rustfmt' },
-  lua = { 'stylua' },
-}
-vim.g.ale_linters = {
-  javascript = { 'eslint' },
-  javascriptreact = { 'eslint' },
-  typescript = { 'eslint' },
-  typescriptreact = { 'eslint' },
-  rust = { 'cargo' },
-  ruby = { 'rubocop' },
-  lua = { 'luacheck' },
-  scss = { 'stylelint' },
-  css = { 'stylelint' },
-}
-
 vim.g['mkdx#settings'] = {
   restore_visual = 1,
   gf_on_steroids = 1,
@@ -87,7 +59,8 @@ vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.shiftwidth = 0
 vim.opt.timeoutlen = 400
-vim.opt.statusline = ' %{v:lua.status_line_filename()}%= %l:%c '
+vim.opt.updatetime = 100
+vim.opt.statusline = ' %{v:lua.custom_status_line_filename()}%= %l:%c '
 vim.opt.softtabstop = 2
 vim.opt.showtabline = 0
 vim.opt.termguicolors = true
@@ -130,6 +103,32 @@ require('packer').startup({
     use({ 'tpope/vim-repeat' })
     use({ 'tpope/vim-commentary' })
 
+    use({ 'sidofc/mkdx', ft = { 'markdown' } })
+    use({ 'junegunn/fzf', requires = { 'junegunn/fzf.vim' } })
+
+    use({
+      'mhartington/formatter.nvim',
+      config = function()
+        require('formatter').setup({
+          filetype = {
+            lua = { require('formatter.filetypes.lua').stylua },
+            javascript = {
+              require('formatter.filetypes.javascript').prettier,
+            },
+            javascriptreact = {
+              require('formatter.filetypes.javascript').prettier,
+            },
+            typescript = {
+              require('formatter.filetypes.javascript').prettier,
+            },
+            typescriptreact = {
+              require('formatter.filetypes.javascript').prettier,
+            },
+          },
+        })
+      end,
+    })
+
     use({
       'kylechui/nvim-surround',
       config = function()
@@ -137,8 +136,12 @@ require('packer').startup({
       end,
     })
 
-    use({ 'sidofc/mkdx', ft = { 'markdown' } })
-    use({ 'junegunn/fzf', requires = { 'junegunn/fzf.vim' } })
+    use({
+      'RRethy/nvim-base16',
+      config = function()
+        vim.cmd.colorscheme('base16-seti')
+      end,
+    })
 
     use({
       'numToStr/Navigator.nvim',
@@ -150,6 +153,51 @@ require('packer').startup({
       },
       config = function()
         require('Navigator').setup()
+      end,
+    })
+
+    use({
+      'neovim/nvim-lspconfig',
+      config = function()
+        local lsp = require('lspconfig')
+
+        local function on_attach(_, bufnr)
+          local opts = { noremap = true, silent = true, buffer = bufnr }
+
+          for mapping, action in pairs({ gn = 'goto_next', gp = 'goto_prev' }) do
+            vim.keymap.set('n', mapping, function()
+              vim.diagnostic[action]({ float = false })
+            end, opts)
+          end
+        end
+
+        lsp.eslint.setup({ on_attach = on_attach })
+        lsp.sumneko_lua.setup({
+          on_attach = on_attach,
+          settings = {
+            Lua = {
+              runtime = {
+                version = 'LuaJIT',
+              },
+              diagnostics = {
+                globals = { 'vim' },
+              },
+              workspace = {
+                library = vim.api.nvim_get_runtime_file('', true),
+                checkThirdParty = false,
+              },
+              telemetry = {
+                enable = false,
+              },
+            },
+          },
+        })
+
+        vim.diagnostic.config({
+          signs = false,
+          virtual_text = false,
+          float = false,
+        })
       end,
     })
 
@@ -176,13 +224,6 @@ require('packer').startup({
     })
 
     use({
-      'RRethy/nvim-base16',
-      config = function()
-        vim.cmd.colorscheme('base16-seti')
-      end,
-    })
-
-    use({
       'timuntersberger/neogit',
       requires = { 'nvim-lua/plenary.nvim' },
       cmd = { 'Neogit' },
@@ -203,22 +244,6 @@ require('packer').startup({
           },
         })
       end,
-    })
-
-    use({
-      'w0rp/ale',
-      ft = {
-        'javascript',
-        'javascriptreact',
-        'typescript',
-        'typescriptreact',
-        'json',
-        'scss',
-        'html',
-        'css',
-        'rust',
-        'lua',
-      },
     })
 
     use({
@@ -316,11 +341,21 @@ vim.keymap.set('n', 'Y', 'y$')
 vim.keymap.set('n', 'Q', '@q')
 vim.keymap.set('n', 'U', '<C-r>')
 
+vim.keymap.set('n', 'gd', function()
+  local diagnostics = vim.diagnostic.get()
+
+  if #diagnostics ~= 0 then
+    vim.diagnostic.setqflist()
+  else
+    vim.api.nvim_echo({ { 'No diagnostics to show', 'MoreMsg' } }, false, {})
+  end
+end)
+
 vim.keymap.set('n', '<C-n>', function()
   return pcall(vim.cmd.cnext) or pcall(vim.cmd.cfirst)
 end)
 
-vim.keymap.set('n', '<C-b>', function()
+vim.keymap.set('n', '<C-p>', function()
   return pcall(vim.cmd.cprev) or pcall(vim.cmd.clast)
 end)
 
@@ -345,7 +380,7 @@ vim.keymap.set('n', '<C-j>', ':NavigatorDown<Cr>', { silent = true })
 vim.keymap.set('n', '<C-k>', ':NavigatorUp<Cr>', { silent = true })
 vim.keymap.set('n', '<C-l>', ':NavigatorRight<Cr>', { silent = true })
 
-vim.keymap.set('n', '<C-p>', ':Files<Cr>', { silent = true })
+vim.keymap.set('n', '<C-f>', ':Files<Cr>', { silent = true })
 vim.keymap.set('n', '<C-g>', function()
   local options = { '--delimiter=:', '--nth=2..' }
   local command = 'rg --line-number --hidden --color=always --smart-case .'
@@ -364,7 +399,7 @@ local status_mode_groups = {
   [''] = 'StatusLineSectionV',
 }
 
-function _G.status_line_filename()
+function _G.custom_status_line_filename()
   local filename = vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
 
   if string.match(filename, '^~') then
@@ -380,7 +415,7 @@ function _G.status_line_filename()
   return filename
 end
 
-function _G.status_line()
+function _G.custom_status_line()
   local mode = vim.fn.mode():lower()
   local group = status_mode_groups[mode] or status_mode_groups.n
 
@@ -388,7 +423,7 @@ function _G.status_line()
     '%%#%s#%s %s %%#StatusLine#%%=%%#%s# %%l:%%c ',
     group,
     vim.bo.modified and ' + |' or '',
-    _G.status_line_filename(),
+    _G.custom_status_line_filename(),
     group
   )
 end
@@ -398,6 +433,22 @@ end
 local augroup = 'init.lua'
 
 vim.api.nvim_create_augroup(augroup, {})
+
+vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
+  group = augroup,
+  pattern = '*',
+  callback = function()
+    local ok = pcall(vim.cmd.FormatWrite)
+
+    if not ok then
+      vim.api.nvim_echo(
+        { { 'Failed to format buffer!', 'ErrorMsg' } },
+        false,
+        {}
+      )
+    end
+  end,
+})
 
 vim.api.nvim_create_autocmd(
   { 'FocusLost', 'VimLeave', 'WinLeave', 'BufWinLeave' },
@@ -418,7 +469,7 @@ vim.api.nvim_create_autocmd(
     pattern = '*',
     callback = function()
       vim.opt_local.cursorline = true
-      vim.opt_local.statusline = '%!v:lua.status_line()'
+      vim.opt_local.statusline = '%!v:lua.custom_status_line()'
     end,
   }
 )
