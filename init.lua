@@ -1,5 +1,10 @@
 -- luacheck: globals vim
 
+local statuslines = {
+  inactive = ' %{v:lua.custom_status_line_filename()}%= %l:%c ',
+  active = '%!v:lua.custom_status_line()',
+}
+
 -- globals {{{
 vim.g.mapleader = ' '
 vim.g.loaded_node_provider = 0
@@ -60,7 +65,7 @@ vim.opt.splitright = true
 vim.opt.shiftwidth = 0
 vim.opt.timeoutlen = 400
 vim.opt.updatetime = 100
-vim.opt.statusline = ' %{v:lua.custom_status_line_filename()}%= %l:%c '
+vim.opt.statusline = statuslines.inactive
 vim.opt.softtabstop = 2
 vim.opt.showtabline = 0
 vim.opt.termguicolors = true
@@ -164,9 +169,12 @@ require('packer').startup({
         local function on_attach(_, bufnr)
           local opts = { noremap = true, silent = true, buffer = bufnr }
 
-          for mapping, action in pairs({ gn = 'goto_next', gp = 'goto_prev' }) do
+          for mapping, action in pairs({
+            gn = 'goto_next',
+            gp = 'goto_prev',
+          }) do
             vim.keymap.set('n', mapping, function()
-              vim.diagnostic[action]({ float = false })
+              vim.diagnostic[action]({ float = true })
             end, opts)
           end
         end
@@ -484,7 +492,7 @@ vim.api.nvim_create_autocmd(
     pattern = '*',
     callback = function()
       vim.opt_local.cursorline = false
-      vim.opt_local.statusline = vim.opt_global.statusline:get()
+      vim.opt_local.statusline = statuslines.inactive
     end,
   }
 )
@@ -496,7 +504,7 @@ vim.api.nvim_create_autocmd(
     pattern = '*',
     callback = function()
       vim.opt_local.cursorline = true
-      vim.opt_local.statusline = '%!v:lua.custom_status_line()'
+      vim.opt_local.statusline = statuslines.active
     end,
   }
 )
