@@ -1,7 +1,7 @@
 [user]
   name = Sidney Liebrand
   email = sidneyliebrand@gmail.com
-  signingkey = 32E59628A8DBA32F
+  signingkey = 57621E845F2B6000
 [core]
   editor = nvim
   excludesfile = ~/.gitignore
