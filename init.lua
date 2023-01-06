@@ -114,21 +114,19 @@ require('packer').startup({
     use({
       'mhartington/formatter.nvim',
       config = function()
+        local stylua = require('formatter.filetypes.lua').stylua
+        local prettier_js = require('formatter.filetypes.javascript').prettier
+        local prettier_json = require('formatter.filetypes.json').prettier
+
         require('formatter').setup({
           filetype = {
-            lua = { require('formatter.filetypes.lua').stylua },
-            javascript = {
-              require('formatter.filetypes.javascript').prettier,
-            },
-            javascriptreact = {
-              require('formatter.filetypes.javascript').prettier,
-            },
-            typescript = {
-              require('formatter.filetypes.javascript').prettier,
-            },
-            typescriptreact = {
-              require('formatter.filetypes.javascript').prettier,
-            },
+            lua = { stylua },
+            json = { prettier_json },
+            jsonc = { prettier_json },
+            javascript = { prettier_js },
+            javascriptreact = { prettier_js },
+            typescript = { prettier_js },
+            typescriptreact = { prettier_js },
           },
         })
       end,
@@ -164,21 +162,22 @@ require('packer').startup({
     use({
       'neovim/nvim-lspconfig',
       config = function()
+        -- js/ts
+        --   npm install --global vscode-langservers-extracted
+        --   npm install --global typescript typescript-language-server
+        -- lua
+        --   brew install lua-language-server
+
         local lsp = require('lspconfig')
 
         local function on_attach(_, bufnr)
           local opts = { noremap = true, silent = true, buffer = bufnr }
 
-          for mapping, action in pairs({
-            gn = 'goto_next',
-            gp = 'goto_prev',
-          }) do
-            vim.keymap.set('n', mapping, function()
-              vim.diagnostic[action]({ float = true })
-            end, opts)
-          end
+          vim.keymap.set('n', 'gn', vim.diagnostic.goto_next, opts)
+          vim.keymap.set('n', 'gp', vim.diagnostic.goto_prev, opts)
         end
 
+        lsp.tsserver.setup({ on_attach = on_attach })
         lsp.eslint.setup({ on_attach = on_attach })
         lsp.sumneko_lua.setup({
           on_attach = on_attach,
@@ -578,6 +577,7 @@ local filetype_handlers = {
     'markdown',
     'python',
     'json',
+    'jsonc',
     'javascript',
     'javascriptreact',
     'typescript',
