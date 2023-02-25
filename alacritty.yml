@@ -15,7 +15,6 @@ scrolling:
 
 font:
   size: 18.0
-  use_thin_strokes: true
 
 colors:
   primary:

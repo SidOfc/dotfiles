@@ -179,7 +179,7 @@ require('packer').startup({
 
         lsp.tsserver.setup({ on_attach = on_attach })
         lsp.eslint.setup({ on_attach = on_attach })
-        lsp.sumneko_lua.setup({
+        lsp.lua_ls.setup({
           on_attach = on_attach,
           settings = {
             Lua = {
@@ -215,17 +215,6 @@ require('packer').startup({
           sync_pwd = true,
           indicators = { collapse = '▾', expand = '▸' },
           actions = { toggle_recursive = '<s-cr>' },
-          highlights = {
-            CarbonDir = { fg = '#00aaff', bold = true },
-            CarbonFile = { fg = '#f8f8f8', bold = true },
-            CarbonExe = { fg = '#22cc22', bold = true },
-            CarbonSymlink = { fg = '#d77ee0', bold = true },
-            CarbonBrokenSymlink = { fg = '#ea871e', bold = true },
-            CarbonIndicator = { fg = 'Gray', bold = true },
-            CarbonDanger = { fg = '#ff3333', bold = true },
-            CarbonPending = { fg = '#ffee00', bold = true },
-            CarbonFlash = { link = 'Visual' },
-          },
         })
       end,
     })
@@ -411,7 +400,7 @@ function _G.custom_status_line_lsp()
   local counts = { 0, 0, 0, 0 }
   local segment = ''
 
-  for _, diagnostic in ipairs(vim.diagnostic.get()) do
+  for _, diagnostic in ipairs(vim.diagnostic.get(0)) do
     counts[diagnostic.severity] = counts[diagnostic.severity] + 1
   end
 
@@ -490,8 +479,8 @@ vim.api.nvim_create_autocmd(
     group = augroup,
     pattern = '*',
     callback = function()
-      vim.opt_local.cursorline = false
-      vim.opt_local.statusline = statuslines.inactive
+      vim.wo.cursorline = false
+      vim.wo.statusline = statuslines.inactive
     end,
   }
 )
@@ -502,8 +491,8 @@ vim.api.nvim_create_autocmd(
     group = augroup,
     pattern = '*',
     callback = function()
-      vim.opt_local.cursorline = true
-      vim.opt_local.statusline = statuslines.active
+      vim.wo.cursorline = true
+      vim.wo.statusline = statuslines.active
     end,
   }
 )
