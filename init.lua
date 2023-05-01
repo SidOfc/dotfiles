@@ -209,12 +209,13 @@ require('packer').startup({
     })
 
     use({
-      '~/Dev/sidofc/lua/carbon.nvim',
+      'sidofc/carbon.nvim',
       config = function()
         require('carbon').setup({
           sync_pwd = true,
           indicators = { collapse = '▾', expand = '▸' },
           actions = { toggle_recursive = '<s-cr>' },
+          file_icons = false,
         })
       end,
     })
@@ -336,16 +337,6 @@ vim.keymap.set('o', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
 vim.keymap.set('n', 'Y', 'y$')
 vim.keymap.set('n', 'Q', '@q')
 vim.keymap.set('n', 'U', '<C-r>')
-
-vim.keymap.set('n', 'gd', function()
-  local diagnostics = vim.diagnostic.get()
-
-  if #diagnostics ~= 0 then
-    vim.diagnostic.setqflist()
-  else
-    vim.api.nvim_echo({ { 'No diagnostics to show', 'MoreMsg' } }, false, {})
-  end
-end)
 
 vim.keymap.set('n', '<C-n>', function()
   return pcall(vim.cmd.cnext) or pcall(vim.cmd.cfirst)
@@ -473,20 +464,17 @@ vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
   end,
 })
 
-vim.api.nvim_create_autocmd(
-  { 'FocusLost', 'VimLeave', 'WinLeave', 'BufWinLeave' },
-  {
-    group = augroup,
-    pattern = '*',
-    callback = function()
-      vim.wo.cursorline = false
-      vim.wo.statusline = statuslines.inactive
-    end,
-  }
-)
+vim.api.nvim_create_autocmd({ 'FocusLost', 'VimLeave', 'WinLeave', 'BufLeave' }, {
+  group = augroup,
+  pattern = '*',
+  callback = function()
+    vim.wo.cursorline = false
+    vim.wo.statusline = statuslines.inactive
+  end,
+})
 
 vim.api.nvim_create_autocmd(
-  { 'FocusGained', 'VimEnter', 'WinEnter', 'BufWinEnter' },
+  { 'FocusGained', 'VimEnter', 'WinEnter', 'BufEnter' },
   {
     group = augroup,
     pattern = '*',
