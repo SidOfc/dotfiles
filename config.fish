@@ -83,14 +83,13 @@
   end
 
   function fish_prompt --description 'Write out the prompt'
-    set_color --bold
-
     switch $status
       case 0   ; set_color green
       case 127 ; set_color yellow
       case '*' ; set_color red
     end
 
+    set_color --bold
     echo -n '• '
     set_color blue
     echo -n (prompt_pwd)
