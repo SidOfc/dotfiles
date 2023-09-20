@@ -31,26 +31,6 @@ colors:
     cyan:    '#60d7af'
     white:   '#d8d7d7'
 
-  bright:
-    black:   '#555555'
-    red:     '#d15c5c'
-    green:   '#afd75f'
-    yellow:  '#d1d05c'
-    blue:    '#5eabd3'
-    magenta: '#af87d7'
-    cyan:    '#60d7af'
-    white:   '#d8d7d7'
-
-  dim:
-    black:   '#555555'
-    red:     '#d15c5c'
-    green:   '#afd75f'
-    yellow:  '#d1d05c'
-    blue:    '#5eabd3'
-    magenta: '#af87d7'
-    cyan:    '#60d7af'
-    white:   '#d8d7d7'
-
 shell:
   program: /bin/zsh
   args:
@@ -58,10 +38,57 @@ shell:
     - -c
     - tmux attach || tmux
 
-alt_send_esc: true
-
 live_config_reload: true
 
 key_bindings:
-  - { key: Return,   mods: Shift,   chars: "\x1b[13;2u" }
-  - { key: Return,   mods: Control, chars: "\x1b[13;5u" }
+  - { key: Return,     mods: Shift,         chars: "\x1b[13;2u"  }
+  - { key: Return,     mods: Control,       chars: "\x1b[13;5u"  }
+  - { key: Return,     mods: Control|Shift, chars: "\x1b[13;6u"  }
+  - { key: A,          mods: Control|Shift, chars: "\x1b[65;6u"  }
+  - { key: B,          mods: Control|Shift, chars: "\x1b[66;6u"  }
+  - { key: C,          mods: Control|Shift, chars: "\x1b[67;6u"  }
+  - { key: D,          mods: Control|Shift, chars: "\x1b[68;6u"  }
+  - { key: E,          mods: Control|Shift, chars: "\x1b[69;6u"  }
+  - { key: F,          mods: Control|Shift, chars: "\x1b[70;6u"  }
+  - { key: G,          mods: Control|Shift, chars: "\x1b[71;6u"  }
+  - { key: H,          mods: Control|Shift, chars: "\x1b[72;6u"  }
+  - { key: I,          mods: Control,       chars: "\x1b[105;5u" }
+  - { key: I,          mods: Control|Shift, chars: "\x1b[73;6u"  }
+  - { key: J,          mods: Control|Shift, chars: "\x1b[74;6u"  }
+  - { key: K,          mods: Control|Shift, chars: "\x1b[75;6u"  }
+  - { key: L,          mods: Control|Shift, chars: "\x1b[76;6u"  }
+  - { key: M,          mods: Control|Shift, chars: "\x1b[77;6u"  }
+  - { key: N,          mods: Control|Shift, chars: "\x1b[78;6u"  }
+  - { key: O,          mods: Control|Shift, chars: "\x1b[79;6u"  }
+  - { key: P,          mods: Control|Shift, chars: "\x1b[80;6u"  }
+  - { key: Q,          mods: Control|Shift, chars: "\x1b[81;6u"  }
+  - { key: R,          mods: Control|Shift, chars: "\x1b[82;6u"  }
+  - { key: S,          mods: Control|Shift, chars: "\x1b[83;6u"  }
+  - { key: T,          mods: Control|Shift, chars: "\x1b[84;6u"  }
+  - { key: U,          mods: Control|Shift, chars: "\x1b[85;6u"  }
+  - { key: V,          mods: Control|Shift, chars: "\x1b[86;6u"  }
+  - { key: W,          mods: Control|Shift, chars: "\x1b[87;6u"  }
+  - { key: X,          mods: Control|Shift, chars: "\x1b[88;6u"  }
+  - { key: Y,          mods: Control|Shift, chars: "\x1b[89;6u"  }
+  - { key: Z,          mods: Control|Shift, chars: "\x1b[90;6u"  }
+  - { key: Key1,       mods: Control|Shift, chars: "\x1b[49;6u"  }
+  - { key: Key2,       mods: Control|Shift, chars: "\x1b[50;6u"  }
+  - { key: Key3,       mods: Control|Shift, chars: "\x1b[51;6u"  }
+  - { key: Key4,       mods: Control|Shift, chars: "\x1b[52;6u"  }
+  - { key: Key5,       mods: Control|Shift, chars: "\x1b[53;6u"  }
+  - { key: Key6,       mods: Control|Shift, chars: "\x1b[54;6u"  }
+  - { key: Key7,       mods: Control|Shift, chars: "\x1b[55;6u"  }
+  - { key: Key8,       mods: Control|Shift, chars: "\x1b[56;6u"  }
+  - { key: Key9,       mods: Control|Shift, chars: "\x1b[57;6u"  }
+  - { key: Key0,       mods: Control|Shift, chars: "\x1b[48;6u"  }
+  - { key: Minus,      mods: Control|Shift, chars: "\x1b[45;6u"  }
+  - { key: Equals,     mods: Control|Shift, chars: "\x1b[61;6u"  }
+  - { key: LBracket,   mods: Control|Shift, chars: "\x1b[91;6u"  }
+  - { key: RBracket,   mods: Control|Shift, chars: "\x1b[93;6u"  }
+  - { key: Backslash,  mods: Control|Shift, chars: "\x1b[92;6u"  }
+  - { key: Semicolon,  mods: Control|Shift, chars: "\x1b[59;6u"  }
+  - { key: Apostrophe, mods: Control|Shift, chars: "\x1b[39;6u"  }
+  - { key: Comma,      mods: Control|Shift, chars: "\x1b[44;6u"  }
+  - { key: Period,     mods: Control|Shift, chars: "\x1b[46;6u"  }
+  - { key: Slash,      mods: Control|Shift, chars: "\x1b[47;6u"  }
+  - { key: Grave,      mods: Control|Shift, chars: "\x1b[96;6u"  }

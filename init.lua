@@ -105,7 +105,6 @@ require('packer').startup({
   function(use)
     use({ 'wbthomason/packer.nvim' })
 
-    use({ 'tpope/vim-repeat' })
     use({ 'tpope/vim-commentary' })
 
     use({ 'sidofc/mkdx', ft = { 'markdown' } })
@@ -116,11 +115,14 @@ require('packer').startup({
       config = function()
         local stylua = require('formatter.filetypes.lua').stylua
         local prettier_js = require('formatter.filetypes.javascript').prettier
+        local prettier_css = require('formatter.filetypes.css').prettier
         local prettier_json = require('formatter.filetypes.json').prettier
 
         require('formatter').setup({
           filetype = {
             lua = { stylua },
+            css = { prettier_css },
+            scss = { prettier_css },
             json = { prettier_json },
             jsonc = { prettier_json },
             javascript = { prettier_js },
@@ -221,7 +223,7 @@ require('packer').startup({
     })
 
     use({
-      'timuntersberger/neogit',
+      'NeogitOrg/neogit',
       requires = { 'nvim-lua/plenary.nvim' },
       cmd = { 'Neogit' },
       config = function()
@@ -231,7 +233,7 @@ require('packer').startup({
           disable_insert_on_commit = false,
           disable_commit_confirmation = true,
           sections = {
-            recent = false,
+            recent = { hidden = true },
           },
           mappings = {
             status = {
@@ -337,6 +339,8 @@ vim.keymap.set('o', 'a<Bar>', ':<C-u>normal! F<Bar>vf<Bar><Cr>')
 vim.keymap.set('n', 'Y', 'y$')
 vim.keymap.set('n', 'Q', '@q')
 vim.keymap.set('n', 'U', '<C-r>')
+vim.keymap.set('n', '<C-S-x>', '<C-x>')
+vim.keymap.set('n', '<C-x>', '<C-a>')
 
 vim.keymap.set('n', '<C-n>', function()
   return pcall(vim.cmd.cnext) or pcall(vim.cmd.cfirst)
@@ -360,14 +364,14 @@ vim.keymap.set('n', '<C-w>', function()
   end
 end)
 
-vim.keymap.set('n', '<leader>m', ':Neogit<Cr>', { silent = true })
+vim.keymap.set('n', '<leader>m', vim.cmd.Neogit, { silent = true })
 
-vim.keymap.set('n', '<C-h>', ':NavigatorLeft<Cr>', { silent = true })
-vim.keymap.set('n', '<C-j>', ':NavigatorDown<Cr>', { silent = true })
-vim.keymap.set('n', '<C-k>', ':NavigatorUp<Cr>', { silent = true })
-vim.keymap.set('n', '<C-l>', ':NavigatorRight<Cr>', { silent = true })
+vim.keymap.set('n', '<C-h>', vim.cmd.NavigatorLeft, { silent = true })
+vim.keymap.set('n', '<C-j>', vim.cmd.NavigatorDown, { silent = true })
+vim.keymap.set('n', '<C-k>', vim.cmd.NavigatorUp, { silent = true })
+vim.keymap.set('n', '<C-l>', vim.cmd.NavigatorRight, { silent = true })
 
-vim.keymap.set('n', '<C-f>', ':Files<Cr>', { silent = true })
+vim.keymap.set('n', '<C-f>', vim.cmd.Files, { silent = true })
 vim.keymap.set('n', '<C-g>', function()
   local options = { '--delimiter=:', '--nth=2..' }
   local command = 'rg --line-number --hidden --color=always --smart-case .'
@@ -384,7 +388,7 @@ local status_mode_groups = {
   c = 'StatusLineSectionC',
   r = 'StatusLineSectionR',
   v = 'StatusLineSectionV',
-  [''] = 'StatusLineSectionV',
+  ['\22'] = 'StatusLineSectionV',
 }
 
 function _G.custom_status_line_lsp()
@@ -429,7 +433,7 @@ function _G.custom_status_line_filename()
 end
 
 function _G.custom_status_line()
-  local mode = vim.fn.mode():lower()
+  local mode = vim.api.nvim_get_mode().mode:lower()
   local group = status_mode_groups[mode] or status_mode_groups.n
 
   return string.format(
@@ -448,6 +452,16 @@ local augroup = 'init.lua'
 
 vim.api.nvim_create_augroup(augroup, {})
 
+vim.api.nvim_create_autocmd({ 'DiagnosticChanged' }, {
+  group = augroup,
+  pattern = '*',
+  callback = function(data)
+    if data.buf == vim.api.nvim_get_current_buf() then
+      vim.wo.statusline = statuslines.active
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
   group = augroup,
   pattern = '*',
@@ -464,14 +478,17 @@ vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
   end,
 })
 
-vim.api.nvim_create_autocmd({ 'FocusLost', 'VimLeave', 'WinLeave', 'BufLeave' }, {
-  group = augroup,
-  pattern = '*',
-  callback = function()
-    vim.wo.cursorline = false
-    vim.wo.statusline = statuslines.inactive
-  end,
-})
+vim.api.nvim_create_autocmd(
+  { 'FocusLost', 'VimLeave', 'WinLeave', 'BufLeave' },
+  {
+    group = augroup,
+    pattern = '*',
+    callback = function()
+      vim.wo.cursorline = false
+      vim.wo.statusline = statuslines.inactive
+    end,
+  }
+)
 
 vim.api.nvim_create_autocmd(
   { 'FocusGained', 'VimEnter', 'WinEnter', 'BufEnter' },
