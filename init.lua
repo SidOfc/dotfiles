@@ -339,11 +339,11 @@ vim.keymap.set('n', '<C-w>', function()
   local winid = vim.api.nvim_get_current_win()
   local bufnr = vim.api.nvim_get_current_buf()
 
-  if #vim.fn.getbufinfo({ buflisted = 1, windows = { winid } }) > 2 then
+  if #vim.fn.getbufinfo() > 2 then
     vim.api.nvim_buf_delete(bufnr, {})
   elseif #vim.fn.getwininfo() > 1 then
     vim.api.nvim_win_close(winid, false)
-  elseif vim.bo.filetype ~= 'carbon' then
+  elseif vim.bo.filetype ~= 'carbon.explorer' then
     vim.cmd.Carbon()
     vim.api.nvim_buf_delete(bufnr, {})
   end
@@ -351,24 +351,34 @@ end)
 
 vim.keymap.set('n', '<leader>m', vim.cmd.Neogit, { silent = true })
 
-if vim.env.TMUX then
-  local function select_tmux_pane(direction)
-    local command = string.format(
-      'tmux if -F "#{pane_at_%s}" "" "select-pane -%s"',
-      ({ L = 'left', D = 'bottom', U = 'top', R = 'right' })[direction],
-      direction
-    )
+local function select_pane(direction)
+  local flag, at = unpack(({
+    h = { 'L', 'left' },
+    j = { 'D', 'bottom' },
+    k = { 'U', 'top' },
+    l = { 'R', 'right' },
+  })[direction])
 
-    return function()
-      vim.fn.system(command)
+  local tmux_template = 'tmux if -F "#{pane_at_%s}" "" "select-pane -%s"'
+  local tmux_command = vim.env.TMUX and string.format(tmux_template, at, flag)
+
+  return function()
+    local win_before = vim.api.nvim_get_current_win()
+
+    vim.cmd.wincmd(direction)
+
+    local win_after = vim.api.nvim_get_current_win()
+
+    if tmux_command and win_after == win_before then
+      vim.fn.system(tmux_command)
     end
   end
-
-  vim.keymap.set('n', '<C-h>', select_tmux_pane('L'))
-  vim.keymap.set('n', '<C-j>', select_tmux_pane('D'))
-  vim.keymap.set('n', '<C-k>', select_tmux_pane('U'))
-  vim.keymap.set('n', '<C-l>', select_tmux_pane('R'))
 end
+
+vim.keymap.set('n', '<C-h>', select_pane('h'))
+vim.keymap.set('n', '<C-j>', select_pane('j'))
+vim.keymap.set('n', '<C-k>', select_pane('k'))
+vim.keymap.set('n', '<C-l>', select_pane('l'))
 
 vim.keymap.set('n', '<C-f>', vim.cmd.Files, { silent = true })
 vim.keymap.set('n', '<C-g>', function()
