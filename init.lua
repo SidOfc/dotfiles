@@ -149,26 +149,11 @@ require('packer').startup({
     })
 
     use({
-      'numToStr/Navigator.nvim',
-      cmd = {
-        'NavigatorUp',
-        'NavigatorDown',
-        'NavigatorLeft',
-        'NavigatorRight',
-      },
-      config = function()
-        require('Navigator').setup()
-      end,
-    })
-
-    use({
       'neovim/nvim-lspconfig',
       config = function()
-        -- js/ts
-        --   npm install --global vscode-langservers-extracted
-        --   npm install --global typescript typescript-language-server
-        -- lua
-        --   brew install lua-language-server
+        --   npm  install --global vscode-langservers-extracted
+        --   npm  install --global typescript typescript-language-server
+        --   brew install          lua-language-server
 
         local lsp = require('lspconfig')
 
@@ -366,10 +351,24 @@ end)
 
 vim.keymap.set('n', '<leader>m', vim.cmd.Neogit, { silent = true })
 
-vim.keymap.set('n', '<C-h>', vim.cmd.NavigatorLeft, { silent = true })
-vim.keymap.set('n', '<C-j>', vim.cmd.NavigatorDown, { silent = true })
-vim.keymap.set('n', '<C-k>', vim.cmd.NavigatorUp, { silent = true })
-vim.keymap.set('n', '<C-l>', vim.cmd.NavigatorRight, { silent = true })
+if vim.env.TMUX then
+  local function select_tmux_pane(direction)
+    local command = string.format(
+      'tmux if -F "#{pane_at_%s}" "" "select-pane -%s"',
+      ({ L = 'left', D = 'bottom', U = 'top', R = 'right' })[direction],
+      direction
+    )
+
+    return function()
+      vim.fn.system(command)
+    end
+  end
+
+  vim.keymap.set('n', '<C-h>', select_tmux_pane('L'))
+  vim.keymap.set('n', '<C-j>', select_tmux_pane('D'))
+  vim.keymap.set('n', '<C-k>', select_tmux_pane('U'))
+  vim.keymap.set('n', '<C-l>', select_tmux_pane('R'))
+end
 
 vim.keymap.set('n', '<C-f>', vim.cmd.Files, { silent = true })
 vim.keymap.set('n', '<C-g>', function()
