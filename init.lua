@@ -135,6 +135,36 @@ require('packer').startup({
     })
 
     use({
+      'aserowy/tmux.nvim',
+      config = function()
+        local tmux = require('tmux')
+
+        tmux.setup({
+          copy_sync = { enable = false },
+          navigation = {
+            cycle_navigation = false,
+            enable_default_keybindings = false,
+          },
+          resize = {
+            resize_step_x = 6,
+            resize_step_y = 3,
+            enable_default_keybindings = false,
+          },
+        })
+
+        vim.keymap.set('n', '<C-h>', tmux.move_left)
+        vim.keymap.set('n', '<C-j>', tmux.move_bottom)
+        vim.keymap.set('n', '<C-k>', tmux.move_top)
+        vim.keymap.set('n', '<C-l>', tmux.move_right)
+
+        vim.keymap.set('n', '<C-S-h>', tmux.resize_left)
+        vim.keymap.set('n', '<C-S-j>', tmux.resize_bottom)
+        vim.keymap.set('n', '<C-S-k>', tmux.resize_top)
+        vim.keymap.set('n', '<C-S-l>', tmux.resize_right)
+      end,
+    })
+
+    use({
       'kylechui/nvim-surround',
       config = function()
         require('nvim-surround').setup()
@@ -338,47 +368,33 @@ end)
 vim.keymap.set('n', '<C-w>', function()
   local winid = vim.api.nvim_get_current_win()
   local bufnr = vim.api.nvim_get_current_buf()
+  local windows = vim.fn.getwininfo()
+  local modified = vim.api.nvim_buf_get_option(bufnr, 'modified')
 
-  if #vim.fn.getbufinfo() > 2 then
-    vim.api.nvim_buf_delete(bufnr, {})
-  elseif #vim.fn.getwininfo() > 1 then
+  if #windows > 1 then
+    local buf_win_count = 0
+
     vim.api.nvim_win_close(winid, false)
+
+    for _, wininfo in ipairs(windows) do
+      if wininfo.bufnr == bufnr then
+        buf_win_count = buf_win_count + 1
+      end
+    end
+
+    if buf_win_count == 1 and not modified then
+      vim.api.nvim_buf_delete(bufnr, {})
+    end
   elseif vim.bo.filetype ~= 'carbon.explorer' then
     vim.cmd.Carbon()
-    vim.api.nvim_buf_delete(bufnr, {})
+
+    if not modified then
+      vim.api.nvim_buf_delete(bufnr, {})
+    end
   end
 end)
 
 vim.keymap.set('n', '<leader>m', vim.cmd.Neogit, { silent = true })
-
-local function select_pane(direction)
-  local flag, at = unpack(({
-    h = { 'L', 'left' },
-    j = { 'D', 'bottom' },
-    k = { 'U', 'top' },
-    l = { 'R', 'right' },
-  })[direction])
-
-  local tmux_template = 'tmux if -F "#{pane_at_%s}" "" "select-pane -%s"'
-  local tmux_command = vim.env.TMUX and string.format(tmux_template, at, flag)
-
-  return function()
-    local win_before = vim.api.nvim_get_current_win()
-
-    vim.cmd.wincmd(direction)
-
-    local win_after = vim.api.nvim_get_current_win()
-
-    if tmux_command and win_after == win_before then
-      vim.fn.system(tmux_command)
-    end
-  end
-end
-
-vim.keymap.set('n', '<C-h>', select_pane('h'))
-vim.keymap.set('n', '<C-j>', select_pane('j'))
-vim.keymap.set('n', '<C-k>', select_pane('k'))
-vim.keymap.set('n', '<C-l>', select_pane('l'))
 
 vim.keymap.set('n', '<C-f>', vim.cmd.Files, { silent = true })
 vim.keymap.set('n', '<C-g>', function()
