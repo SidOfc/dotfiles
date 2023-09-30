@@ -12,22 +12,6 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_python3_provider = 0
 
-vim.g.fzf_preview_window = {}
-vim.g.fzf_layout = { down = '20%' }
-vim.g.fzf_colors = {
-  fg = { 'fg', 'Normal' },
-  hl = { 'fg', 'String' },
-  info = { 'fg', 'PreProc' },
-  prompt = { 'fg', 'Conditional' },
-  pointer = { 'fg', 'Exception' },
-  marker = { 'fg', 'Keyword' },
-  spinner = { 'fg', 'Label' },
-  header = { 'fg', 'Comment' },
-  ['fg+'] = { 'fg', 'CursorLine' },
-  ['bg+'] = { 'bg', 'CursorLine' },
-  ['hl+'] = { 'fg', 'Statement' },
-}
-
 vim.g['mkdx#settings'] = {
   restore_visual = 1,
   gf_on_steroids = 1,
@@ -108,7 +92,35 @@ require('packer').startup({
     use({ 'tpope/vim-commentary' })
 
     use({ 'sidofc/mkdx', ft = { 'markdown' } })
-    use({ 'junegunn/fzf', requires = { 'junegunn/fzf.vim' } })
+
+    use({
+      'ibhagwan/fzf-lua',
+      config = function()
+        local fzf_lua = require('fzf-lua')
+
+        vim.keymap.set('n', '<C-f>', function()
+          fzf_lua.files({ previewer = false })
+        end)
+
+        vim.keymap.set('n', '<C-g>', function()
+          fzf_lua.live_grep({ previewer = false })
+        end)
+
+        fzf_lua.setup({
+          winopts_fn = function()
+            local height = 10
+
+            return {
+              border = { '—', '—', '—', '', '', '', '', '' },
+              row = vim.o.lines - vim.o.cmdheight - 3 - height,
+              column = 1,
+              height = height,
+              width = vim.o.columns + 1,
+            }
+          end,
+        })
+      end,
+    })
 
     use({
       'mhartington/formatter.nvim',
@@ -386,7 +398,7 @@ vim.keymap.set('n', '<C-w>', function()
       vim.api.nvim_buf_delete(bufnr, {})
     end
   elseif vim.bo.filetype ~= 'carbon.explorer' then
-    vim.cmd.Carbon()
+    pcall(vim.cmd.Carbon)
 
     if not modified then
       vim.api.nvim_buf_delete(bufnr, {})
@@ -394,14 +406,8 @@ vim.keymap.set('n', '<C-w>', function()
   end
 end)
 
-vim.keymap.set('n', '<leader>m', vim.cmd.Neogit, { silent = true })
-
-vim.keymap.set('n', '<C-f>', vim.cmd.Files, { silent = true })
-vim.keymap.set('n', '<C-g>', function()
-  local options = { '--delimiter=:', '--nth=2..' }
-  local command = 'rg --line-number --hidden --color=always --smart-case .'
-
-  vim.fn['fzf#vim#grep'](command, 0, { options = options })
+vim.keymap.set('n', '<leader>m', function()
+  pcall(vim.cmd.Neogit)
 end, { silent = true })
 -- }}}
 
@@ -613,19 +619,6 @@ local filetype_handlers = {
 
   NeogitStatus = function()
     vim.opt_local.list = false
-  end,
-
-  fzf = function()
-    local original = vim.opt_global.laststatus:get()
-
-    vim.opt.laststatus = 0
-
-    vim.api.nvim_create_autocmd('BufLeave', {
-      buffer = vim.api.nvim_get_current_buf(),
-      callback = function()
-        vim.opt.laststatus = original
-      end,
-    })
   end,
 }
 
