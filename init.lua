@@ -1,5 +1,7 @@
 -- luacheck: globals vim
 
+vim.loader.enable()
+
 local statuslines = {
   inactive = ' %{v:lua.custom_status_line_filename()}%= %l:%c ',
   active = '%!v:lua.custom_status_line()',
@@ -86,12 +88,13 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  { 'tpope/vim-commentary' },
+  { 'tpope/vim-commentary', event = { 'BufReadPre' } },
 
   { 'sidofc/mkdx', ft = { 'markdown' } },
 
   {
     'ibhagwan/fzf-lua',
+    keys = { '<C-f>', '<C-g>' },
     config = function()
       local fzf_lua = require('fzf-lua')
 
@@ -132,6 +135,7 @@ require('lazy').setup({
 
   {
     'mhartington/formatter.nvim',
+    event = { 'BufReadPre' },
     config = function()
       local stylua = require('formatter.filetypes.lua').stylua
       local prettier_js = require('formatter.filetypes.javascript').prettier
@@ -156,6 +160,16 @@ require('lazy').setup({
 
   {
     'aserowy/tmux.nvim',
+    keys = {
+      '<C-h>',
+      '<C-j>',
+      '<C-k>',
+      '<C-l>',
+      '<C-S-h>',
+      '<C-S-j>',
+      '<C-S-k>',
+      '<C-S-l>',
+    },
     config = function()
       local tmux = require('tmux')
 
@@ -186,6 +200,7 @@ require('lazy').setup({
 
   {
     'kylechui/nvim-surround',
+    event = { 'BufReadPre' },
     config = function()
       require('nvim-surround').setup()
     end,
@@ -193,33 +208,13 @@ require('lazy').setup({
 
   {
     'RRethy/nvim-base16',
-    config = function()
-      vim.cmd([[
-        colorscheme base16-seti
-
-        highlight Normal             ctermbg=NONE guibg=NONE
-        highlight NormalNC           ctermbg=NONE guibg=NONE
-        highlight CursorLine         ctermbg=8    guibg=#282a2b
-        highlight EndOfBuffer        ctermbg=NONE guibg=NONE    ctermfg=0    guifg=Black
-        highlight TrailingWhitespace ctermbg=8    guibg=#41535B ctermfg=0    guifg=Black
-        highlight VertSplit          ctermbg=NONE guibg=NONE    ctermfg=Gray guifg=Gray
-        highlight StatusLine         ctermbg=8    guibg=#313131 ctermfg=15   guifg=#cccccc
-        highlight StatusLineNC       ctermbg=0    guibg=#313131 ctermfg=8    guifg=#999999
-        highlight StatusLineSection  ctermbg=8    guibg=#55b5db ctermfg=0    guifg=#333333
-        highlight StatusLineSectionV ctermbg=11   guibg=#a074c4 ctermfg=0    guifg=#000000
-        highlight StatusLineSectionI ctermbg=10   guibg=#9fca56 ctermfg=0    guifg=#000000
-        highlight StatusLineSectionC ctermbg=12   guibg=#db7b55 ctermfg=0    guifg=#000000
-        highlight StatusLineSectionR ctermbg=12   guibg=#ed3f45 ctermfg=0    guifg=#000000
-        highlight StatusLineLspError ctermbg=8    guifg=#313131              guibg=#ff0000
-        highlight StatusLineLspWarn  ctermbg=8    guifg=#313131              guibg=#ff8800
-        highlight StatusLineLspInfo  ctermbg=8    guifg=#313131              guibg=#2266cc
-        highlight StatusLineLspHint  ctermbg=8    guifg=#313131              guibg=#d6d6d6
-      ]])
-    end,
+    event = { 'ColorScheme' },
+    config = function() end,
   },
 
   {
     'neovim/nvim-lspconfig',
+    event = { 'BufReadPre' },
     config = function()
       --   npm  install --global vscode-langservers-extracted
       --   npm  install --global typescript typescript-language-server
@@ -247,7 +242,7 @@ require('lazy').setup({
               globals = { 'vim' },
             },
             workspace = {
-              library = vim.api.nvim_get_runtime_file('', true),
+              library = { vim.env.VIM },
               checkThirdParty = false,
             },
             telemetry = {
@@ -280,10 +275,7 @@ require('lazy').setup({
   {
     'NeogitOrg/neogit',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    cmd = { 'Neogit' },
-    init = function()
-      vim.keymap.set('n', '<leader>m', vim.cmd.Neogit, { silent = true })
-    end,
+    keys = { '<leader>m' },
     config = function()
       require('neogit').setup({
         disable_hint = true,
@@ -300,13 +292,15 @@ require('lazy').setup({
           },
         },
       })
+
+      vim.keymap.set('n', '<leader>m', vim.cmd.Neogit, { silent = true })
     end,
   },
 
   {
     'nvim-treesitter/nvim-treesitter',
-    version = '*',
     build = ':TSUpdate',
+    event = { 'BufRead' },
     config = function()
       require('nvim-treesitter.configs').setup({
         indent = { enable = true },
@@ -408,7 +402,7 @@ vim.keymap.set('n', '<C-w>', function()
   local winid = vim.api.nvim_get_current_win()
   local bufnr = vim.api.nvim_get_current_buf()
   local windows = vim.fn.getwininfo()
-  local modified = vim.api.nvim_buf_get_option(bufnr, 'modified')
+  local modified = vim.api.nvim_get_option_value('modified', { buf = bufnr })
 
   if #windows > 1 then
     local buf_win_count = 0
@@ -471,7 +465,7 @@ function _G.custom_status_line_lsp()
 end
 
 function _G.custom_status_line_filename()
-  local filename = vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
+  local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':~:.')
 
   if string.match(filename, '^term:') then
     filename = 'terminal'
@@ -503,7 +497,7 @@ function _G.custom_status_line()
 end
 -- }}}
 
--- define auto commands {{{
+-- autocommands {{{
 local augroup = 'init.lua'
 
 vim.api.nvim_create_augroup(augroup, {})
@@ -629,4 +623,27 @@ for pattern, callback in pairs(filetype_handlers) do
     callback = callback,
   })
 end
+-- }}}
+
+-- colorscheme and highlights {{{
+vim.cmd.colorscheme('base16-seti')
+vim.cmd([[
+  highlight Normal             ctermbg=NONE guibg=NONE
+  highlight NormalNC           ctermbg=NONE guibg=NONE
+  highlight CursorLine         ctermbg=8    guibg=#282a2b
+  highlight EndOfBuffer        ctermbg=NONE guibg=NONE    ctermfg=0    guifg=Black
+  highlight TrailingWhitespace ctermbg=8    guibg=#41535B ctermfg=0    guifg=Black
+  highlight VertSplit          ctermbg=NONE guibg=NONE    ctermfg=Gray guifg=Gray
+  highlight StatusLine         ctermbg=8    guibg=#313131 ctermfg=15   guifg=#cccccc
+  highlight StatusLineNC       ctermbg=0    guibg=#313131 ctermfg=8    guifg=#999999
+  highlight StatusLineSection  ctermbg=8    guibg=#55b5db ctermfg=0    guifg=#333333
+  highlight StatusLineSectionV ctermbg=11   guibg=#a074c4 ctermfg=0    guifg=#000000
+  highlight StatusLineSectionI ctermbg=10   guibg=#9fca56 ctermfg=0    guifg=#000000
+  highlight StatusLineSectionC ctermbg=12   guibg=#db7b55 ctermfg=0    guifg=#000000
+  highlight StatusLineSectionR ctermbg=12   guibg=#ed3f45 ctermfg=0    guifg=#000000
+  highlight StatusLineLspError ctermbg=8    guifg=#313131              guibg=#ff0000
+  highlight StatusLineLspWarn  ctermbg=8    guifg=#313131              guibg=#ff8800
+  highlight StatusLineLspInfo  ctermbg=8    guifg=#313131              guibg=#2266cc
+  highlight StatusLineLspHint  ctermbg=8    guifg=#313131              guibg=#d6d6d6
+]])
 -- }}}
