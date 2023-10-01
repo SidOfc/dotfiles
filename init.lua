@@ -352,9 +352,6 @@ vim.keymap.set('n', '^', '<Nop>')
 vim.keymap.set('n', '{', '<Nop>')
 vim.keymap.set('n', '}', '<Nop>')
 
-vim.keymap.set('n', 'q:', ':q<Cr>', { silent = true })
-vim.keymap.set('n', 'Q:', ':q<Cr>', { silent = true })
-
 vim.keymap.set('i', '<C-k>', '<Up>')
 vim.keymap.set('i', '<C-j>', '<Down>')
 vim.keymap.set('i', '<C-h>', '<Left>')
