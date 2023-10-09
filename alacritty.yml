@@ -16,6 +16,12 @@ scrolling:
 font:
   size: 18.0
 
+  normal:
+    family: Monaco
+
+  offset:
+    y: -3
+
 colors:
   primary:
     background: '#000000'

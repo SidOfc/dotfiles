@@ -59,8 +59,8 @@ vim.opt.path:append({ '**' })
 vim.opt.undodir:prepend({ undo_directory })
 vim.opt.backupdir:prepend({ backup_directory })
 vim.opt.clipboard:append({ 'unnamedplus' })
-vim.opt.listchars:append({ tab = '‣ ', trail = '•' })
-vim.opt.fillchars:append({ msgsep = ' ', vert = '│' })
+vim.opt.listchars:append({ nbsp = '+', tab = '‣ ', trail = '•' })
+vim.opt.fillchars:append({ msgsep = ' ', vert = '│', eob = ' ' })
 vim.opt.wildignore:append({ '.git', '.DS_Store', 'node_modules' })
 vim.opt.completeopt:append({ 'menu', 'menuone', 'noselect' })
 vim.opt.virtualedit:append({ 'onemore' })
@@ -99,6 +99,13 @@ require('lazy').setup({
       local fzf_lua = require('fzf-lua')
 
       fzf_lua.setup({
+        actions = {
+          files = {
+            ['default'] = fzf_lua.actions.file_edit_or_qf,
+            ['ctrl-x'] = fzf_lua.actions.file_split,
+            ['ctrl-v'] = fzf_lua.actions.file_vsplit,
+          },
+        },
         winopts_fn = function()
           local height = 15
 
@@ -397,30 +404,12 @@ end)
 
 vim.keymap.set('n', '<C-w>', function()
   local winid = vim.api.nvim_get_current_win()
-  local bufnr = vim.api.nvim_get_current_buf()
   local windows = vim.fn.getwininfo()
-  local modified = vim.api.nvim_get_option_value('modified', { buf = bufnr })
 
   if #windows > 1 then
-    local buf_win_count = 0
-
     vim.api.nvim_win_close(winid, false)
-
-    for _, wininfo in ipairs(windows) do
-      if wininfo.bufnr == bufnr then
-        buf_win_count = buf_win_count + 1
-      end
-    end
-
-    if buf_win_count == 1 and not modified then
-      vim.api.nvim_buf_delete(bufnr, {})
-    end
   elseif vim.bo.filetype ~= 'carbon.explorer' then
     pcall(vim.cmd.Carbon)
-
-    if not modified then
-      vim.api.nvim_buf_delete(bufnr, {})
-    end
   end
 end)
 -- }}}
@@ -464,7 +453,9 @@ end
 function _G.custom_status_line_filename()
   local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':~:.')
 
-  if string.match(filename, '^term:') then
+  if vim.bo.filetype == 'qf' then
+    filename = 'quickfix'
+  elseif string.match(filename, '^term:') then
     filename = 'terminal'
   elseif string.match(filename, '^~') then
     filename = vim.fn.fnamemodify(filename, ':t')
@@ -608,6 +599,11 @@ local filetype_handlers = {
     vim.opt_local.softtabstop = 4
   end,
 
+  qf = function()
+    vim.opt_local.list = false
+    vim.opt_local.statusline = statuslines.active
+  end,
+
   NeogitStatus = function()
     vim.opt_local.list = false
   end,
@@ -628,7 +624,6 @@ vim.cmd([[
   highlight Normal             ctermbg=NONE guibg=NONE
   highlight NormalNC           ctermbg=NONE guibg=NONE
   highlight CursorLine         ctermbg=8    guibg=#282a2b
-  highlight EndOfBuffer        ctermbg=NONE guibg=NONE    ctermfg=0    guifg=Black
   highlight TrailingWhitespace ctermbg=8    guibg=#41535B ctermfg=0    guifg=Black
   highlight VertSplit          ctermbg=NONE guibg=NONE    ctermfg=Gray guifg=Gray
   highlight StatusLine         ctermbg=8    guibg=#313131 ctermfg=15   guifg=#cccccc
