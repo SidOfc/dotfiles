@@ -224,7 +224,6 @@ require('lazy').setup({
     event = { 'BufReadPre' },
     config = function()
       --   npm  install --global vscode-langservers-extracted
-      --   npm  install --global typescript typescript-language-server
       --   brew install          lua-language-server
 
       local lsp = require('lspconfig')
@@ -236,7 +235,6 @@ require('lazy').setup({
         vim.keymap.set('n', 'gp', vim.diagnostic.goto_prev, opts)
       end
 
-      lsp.tsserver.setup({ on_attach = on_attach })
       lsp.eslint.setup({ on_attach = on_attach })
       lsp.lua_ls.setup({
         on_attach = on_attach,
@@ -293,7 +291,7 @@ require('lazy').setup({
           recent = { hidden = true, folded = true },
         },
         mappings = {
-          status = {
+          popup = {
             P = 'PullPopup',
             p = 'PushPopup',
           },
@@ -331,6 +329,8 @@ require('lazy').setup({
           'toml',
           'tsx',
           'typescript',
+          'vimdoc',
+          'vim',
           'yaml',
         },
       })
@@ -595,6 +595,7 @@ local filetype_handlers = {
     'php',
   }] = function()
     vim.opt_local.expandtab = true
+    vim.opt_local.shiftwidth = 0
     vim.opt_local.tabstop = 4
     vim.opt_local.softtabstop = 4
   end,

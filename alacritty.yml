@@ -17,7 +17,7 @@ font:
   size: 18.0
 
   normal:
-    family: Monaco
+    family: Iosevka
 
   offset:
     y: -3
