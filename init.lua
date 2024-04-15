@@ -145,6 +145,7 @@ require('lazy').setup({
     event = { 'BufReadPre' },
     config = function()
       local stylua = require('formatter.filetypes.lua').stylua
+      local rubocop = require('formatter.filetypes.ruby').rubocop
       local prettier_js = require('formatter.filetypes.javascript').prettier
       local prettier_css = require('formatter.filetypes.css').prettier
       local prettier_json = require('formatter.filetypes.json').prettier
@@ -154,6 +155,7 @@ require('lazy').setup({
           lua = { stylua },
           css = { prettier_css },
           scss = { prettier_css },
+          ruby = { rubocop },
           json = { prettier_json },
           jsonc = { prettier_json },
           javascript = { prettier_js },
