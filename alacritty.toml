@@ -255,7 +255,7 @@ mods = "Control|Shift"
 
 [[keyboard.bindings]]
 chars = "\u001B[39;6u"
-key = "Apostrophe"
+key = "'"
 mods = "Control|Shift"
 
 [[keyboard.bindings]]
@@ -275,7 +275,7 @@ mods = "Control|Shift"
 
 [[keyboard.bindings]]
 chars = "\u001B[96;6u"
-key = "Grave"
+key = "`"
 mods = "Control|Shift"
 
 [scrolling]
