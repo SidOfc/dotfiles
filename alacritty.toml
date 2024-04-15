@@ -1,286 +1,5 @@
 live_config_reload = true
 
-[colors.normal]
-black = "#555555"
-blue = "#5eabd3"
-cyan = "#60d7af"
-green = "#afd75f"
-magenta = "#af87d7"
-red = "#d15c5c"
-white = "#d8d7d7"
-yellow = "#d1d05c"
-
-[colors.primary]
-background = "#000000"
-foreground = "#d8d7d7"
-
-[font]
-size = 18.0
-
-[font.normal]
-family = "Iosevka"
-
-[font.offset]
-y = -3
-
-[[keyboard.bindings]]
-chars = "\u001B[13;2u"
-key = "Return"
-mods = "Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[13;5u"
-key = "Return"
-mods = "Control"
-
-[[keyboard.bindings]]
-chars = "\u001B[13;6u"
-key = "Return"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[65;6u"
-key = "A"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[66;6u"
-key = "B"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[67;6u"
-key = "C"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[68;6u"
-key = "D"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[69;6u"
-key = "E"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[70;6u"
-key = "F"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[71;6u"
-key = "G"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[72;6u"
-key = "H"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[105;5u"
-key = "I"
-mods = "Control"
-
-[[keyboard.bindings]]
-chars = "\u001B[73;6u"
-key = "I"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[74;6u"
-key = "J"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[75;6u"
-key = "K"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[76;6u"
-key = "L"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[77;6u"
-key = "M"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[78;6u"
-key = "N"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[79;6u"
-key = "O"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[80;6u"
-key = "P"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[81;6u"
-key = "Q"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[82;6u"
-key = "R"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[83;6u"
-key = "S"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[84;6u"
-key = "T"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[85;6u"
-key = "U"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[86;6u"
-key = "V"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[87;6u"
-key = "W"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[88;6u"
-key = "X"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[89;6u"
-key = "Y"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[90;6u"
-key = "Z"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[49;6u"
-key = "Key1"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[50;6u"
-key = "Key2"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[51;6u"
-key = "Key3"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[52;6u"
-key = "Key4"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[53;6u"
-key = "Key5"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[54;6u"
-key = "Key6"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[55;6u"
-key = "Key7"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[56;6u"
-key = "Key8"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[57;6u"
-key = "Key9"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[48;6u"
-key = "Key0"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[45;6u"
-key = "Minus"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[61;6u"
-key = "Equals"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[91;6u"
-key = "LBracket"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[93;6u"
-key = "RBracket"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[92;6u"
-key = "Backslash"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[59;6u"
-key = "Semicolon"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[39;6u"
-key = "'"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[44;6u"
-key = "Comma"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[46;6u"
-key = "Period"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[47;6u"
-key = "Slash"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-chars = "\u001B[96;6u"
-key = "`"
-mods = "Control|Shift"
-
-[scrolling]
-history = 0
-
 [shell]
 args = ["--login", "-c", "tmux attach || tmux"]
 program = "/bin/zsh"
@@ -288,11 +7,83 @@ program = "/bin/zsh"
 [window]
 decorations = "none"
 startup_mode = "Maximized"
+dimensions.lines = 0
+dimensions.columns = 0
+padding.x = 0
+padding.y = 0
 
-[window.dimensions]
-columns = 0
-lines = 0
+[scrolling]
+history = 0
 
-[window.padding]
-x = 0
-y = 0
+[font]
+size = 18.0
+offset.y = -3
+normal.family = "Iosevka"
+
+[colors]
+primary.background = "#000000"
+primary.foreground = "#d8d7d7"
+normal.black = "#555555"
+normal.blue = "#5eabd3"
+normal.cyan = "#60d7af"
+normal.green = "#afd75f"
+normal.magenta = "#af87d7"
+normal.red = "#d15c5c"
+normal.white = "#d8d7d7"
+normal.yellow = "#d1d05c"
+
+[keyboard]
+bindings = [
+  { chars = "\u001B[105;5u", key = "I", mods = "Control" },
+  { chars = "\u001B[13;2u", key = "Return", mods = "Shift" },
+  { chars = "\u001B[13;5u", key = "Return", mods = "Control" },
+  { chars = "\u001B[13;6u", key = "Return", mods = "Control|Shift" },
+  { chars = "\u001B[65;6u", key = "A", mods = "Control|Shift" },
+  { chars = "\u001B[66;6u", key = "B", mods = "Control|Shift" },
+  { chars = "\u001B[67;6u", key = "C", mods = "Control|Shift" },
+  { chars = "\u001B[68;6u", key = "D", mods = "Control|Shift" },
+  { chars = "\u001B[69;6u", key = "E", mods = "Control|Shift" },
+  { chars = "\u001B[70;6u", key = "F", mods = "Control|Shift" },
+  { chars = "\u001B[71;6u", key = "G", mods = "Control|Shift" },
+  { chars = "\u001B[72;6u", key = "H", mods = "Control|Shift" },
+  { chars = "\u001B[73;6u", key = "I", mods = "Control|Shift" },
+  { chars = "\u001B[74;6u", key = "J", mods = "Control|Shift" },
+  { chars = "\u001B[75;6u", key = "K", mods = "Control|Shift" },
+  { chars = "\u001B[76;6u", key = "L", mods = "Control|Shift" },
+  { chars = "\u001B[77;6u", key = "M", mods = "Control|Shift" },
+  { chars = "\u001B[78;6u", key = "N", mods = "Control|Shift" },
+  { chars = "\u001B[79;6u", key = "O", mods = "Control|Shift" },
+  { chars = "\u001B[80;6u", key = "P", mods = "Control|Shift" },
+  { chars = "\u001B[81;6u", key = "Q", mods = "Control|Shift" },
+  { chars = "\u001B[82;6u", key = "R", mods = "Control|Shift" },
+  { chars = "\u001B[83;6u", key = "S", mods = "Control|Shift" },
+  { chars = "\u001B[84;6u", key = "T", mods = "Control|Shift" },
+  { chars = "\u001B[85;6u", key = "U", mods = "Control|Shift" },
+  { chars = "\u001B[86;6u", key = "V", mods = "Control|Shift" },
+  { chars = "\u001B[87;6u", key = "W", mods = "Control|Shift" },
+  { chars = "\u001B[88;6u", key = "X", mods = "Control|Shift" },
+  { chars = "\u001B[89;6u", key = "Y", mods = "Control|Shift" },
+  { chars = "\u001B[90;6u", key = "Z", mods = "Control|Shift" },
+  { chars = "\u001B[49;6u", key = "Key1", mods = "Control|Shift" },
+  { chars = "\u001B[50;6u", key = "Key2", mods = "Control|Shift" },
+  { chars = "\u001B[51;6u", key = "Key3", mods = "Control|Shift" },
+  { chars = "\u001B[52;6u", key = "Key4", mods = "Control|Shift" },
+  { chars = "\u001B[53;6u", key = "Key5", mods = "Control|Shift" },
+  { chars = "\u001B[54;6u", key = "Key6", mods = "Control|Shift" },
+  { chars = "\u001B[55;6u", key = "Key7", mods = "Control|Shift" },
+  { chars = "\u001B[56;6u", key = "Key8", mods = "Control|Shift" },
+  { chars = "\u001B[57;6u", key = "Key9", mods = "Control|Shift" },
+  { chars = "\u001B[48;6u", key = "Key0", mods = "Control|Shift" },
+  { chars = "\u001B[45;6u", key = "Minus", mods = "Control|Shift" },
+  { chars = "\u001B[61;6u", key = "Equals", mods = "Control|Shift" },
+  { chars = "\u001B[91;6u", key = "LBracket", mods = "Control|Shift" },
+  { chars = "\u001B[93;6u", key = "RBracket", mods = "Control|Shift" },
+  { chars = "\u001B[92;6u", key = "Backslash", mods = "Control|Shift" },
+  { chars = "\u001B[59;6u", key = "Semicolon", mods = "Control|Shift" },
+  { chars = "\u001B[46;6u", key = "Period", mods = "Control|Shift" },
+  { chars = "\u001B[47;6u", key = "Slash", mods = "Control|Shift" },
+  { chars = "\u001B[44;6u", key = "Comma", mods = "Control|Shift" },
+  { chars = "\u001B[96;6u", key = "`", mods = "Control|Shift" },
+  { chars = "\u001B[39;6u", key = "'", mods = "Control|Shift" },
+]
+
