@@ -124,6 +124,7 @@ require('lazy').setup({
           prompt = '> ',
           previewer = false,
           cwd_prompt = false,
+          rg_opts = [[--color=never --files --hidden --follow --no-ignore -g "!.git"]],
           fzf_opts = { ['--info'] = 'inline' },
         })
       end)
@@ -145,7 +146,7 @@ require('lazy').setup({
     event = { 'BufReadPre' },
     config = function()
       local stylua = require('formatter.filetypes.lua').stylua
-      local rubocop = require('formatter.filetypes.ruby').rubocop
+      -- local rubocop = require('formatter.filetypes.ruby').rubocop
       local prettier_js = require('formatter.filetypes.javascript').prettier
       local prettier_css = require('formatter.filetypes.css').prettier
       local prettier_json = require('formatter.filetypes.json').prettier
@@ -155,7 +156,7 @@ require('lazy').setup({
           lua = { stylua },
           css = { prettier_css },
           scss = { prettier_css },
-          ruby = { rubocop },
+          -- ruby = { rubocop },
           json = { prettier_json },
           jsonc = { prettier_json },
           javascript = { prettier_js },
@@ -249,8 +250,8 @@ require('lazy').setup({
               globals = { 'vim' },
             },
             workspace = {
-              library = { vim.env.VIM },
               checkThirdParty = false,
+              library = { vim.env.VIMRUNTIME },
             },
             telemetry = {
               enable = false,
@@ -281,7 +282,6 @@ require('lazy').setup({
 
   {
     'NeogitOrg/neogit',
-    branch = 'nightly',
     keys = { '<leader>m' },
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
@@ -414,7 +414,7 @@ vim.keymap.set('n', '<C-w>', function()
   elseif vim.bo.filetype ~= 'carbon.explorer' then
     pcall(vim.cmd.Carbon)
   end
-end)
+end, { nowait = true })
 -- }}}
 
 -- statusline and cursorline {{{
