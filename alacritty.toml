@@ -18,7 +18,7 @@ history = 0
 [font]
 size          = 18.0
 offset.y      = -3
-normal.family = "Iosevka"
+normal.family = "Mononoki"
 
 [colors]
 primary.background = "#000000"

@@ -1,5 +1,8 @@
 -- luacheck: globals vim
 
+local augroup = 'init.lua'
+vim.api.nvim_create_augroup(augroup, {})
+
 vim.loader.enable()
 
 local statuslines = {
@@ -124,7 +127,7 @@ require('lazy').setup({
           prompt = '> ',
           previewer = false,
           cwd_prompt = false,
-          rg_opts = [[--color=never --files --hidden --follow --no-ignore -g "!.git"]],
+          rg_opts = [[--color=never --files --hidden --follow --no-ignore -g "!.git/**" -g "!node_modules/**" -g "!.DS_Store"]],
           fzf_opts = { ['--info'] = 'inline' },
         })
       end)
@@ -145,25 +148,74 @@ require('lazy').setup({
     'mhartington/formatter.nvim',
     event = { 'BufReadPre' },
     config = function()
+      local function prettier_no_ignore(fn)
+        return function(...)
+          local settings = fn(...)
+
+          if type(settings.args) ~= 'table' then
+            settings.args = {}
+          end
+
+          settings.args[#settings.args + 1] = '--ignore-path no-ignore'
+
+          return settings
+        end
+      end
+
       local stylua = require('formatter.filetypes.lua').stylua
       -- local rubocop = require('formatter.filetypes.ruby').rubocop
       local prettier_js = require('formatter.filetypes.javascript').prettier
       local prettier_css = require('formatter.filetypes.css').prettier
+      local prettier_html = require('formatter.filetypes.html').prettier
       local prettier_json = require('formatter.filetypes.json').prettier
+      local filetype_config = {
+        lua = { stylua },
+        css = { prettier_no_ignore(prettier_css) },
+        scss = { prettier_no_ignore(prettier_css) },
+        -- ruby = { rubocop },
+        html = { prettier_no_ignore(prettier_html) },
+        json = { prettier_no_ignore(prettier_json) },
+        jsonc = { prettier_no_ignore(prettier_json) },
+        javascript = { prettier_no_ignore(prettier_js) },
+        javascriptreact = { prettier_no_ignore(prettier_js) },
+        typescript = { prettier_no_ignore(prettier_js) },
+        typescriptreact = { prettier_no_ignore(prettier_js) },
+      }
+      local filetype_exts = table.concat(
+        vim.tbl_map(function(k)
+          return string.format('*.%s', k)
+        end, {
+          'lua',
+          'css',
+          'scss',
+          'rb',
+          'html',
+          'json',
+          'js',
+          'cjs',
+          'mjs',
+          'jsx',
+          'ts',
+          'tsx',
+        }),
+        ','
+      )
 
-      require('formatter').setup({
-        filetype = {
-          lua = { stylua },
-          css = { prettier_css },
-          scss = { prettier_css },
-          -- ruby = { rubocop },
-          json = { prettier_json },
-          jsonc = { prettier_json },
-          javascript = { prettier_js },
-          javascriptreact = { prettier_js },
-          typescript = { prettier_js },
-          typescriptreact = { prettier_js },
-        },
+      require('formatter').setup({ filetype = filetype_config })
+      vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
+        group = augroup,
+        pattern = filetype_exts,
+        callback = function()
+          local ok = pcall(vim.cmd.FormatWrite)
+
+          if not ok then
+            vim.api.nvim_echo(
+              { { 'Failed to format buffer!', 'ErrorMsg' } },
+              false,
+              {}
+            )
+          end
+        end,
       })
     end,
   },
@@ -226,8 +278,9 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre' },
     config = function()
-      --   npm  install --global vscode-langservers-extracted
-      --   brew install          lua-language-server
+      -- npm  install --global typescript typescript-language-server
+      -- npm  install --global vscode-langservers-extracted
+      -- brew install          lua-language-server
 
       local lsp = require('lspconfig')
 
@@ -238,6 +291,7 @@ require('lazy').setup({
         vim.keymap.set('n', 'gp', vim.diagnostic.goto_prev, opts)
       end
 
+      lsp.tsserver.setup({ on_attach = on_attach })
       lsp.eslint.setup({ on_attach = on_attach })
       lsp.lua_ls.setup({
         on_attach = on_attach,
@@ -247,11 +301,44 @@ require('lazy').setup({
               version = 'LuaJIT',
             },
             diagnostics = {
-              globals = { 'vim' },
+              globals = {
+                -- vim lua api globals
+                'vim',
+
+                -- wow lua api globals
+                'wipe',
+                'strsplit',
+                'C_Map',
+                'C_Item',
+                'C_CVar',
+                'C_Timer',
+                'C_Container',
+                'UIParent',
+                'LootSlot',
+                'LootFrame',
+                'GameTooltip',
+                'SlashCmdList',
+                'CreateFrame',
+                'DevTools_Dump',
+                'GetLootInfo',
+                'IsFishingLoot',
+                'GetLootSlotLink',
+                'ConfirmLootSlot',
+                'LootSlotHasItem',
+                'hooksecurefunc',
+                'GetSubZoneText',
+                'GetProfessions',
+                'GetProfessionInfo',
+                'PanelTemplates_SetTab',
+                'PanelTemplates_SetNumTabs',
+                'PanelTemplates_GetSelectedTab',
+              },
             },
             workspace = {
               checkThirdParty = false,
-              library = { vim.env.VIMRUNTIME },
+              library = {
+                vim.env.VIMRUNTIME,
+              },
             },
             telemetry = {
               enable = false,
@@ -317,6 +404,7 @@ require('lazy').setup({
           'c',
           'cpp',
           'css',
+          'bash',
           'fish',
           'html',
           'java',
@@ -489,32 +577,12 @@ end
 -- }}}
 
 -- autocommands {{{
-local augroup = 'init.lua'
-
-vim.api.nvim_create_augroup(augroup, {})
-
 vim.api.nvim_create_autocmd({ 'DiagnosticChanged' }, {
   group = augroup,
   pattern = '*',
   callback = function(data)
     if data.buf == vim.api.nvim_get_current_buf() then
       vim.wo.statusline = statuslines.active
-    end
-  end,
-})
-
-vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
-  group = augroup,
-  pattern = '*',
-  callback = function()
-    local ok = pcall(vim.cmd.FormatWrite)
-
-    if not ok then
-      vim.api.nvim_echo(
-        { { 'Failed to format buffer!', 'ErrorMsg' } },
-        false,
-        {}
-      )
     end
   end,
 })
@@ -623,23 +691,30 @@ end
 -- }}}
 
 -- colorscheme and highlights {{{
+vim.api.nvim_create_autocmd('ColorScheme', {
+  group = augroup,
+  pattern = '*',
+  callback = function()
+    vim.cmd([[
+      highlight Normal             ctermbg=NONE guibg=NONE
+      highlight NormalNC           ctermbg=NONE guibg=NONE
+      highlight CursorLine         ctermbg=8    guibg=#282a2b
+      highlight TrailingWhitespace ctermbg=8    guibg=#41535B ctermfg=0    guifg=Black
+      highlight VertSplit          ctermbg=NONE guibg=NONE    ctermfg=Gray guifg=Gray
+      highlight StatusLine         ctermbg=8    guibg=#313131 ctermfg=15   guifg=#cccccc
+      highlight StatusLineNC       ctermbg=0    guibg=#313131 ctermfg=8    guifg=#999999
+      highlight StatusLineSection  ctermbg=8    guibg=#55b5db ctermfg=0    guifg=#333333
+      highlight StatusLineSectionV ctermbg=11   guibg=#a074c4 ctermfg=0    guifg=#000000
+      highlight StatusLineSectionI ctermbg=10   guibg=#9fca56 ctermfg=0    guifg=#000000
+      highlight StatusLineSectionC ctermbg=12   guibg=#db7b55 ctermfg=0    guifg=#000000
+      highlight StatusLineSectionR ctermbg=12   guibg=#ed3f45 ctermfg=0    guifg=#000000
+      highlight StatusLineLspError ctermbg=8    guifg=#313131              guibg=#ff0000
+      highlight StatusLineLspWarn  ctermbg=8    guifg=#313131              guibg=#ff8800
+      highlight StatusLineLspInfo  ctermbg=8    guifg=#313131              guibg=#2266cc
+      highlight StatusLineLspHint  ctermbg=8    guifg=#313131              guibg=#d6d6d6
+    ]])
+  end,
+})
+
 vim.cmd.colorscheme('base16-seti')
-vim.cmd([[
-  highlight Normal             ctermbg=NONE guibg=NONE
-  highlight NormalNC           ctermbg=NONE guibg=NONE
-  highlight CursorLine         ctermbg=8    guibg=#282a2b
-  highlight TrailingWhitespace ctermbg=8    guibg=#41535B ctermfg=0    guifg=Black
-  highlight VertSplit          ctermbg=NONE guibg=NONE    ctermfg=Gray guifg=Gray
-  highlight StatusLine         ctermbg=8    guibg=#313131 ctermfg=15   guifg=#cccccc
-  highlight StatusLineNC       ctermbg=0    guibg=#313131 ctermfg=8    guifg=#999999
-  highlight StatusLineSection  ctermbg=8    guibg=#55b5db ctermfg=0    guifg=#333333
-  highlight StatusLineSectionV ctermbg=11   guibg=#a074c4 ctermfg=0    guifg=#000000
-  highlight StatusLineSectionI ctermbg=10   guibg=#9fca56 ctermfg=0    guifg=#000000
-  highlight StatusLineSectionC ctermbg=12   guibg=#db7b55 ctermfg=0    guifg=#000000
-  highlight StatusLineSectionR ctermbg=12   guibg=#ed3f45 ctermfg=0    guifg=#000000
-  highlight StatusLineLspError ctermbg=8    guifg=#313131              guibg=#ff0000
-  highlight StatusLineLspWarn  ctermbg=8    guifg=#313131              guibg=#ff8800
-  highlight StatusLineLspInfo  ctermbg=8    guifg=#313131              guibg=#2266cc
-  highlight StatusLineLspHint  ctermbg=8    guifg=#313131              guibg=#d6d6d6
-]])
 -- }}}
