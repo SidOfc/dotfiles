@@ -91,8 +91,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  { 'tpope/vim-commentary', event = { 'BufReadPre' } },
-
   { 'sidofc/mkdx', ft = { 'markdown' } },
 
   {
