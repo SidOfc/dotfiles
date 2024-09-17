@@ -291,7 +291,7 @@ require('lazy').setup({
         vim.keymap.set('n', 'gp', vim.diagnostic.goto_prev, opts)
       end
 
-      lsp.tsserver.setup({ on_attach = on_attach })
+      lsp.ts_ls.setup({ on_attach = on_attach })
       lsp.eslint.setup({ on_attach = on_attach })
       lsp.lua_ls.setup({
         on_attach = on_attach,
@@ -363,6 +363,9 @@ require('lazy').setup({
         indicators = { collapse = '▾', expand = '▸' },
         actions = { toggle_recursive = '<s-cr>' },
         file_icons = false,
+        highlights = {
+          CarbonExe = { link = '@string' },
+        },
       })
     end,
   },
