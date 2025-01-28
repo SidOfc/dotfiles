@@ -107,7 +107,7 @@ require('lazy').setup({
             ['ctrl-v'] = fzf_lua.actions.file_vsplit,
           },
         },
-        winopts_fn = function()
+        winopts = function()
           local height = 15
 
           return {

@@ -1,6 +1,7 @@
+[general]
 live_config_reload = true
 
-[shell]
+[terminal.shell]
 args    = ["--login", "-c", "tmux attach || tmux"]
 program = "/bin/zsh"
 
