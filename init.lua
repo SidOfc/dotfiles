@@ -1,4 +1,23 @@
--- luacheck: globals vim
+local function apply_default_highlights()
+  vim.cmd([[
+      highlight Normal             ctermbg=NONE guibg=NONE
+      highlight NormalNC           ctermbg=NONE guibg=NONE
+      highlight CursorLine         ctermbg=8    guibg=#282a2b
+      highlight TrailingWhitespace ctermbg=8    guibg=#41535B ctermfg=0    guifg=Black
+      highlight VertSplit          ctermbg=NONE guibg=NONE    ctermfg=Gray guifg=Gray
+      highlight StatusLine         ctermbg=8    guibg=#313131 ctermfg=15   guifg=#cccccc
+      highlight StatusLineNC       ctermbg=0    guibg=#313131 ctermfg=8    guifg=#999999
+      highlight StatusLineSection  ctermbg=8    guibg=#55b5db ctermfg=0    guifg=#333333
+      highlight StatusLineSectionV ctermbg=11   guibg=#a074c4 ctermfg=0    guifg=#000000
+      highlight StatusLineSectionI ctermbg=10   guibg=#9fca56 ctermfg=0    guifg=#000000
+      highlight StatusLineSectionC ctermbg=12   guibg=#db7b55 ctermfg=0    guifg=#000000
+      highlight StatusLineSectionR ctermbg=12   guibg=#ed3f45 ctermfg=0    guifg=#000000
+      highlight StatusLineLspError ctermbg=8    guifg=#313131              guibg=#ff0000
+      highlight StatusLineLspWarn  ctermbg=8    guifg=#313131              guibg=#ff8800
+      highlight StatusLineLspInfo  ctermbg=8    guifg=#313131              guibg=#2266cc
+      highlight StatusLineLspHint  ctermbg=8    guifg=#313131              guibg=#d6d6d6
+    ]])
+end
 
 local augroup = 'init.lua'
 vim.api.nvim_create_augroup(augroup, {})
@@ -92,132 +111,80 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   { 'sidofc/mkdx', ft = { 'markdown' } },
-
   {
-    'ibhagwan/fzf-lua',
-    keys = { '<C-f>', '<C-g>' },
-    config = function()
-      local fzf_lua = require('fzf-lua')
-
-      fzf_lua.setup({
-        actions = {
-          files = {
-            ['default'] = fzf_lua.actions.file_edit_or_qf,
-            ['ctrl-x'] = fzf_lua.actions.file_split,
-            ['ctrl-v'] = fzf_lua.actions.file_vsplit,
-          },
-        },
-        winopts = function()
-          local height = 15
-
-          return {
-            border = { '—', '—', '—', '', '', '', '', '' },
-            row = vim.o.lines - vim.o.cmdheight - 3 - height,
-            column = 1,
-            height = height,
-            width = vim.o.columns + 1,
-          }
-        end,
-      })
-
-      vim.keymap.set('n', '<C-f>', function()
-        fzf_lua.files({
-          prompt = '> ',
-          previewer = false,
-          cwd_prompt = false,
-          rg_opts = [[--color=never --files --hidden --follow --no-ignore -g "!.git/**" -g "!node_modules/**" -g "!.DS_Store"]],
-          fzf_opts = { ['--info'] = 'inline' },
-        })
-      end)
-
-      vim.keymap.set('n', '<C-g>', function()
-        fzf_lua.live_grep_native({
-          prompt = '> ',
-          no_header_i = false,
-          previewer = false,
-          exec_empty_query = true,
-          fzf_opts = { ['--info'] = 'inline', ['--nth'] = '2..' },
-        })
-      end)
-    end,
-  },
-
-  {
-    'mhartington/formatter.nvim',
+    'kylechui/nvim-surround',
     event = { 'BufReadPre' },
     config = function()
-      local function prettier_no_ignore(fn)
-        return function(...)
-          local settings = fn(...)
-
-          if type(settings.args) ~= 'table' then
-            settings.args = {}
-          end
-
-          settings.args[#settings.args + 1] = '--ignore-path no-ignore'
-
-          return settings
-        end
-      end
-
-      local stylua = require('formatter.filetypes.lua').stylua
-      -- local rubocop = require('formatter.filetypes.ruby').rubocop
-      local prettier_js = require('formatter.filetypes.javascript').prettier
-      local prettier_css = require('formatter.filetypes.css').prettier
-      local prettier_html = require('formatter.filetypes.html').prettier
-      local prettier_json = require('formatter.filetypes.json').prettier
-      local filetype_config = {
-        lua = { stylua },
-        css = { prettier_no_ignore(prettier_css) },
-        scss = { prettier_no_ignore(prettier_css) },
-        -- ruby = { rubocop },
-        html = { prettier_no_ignore(prettier_html) },
-        json = { prettier_no_ignore(prettier_json) },
-        jsonc = { prettier_no_ignore(prettier_json) },
-        javascript = { prettier_no_ignore(prettier_js) },
-        javascriptreact = { prettier_no_ignore(prettier_js) },
-        typescript = { prettier_no_ignore(prettier_js) },
-        typescriptreact = { prettier_no_ignore(prettier_js) },
-      }
-      local filetype_exts = table.concat(
-        vim.tbl_map(function(k)
-          return string.format('*.%s', k)
-        end, {
-          'lua',
-          'css',
-          'scss',
-          'rb',
-          'html',
-          'json',
-          'js',
-          'cjs',
-          'mjs',
-          'jsx',
-          'ts',
-          'tsx',
-        }),
-        ','
-      )
-
-      require('formatter').setup({ filetype = filetype_config })
-      vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
-        group = augroup,
-        pattern = filetype_exts,
-        callback = function()
-          local ok = pcall(vim.cmd.FormatWrite)
-
-          if not ok then
-            vim.api.nvim_echo(
-              { { 'Failed to format buffer!', 'ErrorMsg' } },
-              false,
-              {}
-            )
-          end
-        end,
+      require('nvim-surround').setup()
+    end,
+  },
+  {
+    'sainnhe/gruvbox-material',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.g.gruvbox_material_enable_italic = true
+      vim.g.gruvbox_material_better_performance = 1
+      vim.cmd.colorscheme('gruvbox-material')
+    end,
+  },
+  {
+    'sidofc/carbon.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('carbon').setup({
+        sync_pwd = true,
+        indicators = { collapse = '▾', expand = '▸' },
+        actions = { toggle_recursive = '<s-cr>' },
       })
     end,
   },
+  {
+    'NeogitOrg/neogit',
+    keys = { '<leader>m' },
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('neogit').setup({
+        disable_hint = true,
+        disable_signs = true,
+        disable_insert_on_commit = false,
+        disable_commit_confirmation = true,
+        sections = {
+          recent = { hidden = true, folded = true },
+        },
+        mappings = {
+          popup = {
+            P = 'PullPopup',
+            p = 'PushPopup',
+          },
+        },
+      })
 
+      vim.keymap.set('n', '<leader>m', vim.cmd.Neogit, { silent = true })
+    end,
+  },
+  {
+    'stevearc/conform.nvim',
+    config = function()
+      local js_tool = 'prettier'
+
+      require('conform').setup({
+        format_on_save = { timeout_ms = 1000 },
+        formatters_by_ft = {
+          lua = { 'stylua' },
+          ejs = { js_tool },
+          css = { js_tool },
+          scss = { js_tool },
+          json = { js_tool },
+          html = { js_tool },
+          javascript = { js_tool },
+          typescript = { js_tool },
+          javascriptreact = { js_tool },
+          typescriptreact = { js_tool },
+        },
+      })
+    end,
+  },
   {
     'aserowy/tmux.nvim',
     keys = {
@@ -257,27 +224,13 @@ require('lazy').setup({
       vim.keymap.set('n', '<C-S-l>', tmux.resize_right)
     end,
   },
-
-  {
-    'kylechui/nvim-surround',
-    event = { 'BufReadPre' },
-    config = function()
-      require('nvim-surround').setup()
-    end,
-  },
-
-  {
-    'RRethy/nvim-base16',
-    event = { 'ColorScheme' },
-    config = function() end,
-  },
-
   {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre' },
     config = function()
       -- npm  install --global typescript typescript-language-server
       -- npm  install --global vscode-langservers-extracted
+      -- npm  install --global @biomejs/biome
       -- brew install          lua-language-server
 
       local lsp = require('lspconfig')
@@ -285,114 +238,25 @@ require('lazy').setup({
       local function on_attach(_, bufnr)
         local opts = { noremap = true, silent = true, buffer = bufnr }
 
-        vim.keymap.set('n', 'gn', vim.diagnostic.goto_next, opts)
-        vim.keymap.set('n', 'gp', vim.diagnostic.goto_prev, opts)
+        vim.keymap.set('n', 'gn', function()
+          vim.diagnostic.jump({ count = 1, float = true })
+        end, opts)
+
+        vim.keymap.set('n', 'gp', function()
+          vim.diagnostic.jump({ count = -1, float = true })
+        end, opts)
       end
 
       lsp.ts_ls.setup({ on_attach = on_attach })
-      lsp.eslint.setup({ on_attach = on_attach })
-      lsp.lua_ls.setup({
-        on_attach = on_attach,
-        settings = {
-          Lua = {
-            runtime = {
-              version = 'LuaJIT',
-            },
-            diagnostics = {
-              globals = {
-                -- vim lua api globals
-                'vim',
-
-                -- wow lua api globals
-                'wipe',
-                'strsplit',
-                'C_Map',
-                'C_Item',
-                'C_CVar',
-                'C_Timer',
-                'C_Container',
-                'UIParent',
-                'LootSlot',
-                'LootFrame',
-                'GameTooltip',
-                'SlashCmdList',
-                'CreateFrame',
-                'DevTools_Dump',
-                'GetLootInfo',
-                'IsFishingLoot',
-                'GetLootSlotLink',
-                'ConfirmLootSlot',
-                'LootSlotHasItem',
-                'hooksecurefunc',
-                'GetSubZoneText',
-                'GetProfessions',
-                'GetProfessionInfo',
-                'PanelTemplates_SetTab',
-                'PanelTemplates_SetNumTabs',
-                'PanelTemplates_GetSelectedTab',
-              },
-            },
-            workspace = {
-              checkThirdParty = false,
-              library = {
-                vim.env.VIMRUNTIME,
-              },
-            },
-            telemetry = {
-              enable = false,
-            },
-          },
-        },
-      })
+      -- lsp.biome.setup({ on_attach = on_attach })
 
       vim.diagnostic.config({
         signs = false,
-        virtual_text = false,
+        virtual_text = true,
         float = false,
       })
     end,
   },
-
-  {
-    'sidofc/carbon.nvim',
-    config = function()
-      require('carbon').setup({
-        sync_pwd = true,
-        indicators = { collapse = '▾', expand = '▸' },
-        actions = { toggle_recursive = '<s-cr>' },
-        file_icons = false,
-        highlights = {
-          CarbonExe = { link = '@string' },
-        },
-      })
-    end,
-  },
-
-  {
-    'NeogitOrg/neogit',
-    keys = { '<leader>m' },
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      require('neogit').setup({
-        disable_hint = true,
-        disable_signs = true,
-        disable_insert_on_commit = false,
-        disable_commit_confirmation = true,
-        sections = {
-          recent = { hidden = true, folded = true },
-        },
-        mappings = {
-          popup = {
-            P = 'PullPopup',
-            p = 'PushPopup',
-          },
-        },
-      })
-
-      vim.keymap.set('n', '<leader>m', vim.cmd.Neogit, { silent = true })
-    end,
-  },
-
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -401,6 +265,8 @@ require('lazy').setup({
       require('nvim-treesitter.configs').setup({
         indent = { enable = true },
         highlight = { enable = true },
+        incremental_selection = { enable = true },
+        textobjects = { enable = true },
         ensure_installed = {
           'c',
           'cpp',
@@ -428,6 +294,54 @@ require('lazy').setup({
       })
     end,
   },
+  {
+    'ibhagwan/fzf-lua',
+    keys = { '<C-f>', '<C-g>' },
+    config = function()
+      local fzf_lua = require('fzf-lua')
+
+      fzf_lua.setup({
+        actions = {
+          files = {
+            ['default'] = fzf_lua.actions.file_edit_or_qf,
+            ['ctrl-x'] = fzf_lua.actions.file_split,
+            ['ctrl-v'] = fzf_lua.actions.file_vsplit,
+          },
+        },
+        winopts = function()
+          local height = 15
+
+          return {
+            border = { '—', '—', '—', '', '', '', '', '' },
+            row = vim.o.lines - vim.o.cmdheight - 3 - height,
+            column = 1,
+            height = height,
+            width = vim.o.columns + 1,
+          }
+        end,
+      })
+
+      vim.keymap.set('n', '<C-f>', function()
+        fzf_lua.files({
+          prompt = '> ',
+          previewer = false,
+          cwd_prompt = false,
+          rg_opts = [[--color=never --files --hidden --follow --no-ignore -g "!.git/**" -g "!node_modules/**" -g "!.DS_Store" -g "!build"]],
+          fzf_opts = { ['--info'] = 'inline' },
+        })
+      end)
+
+      vim.keymap.set('n', '<C-g>', function()
+        fzf_lua.live_grep_native({
+          prompt = '> ',
+          no_header_i = false,
+          previewer = false,
+          exec_empty_query = true,
+          fzf_opts = { ['--info'] = 'inline', ['--nth'] = '2..' },
+        })
+      end)
+    end,
+  },
 })
 -- }}}
 
@@ -442,9 +356,6 @@ vim.keymap.set({ 'n', 'v', 'o' }, 'K', '{')
 vim.keymap.set({ 'n', 'v', 'o' }, 'J', '}')
 vim.keymap.set({ 'n', 'v', 'o' }, 'H', '^')
 vim.keymap.set({ 'n', 'v', 'o' }, 'L', '$')
-
-vim.keymap.set('n', '<S-s>', '<Nop>')
-vim.keymap.set('n', '<C-z>', '<Nop>')
 
 vim.keymap.set('n', '$', '<Nop>')
 vim.keymap.set('n', '^', '<Nop>')
@@ -543,7 +454,11 @@ function _G.custom_status_line_lsp()
 end
 
 function _G.custom_status_line_filename()
-  local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':~:.')
+  local filename = string.gsub(
+    vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':~:.'),
+    '%%',
+    '%%%%'
+  )
 
   if vim.bo.filetype == 'qf' then
     filename = 'quickfix'
@@ -692,30 +607,10 @@ end
 -- }}}
 
 -- colorscheme and highlights {{{
+apply_default_highlights()
 vim.api.nvim_create_autocmd('ColorScheme', {
   group = augroup,
   pattern = '*',
-  callback = function()
-    vim.cmd([[
-      highlight Normal             ctermbg=NONE guibg=NONE
-      highlight NormalNC           ctermbg=NONE guibg=NONE
-      highlight CursorLine         ctermbg=8    guibg=#282a2b
-      highlight TrailingWhitespace ctermbg=8    guibg=#41535B ctermfg=0    guifg=Black
-      highlight VertSplit          ctermbg=NONE guibg=NONE    ctermfg=Gray guifg=Gray
-      highlight StatusLine         ctermbg=8    guibg=#313131 ctermfg=15   guifg=#cccccc
-      highlight StatusLineNC       ctermbg=0    guibg=#313131 ctermfg=8    guifg=#999999
-      highlight StatusLineSection  ctermbg=8    guibg=#55b5db ctermfg=0    guifg=#333333
-      highlight StatusLineSectionV ctermbg=11   guibg=#a074c4 ctermfg=0    guifg=#000000
-      highlight StatusLineSectionI ctermbg=10   guibg=#9fca56 ctermfg=0    guifg=#000000
-      highlight StatusLineSectionC ctermbg=12   guibg=#db7b55 ctermfg=0    guifg=#000000
-      highlight StatusLineSectionR ctermbg=12   guibg=#ed3f45 ctermfg=0    guifg=#000000
-      highlight StatusLineLspError ctermbg=8    guifg=#313131              guibg=#ff0000
-      highlight StatusLineLspWarn  ctermbg=8    guifg=#313131              guibg=#ff8800
-      highlight StatusLineLspInfo  ctermbg=8    guifg=#313131              guibg=#2266cc
-      highlight StatusLineLspHint  ctermbg=8    guifg=#313131              guibg=#d6d6d6
-    ]])
-  end,
+  callback = apply_default_highlights,
 })
-
-vim.cmd.colorscheme('base16-seti')
 -- }}}

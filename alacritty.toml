@@ -17,9 +17,11 @@ padding.y          = 0
 history = 0
 
 [font]
-size          = 18.0
-offset.y      = -3
-normal.family = "Mononoki"
+size          = 16.0
+normal        = { family = "CaskaydiaCove Nerd Font Mono", style = "SemiLight" }
+italic        = { family = "CaskaydiaCove Nerd Font Mono", style = "SemiLight Italic" }
+bold          = { family = "CaskaydiaCove Nerd Font Mono", style = "Bold" }
+bold_italic   = { family = "CaskaydiaCove Nerd Font Mono", style = "Bold Italic" }
 
 [colors]
 primary.background = "#000000"
