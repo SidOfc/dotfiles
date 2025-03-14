@@ -110,6 +110,18 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+  {
+    'folke/trouble.nvim',
+    opts = {},
+    cmd = 'Trouble',
+    keys = {
+      {
+        '<leader>d',
+        '<cmd>Trouble diagnostics toggle<cr>',
+        desc = 'Diagnostics (Trouble)',
+      },
+    },
+  },
   { 'sidofc/mkdx', ft = { 'markdown' } },
   {
     'kylechui/nvim-surround',
@@ -248,6 +260,7 @@ require('lazy').setup({
       end
 
       lsp.ts_ls.setup({ on_attach = on_attach })
+      lsp.eslint.setup({ on_attach = on_attach })
       -- lsp.biome.setup({ on_attach = on_attach })
 
       vim.diagnostic.config({
