@@ -5,17 +5,6 @@ local function apply_default_highlights()
       highlight CursorLine         ctermbg=8    guibg=#282a2b
       highlight TrailingWhitespace ctermbg=8    guibg=#41535B ctermfg=0    guifg=Black
       highlight VertSplit          ctermbg=NONE guibg=NONE    ctermfg=Gray guifg=Gray
-      highlight StatusLine         ctermbg=8    guibg=#313131 ctermfg=15   guifg=#cccccc
-      highlight StatusLineNC       ctermbg=0    guibg=#313131 ctermfg=8    guifg=#999999
-      highlight StatusLineSection  ctermbg=8    guibg=#55b5db ctermfg=0    guifg=#333333
-      highlight StatusLineSectionV ctermbg=11   guibg=#a074c4 ctermfg=0    guifg=#000000
-      highlight StatusLineSectionI ctermbg=10   guibg=#9fca56 ctermfg=0    guifg=#000000
-      highlight StatusLineSectionC ctermbg=12   guibg=#db7b55 ctermfg=0    guifg=#000000
-      highlight StatusLineSectionR ctermbg=12   guibg=#ed3f45 ctermfg=0    guifg=#000000
-      highlight StatusLineLspError ctermbg=8    guifg=#313131              guibg=#ff0000
-      highlight StatusLineLspWarn  ctermbg=8    guifg=#313131              guibg=#ff8800
-      highlight StatusLineLspInfo  ctermbg=8    guifg=#313131              guibg=#2266cc
-      highlight StatusLineLspHint  ctermbg=8    guifg=#313131              guibg=#d6d6d6
     ]])
 end
 
@@ -23,11 +12,6 @@ local augroup = 'init.lua'
 vim.api.nvim_create_augroup(augroup, {})
 
 vim.loader.enable()
-
-local statuslines = {
-  inactive = ' %{v:lua.custom_status_line_filename()}%= %l:%c ',
-  active = '%!v:lua.custom_status_line()',
-}
 
 -- globals {{{
 vim.g.mapleader = ' '
@@ -73,7 +57,6 @@ vim.opt.splitright = true
 vim.opt.shiftwidth = 0
 vim.opt.timeoutlen = 400
 vim.opt.updatetime = 100
-vim.opt.statusline = statuslines.inactive
 vim.opt.softtabstop = 2
 vim.opt.showtabline = 0
 vim.opt.termguicolors = true
@@ -110,6 +93,22 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+  {
+    'nvim-lualine/lualine.nvim',
+    config = function()
+      require('lualine').setup({
+        theme = 'gruvbox-material',
+        sections = {
+          lualine_a = { 'filename' },
+          lualine_b = { 'diagnostics' },
+          lualine_c = {},
+          lualine_x = {},
+          lualine_y = {},
+          lualine_z = { 'location' },
+        },
+      })
+    end,
+  },
   {
     'folke/trouble.nvim',
     opts = {},
@@ -430,92 +429,7 @@ vim.keymap.set('n', '<C-w>', function()
 end, { nowait = true })
 -- }}}
 
--- statusline and cursorline {{{
-local severity_labels = { 'Error', 'Warn', 'Info', 'Hint' }
-local status_mode_groups = {
-  n = 'StatusLineSection',
-  i = 'StatusLineSectionI',
-  c = 'StatusLineSectionC',
-  r = 'StatusLineSectionR',
-  v = 'StatusLineSectionV',
-  ['\22'] = 'StatusLineSectionV',
-}
-
-function _G.custom_status_line_lsp()
-  local counts = { 0, 0, 0, 0 }
-  local segment = ''
-
-  for _, diagnostic in ipairs(vim.diagnostic.get(0)) do
-    counts[diagnostic.severity] = counts[diagnostic.severity] + 1
-  end
-
-  for severity_index, count in ipairs(counts) do
-    if count > 0 then
-      local type = severity_labels[severity_index]
-
-      segment = string.format(
-        '%s%%#StatusLineLsp%s# %d%s ',
-        segment,
-        type,
-        count,
-        type:sub(0, 1)
-      )
-    end
-  end
-
-  return segment
-end
-
-function _G.custom_status_line_filename()
-  local filename = string.gsub(
-    vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':~:.'),
-    '%%',
-    '%%%%'
-  )
-
-  if vim.bo.filetype == 'qf' then
-    filename = 'quickfix'
-  elseif string.match(filename, '^term:') then
-    filename = 'terminal'
-  elseif string.match(filename, '^~') then
-    filename = vim.fn.fnamemodify(filename, ':t')
-  elseif vim.b.carbon and vim.b.carbon.path then
-    filename = string.gsub(
-      vim.b.carbon.path,
-      vim.fn.fnamemodify(vim.uv.cwd(), ':h') .. '/',
-      ''
-    )
-  end
-
-  return filename
-end
-
-function _G.custom_status_line()
-  local mode = vim.api.nvim_get_mode().mode:lower()
-  local group = status_mode_groups[mode] or status_mode_groups.n
-
-  return string.format(
-    '%%#%s#%s %s %s%%#StatusLine#%%=%%#%s# %%l:%%c ',
-    group,
-    vim.bo.modified and ' + |' or '',
-    _G.custom_status_line_filename(),
-    _G.custom_status_line_lsp(),
-    group
-  )
-end
--- }}}
-
 -- autocommands {{{
-vim.api.nvim_create_autocmd({ 'DiagnosticChanged' }, {
-  group = augroup,
-  pattern = '*',
-  callback = function(data)
-    if data.buf == vim.api.nvim_get_current_buf() then
-      vim.wo.statusline = statuslines.active
-    end
-  end,
-})
-
 vim.api.nvim_create_autocmd(
   { 'FocusLost', 'VimLeave', 'WinLeave', 'BufLeave' },
   {
@@ -523,7 +437,6 @@ vim.api.nvim_create_autocmd(
     pattern = '*',
     callback = function()
       vim.wo.cursorline = false
-      vim.wo.statusline = statuslines.inactive
     end,
   }
 )
@@ -535,7 +448,6 @@ vim.api.nvim_create_autocmd(
     pattern = '*',
     callback = function()
       vim.wo.cursorline = true
-      vim.wo.statusline = statuslines.active
     end,
   }
 )
@@ -602,7 +514,6 @@ local filetype_handlers = {
 
   qf = function()
     vim.opt_local.list = false
-    vim.opt_local.statusline = statuslines.active
   end,
 
   NeogitStatus = function()
