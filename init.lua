@@ -5,6 +5,7 @@ local function apply_default_highlights()
       highlight CursorLine         ctermbg=8    guibg=#282a2b
       highlight TrailingWhitespace ctermbg=8    guibg=#41535B ctermfg=0    guifg=Black
       highlight VertSplit          ctermbg=NONE guibg=NONE    ctermfg=Gray guifg=Gray
+      highlight LualineSeparator   ctermbg=NONE guibg=#504945 ctermfg=Gray guifg=Gray
     ]])
 end
 
@@ -96,11 +97,45 @@ require('lazy').setup({
   {
     'nvim-lualine/lualine.nvim',
     config = function()
+      function file_status()
+        if vim.bo.modified then
+          return '\u{eabc}'
+        end
+
+        return ''
+      end
+
+      function diag_config(type, icon)
+        icon = icon or type:sub(0, 1)
+
+        return {
+          'diagnostics',
+          sources = { 'nvim_diagnostic' },
+          sections = { type },
+          symbols = { [type] = icon },
+          colored = true,
+          update_in_insert = false,
+        }
+      end
+
       require('lualine').setup({
-        theme = 'gruvbox-material',
+        options = {
+          theme = 'gruvbox-material',
+          section_separators = { left = '', right = '' },
+          component_separators = {
+            left = '%#LualineSeparator#',
+            right = '%#LualineSeparator#',
+          },
+        },
         sections = {
-          lualine_a = { 'filename' },
-          lualine_b = { 'diagnostics' },
+          lualine_a = { { 'filename', file_status = false, path = 1 } },
+          lualine_b = {
+            { file_status, color = { fg = '#ffa657' } },
+            diag_config('error', '󰅚 '),
+            diag_config('warn', '󰀪 '),
+            diag_config('info', '󰋽 '),
+            diag_config('hint', '󰌶 '),
+          },
           lualine_c = {},
           lualine_x = {},
           lualine_y = {},
