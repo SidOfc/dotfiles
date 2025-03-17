@@ -343,7 +343,7 @@ require('lazy').setup({
   },
   {
     'ibhagwan/fzf-lua',
-    keys = { '<C-f>', '<C-g>' },
+    keys = { '<C-f>', '<C-g>', '<C-y>' },
     config = function()
       local fzf_lua = require('fzf-lua')
 
@@ -367,6 +367,10 @@ require('lazy').setup({
           }
         end,
       })
+
+      vim.keymap.set('n', '<C-y>', function()
+        fzf_lua.help_tags({ previewer = false })
+      end)
 
       vim.keymap.set('n', '<C-f>', function()
         fzf_lua.files({
