@@ -1,8 +1,10 @@
 # Settings {{{
   set -U  fish_greeting
-  set -U  fish_color_command         magenta
-  set -U  fish_color_param           blue
+  set -U  fish_color_command         ff8800
+  set -U  fish_color_param           magenta
 
+  set -gx CPATH                      "$(brew --prefix zstd)/include:$(brew --prefix openssl)/include"
+  set -gx LIBRARY_PATH               "$(brew --prefix zstd)/lib:$(brew --prefix openssl)/lib"
   set -gx DOTFILES_DIRECTORY         "$HOME/dotfiles"
   set -gx ASDF_CONFIG_FILE           "$HOME/.config/asdf/asdfrc"
   set -gx RIPGREP_CONFIG_PATH        "$HOME/.config/ripgrep/ripgreprc"
@@ -22,10 +24,6 @@
   alias rails "env TERM=xterm-256color rails"
 
   # config files
-  alias tt "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/tmux/tmux.conf && cd -"
-  alias aa "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/alacritty/alacritty.yml && cd -"
-  alias vv "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/nvim/init.lua && cd -"
-  alias ff "cd $DOTFILES_DIRECTORY && $EDITOR ~/.config/fish/config.fish && cd -"
   alias zx "source ~/.config/fish/config.fish"
 
   # gpg-agent
@@ -47,9 +45,6 @@
 
   # vim / vim-isms
   abbr v   "$EDITOR ."
-  abbr vip "$EDITOR +PackerInstall +qall"
-  abbr vup "$EDITOR +PackerUpdate"
-  abbr vcp "$EDITOR +PackerClean +qall"
 # }}}
 
 # Utility functions {{{
@@ -94,14 +89,13 @@
     set_color blue
     echo -n (prompt_pwd)
 
-    if test (git rev-parse --git-dir 2>/dev/null)
-      and not test (pwd | grep '.git')
+    if git rev-parse --is-inside-work-tree &> /dev/null
       set_color yellow
       echo -n " on "
       set_color green
-      echo -n (git status 2>/dev/null | head -1 | string split ' ')[-1]
+      echo -n (git branch --show-current)
 
-      if test -n (echo (git status -s 2>/dev/null))
+      if git diff --quiet HEAD --
         set_color magenta
       end
 

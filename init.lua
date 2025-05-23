@@ -217,6 +217,7 @@ require('lazy').setup({
       require('conform').setup({
         format_on_save = { timeout_ms = 1000 },
         formatters_by_ft = {
+          rust = { 'rustfmt' },
           lua = { 'stylua' },
           ejs = { js_tool },
           css = { js_tool },
@@ -293,9 +294,56 @@ require('lazy').setup({
         end, opts)
       end
 
-      lsp.ts_ls.setup({ on_attach = on_attach })
-      lsp.eslint.setup({ on_attach = on_attach })
-      -- lsp.biome.setup({ on_attach = on_attach })
+      vim.lsp.enable('rust_analyzer')
+      vim.lsp.config(
+        'rust_analyzer',
+        coq.lsp_ensure_capabilities({ on_attach = on_attach })
+      )
+
+      vim.lsp.enable('eslint')
+      vim.lsp.config(
+        'eslint',
+        coq.lsp_ensure_capabilities({ on_attach = on_attach })
+      )
+
+      vim.lsp.enable('ts_ls')
+      vim.lsp.config(
+        'ts_ls',
+        coq.lsp_ensure_capabilities({ on_attach = on_attach })
+      )
+
+      vim.lsp.enable('lua_ls')
+      vim.lsp.config(
+        'lua_ls',
+        coq.lsp_ensure_capabilities({
+          settings = { Lua = {} },
+          on_attach = on_attach,
+          on_init = function(client)
+            if client.workspace_folders then
+              local path = client.workspace_folders[1].name
+              if
+                path ~= vim.fn.stdpath('config')
+                and vim.loop.fs_stat(path .. '/.luarc.json')
+              then
+                return
+              end
+            end
+
+            client.config.settings.Lua =
+              vim.tbl_deep_extend('force', client.config.settings.Lua, {
+                runtime = { version = 'LuaJIT' },
+                workspace = {
+                  checkThirdParty = false,
+                  library = {
+                    vim.env.VIMRUNTIME,
+                    '${3rd}/luv/library',
+                    '${3rd}/busted/library',
+                  },
+                },
+              })
+          end,
+        })
+      )
 
       vim.diagnostic.config({
         signs = false,
@@ -313,7 +361,6 @@ require('lazy').setup({
         indent = { enable = true },
         highlight = { enable = true },
         incremental_selection = { enable = true },
-        textobjects = { enable = true },
         ensure_installed = {
           'c',
           'cpp',
@@ -377,7 +424,7 @@ require('lazy').setup({
           prompt = '> ',
           previewer = false,
           cwd_prompt = false,
-          rg_opts = [[--color=never --files --hidden --follow --no-ignore -g "!.git/**" -g "!node_modules/**" -g "!.DS_Store" -g "!build"]],
+          rg_opts = [[--color=never --files --hidden --follow --no-ignore -g "!.git/**" -g "!node_modules/**" -g "!.DS_Store"]],
           fzf_opts = { ['--info'] = 'inline' },
         })
       end)
@@ -408,15 +455,15 @@ vim.keymap.set({ 'n', 'v', 'o' }, 'J', '}')
 vim.keymap.set({ 'n', 'v', 'o' }, 'H', '^')
 vim.keymap.set({ 'n', 'v', 'o' }, 'L', '$')
 
-vim.keymap.set('n', '$', '<Nop>')
-vim.keymap.set('n', '^', '<Nop>')
-vim.keymap.set('n', '{', '<Nop>')
-vim.keymap.set('n', '}', '<Nop>')
-
 vim.keymap.set('i', '<C-k>', '<Up>')
 vim.keymap.set('i', '<C-j>', '<Down>')
 vim.keymap.set('i', '<C-h>', '<Left>')
 vim.keymap.set('i', '<C-l>', '<Right>')
+
+vim.keymap.set('n', '$', '<Nop>')
+vim.keymap.set('n', '^', '<Nop>')
+vim.keymap.set('n', '{', '<Nop>')
+vim.keymap.set('n', '}', '<Nop>')
 
 vim.keymap.set('n', '<C-s>', ':write<Cr>', { silent = true })
 vim.keymap.set('v', '<C-s>', '<C-c>:write<Cr>gv', { silent = true })

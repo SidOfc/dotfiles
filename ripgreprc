@@ -2,7 +2,7 @@
 !{node_modules,tmp,history,_site}
 
 --glob
-!*{.min,.orig,history,debug,cache,public/js,build}
+!*{.min,.orig,history,debug,cache,public/js}
 
 --glob
 !.{git/*,DS_Store,Trashes,asdf,cargo,rustup,npm,gem,pylint}
