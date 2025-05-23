@@ -95,11 +95,10 @@
       set_color green
       echo -n (git branch --show-current)
 
-      if git diff --quiet HEAD --
+      if not git diff --quiet HEAD --
         set_color magenta
+        echo -n ' ⚑'
       end
-
-      echo -n ' ⚑'
     end
 
     set_color yellow
