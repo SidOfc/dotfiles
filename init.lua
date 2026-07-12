@@ -20,6 +20,8 @@ vim.g.loaded_node_provider = 0
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_python3_provider = 0
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
 vim.g['mkdx#settings'] = {
   restore_visual = 1,
@@ -97,48 +99,48 @@ require('lazy').setup({
   {
     'nvim-lualine/lualine.nvim',
     config = function()
-      function file_status()
-        if vim.bo.modified then
-          return '\u{eabc}'
-        end
-
-        return ''
-      end
-
-      function diag_config(type, icon)
-        icon = icon or type:sub(0, 1)
-
-        return {
-          'diagnostics',
-          sources = { 'nvim_diagnostic' },
-          sections = { type },
-          symbols = { [type] = icon },
-          colored = true,
-          update_in_insert = false,
-        }
-      end
-
       require('lualine').setup({
         options = {
           theme = 'gruvbox-material',
           section_separators = { left = '', right = '' },
           component_separators = {
-            left = '%#LualineSeparator#',
-            right = '%#LualineSeparator#',
+            left = '',
+            right = '',
           },
         },
         sections = {
           lualine_a = { { 'filename', file_status = false, path = 1 } },
           lualine_b = {
-            { file_status, color = { fg = '#ffa657' } },
-            diag_config('error', '󰅚 '),
-            diag_config('warn', '󰀪 '),
-            diag_config('info', '󰋽 '),
-            diag_config('hint', '󰌶 '),
+            {
+              function()
+                return vim.bo.modified and '\u{eabc}' or ''
+              end,
+              color = { fg = '#ffa657' },
+            },
+            {
+              'diagnostics',
+              sections = { 'error' },
+              symbols = { error = '󰅚 ' },
+            },
+            {
+              'diagnostics',
+              sections = { 'warn' },
+              symbols = { error = '󰀪 ' },
+            },
+            {
+              'diagnostics',
+              sections = { 'info' },
+              symbols = { error = '󰋽 ' },
+            },
+            {
+              'diagnostics',
+              sections = { 'hint' },
+              symbols = { error = '󰌶 ' },
+            },
           },
           lualine_c = {},
           lualine_x = {},
-          lualine_y = {},
+          lualine_y = { { 'searchcount', maxcount = 999999, timeout = 300 } },
           lualine_z = { 'location' },
         },
       })
@@ -212,7 +214,7 @@ require('lazy').setup({
   {
     'stevearc/conform.nvim',
     config = function()
-      local js_tool = 'prettier'
+      local js_tool = 'biome'
 
       require('conform').setup({
         format_on_save = { timeout_ms = 1000 },
@@ -272,15 +274,24 @@ require('lazy').setup({
     end,
   },
   {
+    'saghen/blink.cmp',
+    version = '1.*',
+    opts = {
+      keymap = { preset = 'super-tab' },
+      sources = {
+        default = { 'lsp', 'path', 'buffer' },
+      },
+    },
+  },
+  {
     'neovim/nvim-lspconfig',
+    dependencies = { 'saghen/blink.cmp' },
     event = { 'BufReadPre' },
     config = function()
       -- npm  install --global typescript typescript-language-server
       -- npm  install --global vscode-langservers-extracted
       -- npm  install --global @biomejs/biome
       -- brew install          lua-language-server
-
-      local lsp = require('lspconfig')
 
       local function on_attach(_, bufnr)
         local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -294,29 +305,14 @@ require('lazy').setup({
         end, opts)
       end
 
-      vim.lsp.enable('rust_analyzer')
-      vim.lsp.config(
-        'rust_analyzer',
-        coq.lsp_ensure_capabilities({ on_attach = on_attach })
-      )
-
-      vim.lsp.enable('eslint')
-      vim.lsp.config(
-        'eslint',
-        coq.lsp_ensure_capabilities({ on_attach = on_attach })
-      )
-
-      vim.lsp.enable('ts_ls')
-      vim.lsp.config(
-        'ts_ls',
-        coq.lsp_ensure_capabilities({ on_attach = on_attach })
-      )
-
-      vim.lsp.enable('lua_ls')
-      vim.lsp.config(
-        'lua_ls',
-        coq.lsp_ensure_capabilities({
+      local blink_cmp = require('blink.cmp')
+      local capabilities = blink_cmp.get_lsp_capabilities()
+      local servers = {
+        biome = { capabilities = capabilities, on_attach = on_attach },
+        ts_ls = { capabilities = capabilities, on_attach = on_attach },
+        lua_ls = {
           settings = { Lua = {} },
+          capabilities = capabilities,
           on_attach = on_attach,
           on_init = function(client)
             if client.workspace_folders then
@@ -337,13 +333,20 @@ require('lazy').setup({
                   library = {
                     vim.env.VIMRUNTIME,
                     '${3rd}/luv/library',
+                    '${3rd}/love2d/library',
                     '${3rd}/busted/library',
+                    '${3rd}/luassert/library',
                   },
                 },
               })
           end,
-        })
-      )
+        },
+      }
+
+      for lsp, config in pairs(servers) do
+        vim.lsp.enable(lsp)
+        vim.lsp.config(lsp, config)
+      end
 
       vim.diagnostic.config({
         signs = false,
@@ -553,7 +556,7 @@ vim.api.nvim_create_autocmd('VimResized', {
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = augroup,
   callback = function()
-    vim.highlight.on_yank({
+    vim.hl.hl_op({
       higroup = 'IncSearch',
       timeout = 150,
       on_visual = true,

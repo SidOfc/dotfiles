@@ -1,28 +1,31 @@
+# Brew {{{
+  set -gx HOMEBREW_PREFIX "/opt/homebrew";
+  set -gx HOMEBREW_CELLAR "/opt/homebrew/Cellar";
+  set -gx HOMEBREW_REPOSITORY "/opt/homebrew";
+
+  fish_add_path --global --move --path "/opt/homebrew/bin" "/opt/homebrew/sbin";
+# }}}
+
 # Settings {{{
   set -U  fish_greeting
   set -U  fish_color_command         ff8800
   set -U  fish_color_param           magenta
 
-  set -gx CPATH                      "$(brew --prefix zstd)/include:$(brew --prefix openssl)/include"
-  set -gx LIBRARY_PATH               "$(brew --prefix zstd)/lib:$(brew --prefix openssl)/lib"
-  set -gx DOTFILES_DIRECTORY         "$HOME/dotfiles"
   set -gx ASDF_CONFIG_FILE           "$HOME/.config/asdf/asdfrc"
   set -gx RIPGREP_CONFIG_PATH        "$HOME/.config/ripgrep/ripgreprc"
   set -gx FZF_DEFAULT_OPTS           '--height=50% --layout=reverse'
   set -gx FZF_DEFAULT_COMMAND        'rg --files --no-ignore-vcs --hidden'
-  set -gx SHELL                      (which fish)
   set -gx GPG_TTY                    (tty)
+  set -gx SHELL                      "$HOMEBREW_PREFIX/bin/fish"
   set -gx EDITOR                     nvim
   set -gx EVENT_NOKQUEUE             1
   set -gx HOMEBREW_FORCE_VENDOR_RUBY 1
   set -gx HOMEBREW_NO_ENV_HINTS      1
+
+  fish_add_path -p "$(brew --prefix coreutils)/libexec/gnubin"
 # }}}
 
 # Aliases {{{
-  # don't send terminal type 'alacritty' through ssh
-  alias ssh   "env TERM=xterm-256color ssh"
-  alias rails "env TERM=xterm-256color rails"
-
   # config files
   alias zx "source ~/.config/fish/config.fish"
 
@@ -95,7 +98,7 @@
       set_color green
       echo -n (git branch --show-current)
 
-      if not git diff --quiet HEAD --
+      if not git diff --quiet HEAD -- &> /dev/null
         set_color magenta
         echo -n ' ⚑'
       end
@@ -114,6 +117,7 @@
 # }}}
 
 # Sourcing {{{
-  [ -f /opt/homebrew/share/autojump/autojump.fish ]; and source /opt/homebrew/share/autojump/autojump.fish
-  [ -f /opt/homebrew/opt/asdf/libexec/asdf.fish ]; and source /opt/homebrew/opt/asdf/libexec/asdf.fish
+  for source in "share/autojump/autojump.fish" "opt/asdf/libexec/asdf.fish";
+    [ -f "$HOMEBREW_PREFIX/$source" ]; and source "$HOMEBREW_PREFIX/$source"
+  end
 # }}}
